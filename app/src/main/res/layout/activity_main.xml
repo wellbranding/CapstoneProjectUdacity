@@ -9,6 +9,10 @@
             name="viewModel"
             type="udacityteam.healthapp.activities.MainActivityViewModel"/>
     </data>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:id="@+id/fragmentContainer"
+        android:layout_height="match_parent">
 
 <android.support.v4.widget.DrawerLayout
     android:id="@+id/drawer_layout"
@@ -26,21 +30,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <!--<include-->
-        <!--layout="@layout/layout_calendar_view"-->
-        <!--android:id="@+id/calendarView"-->
-        <!--/>-->
-    <!--<include-->
-        <!--android:id="@+id/buttons"-->
-        <!--layout="@layout/layout_buttons"/>-->
-    <!--<include-->
-        <!--android:id="@+id/recyclerView"-->
-        <!--layout="@layout/layout_main_recyclerview"-->
-        <!--/>-->
-
-    <!--<include layout="@layout/layout_floating_action"-->
-        <!--android:id="@+id/layout_floating_action"/>-->
-
 
     <android.support.design.widget.NavigationView
         android:id="@+id/nav_view"
@@ -54,4 +43,5 @@
 
 
 </android.support.v4.widget.DrawerLayout>
+    </FrameLayout>
 </layout>

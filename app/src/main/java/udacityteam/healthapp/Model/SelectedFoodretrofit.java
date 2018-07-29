@@ -1,5 +1,7 @@
 package udacityteam.healthapp.Model;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.os.health.TimerStat;
@@ -12,18 +14,54 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by kunda on 10/4/2017.
  */
-
+@Entity
 public class SelectedFoodretrofit implements  Parcelable {
+    @PrimaryKey(autoGenerate = true)
+    private int roomId;
     private String foodId;
     private String foodName;
-    private String UserId= FirebaseAuth.getInstance().getCurrentUser().getUid();
+    private String whichTime;
+//    private String UserId= FirebaseAuth.getInstance().getCurrentUser().getUid();
     private String SendDate;
     private float Calories;
     private float Protein;
     private float Fat;
     private float Carbohydrates;
+   //  private String mail;
+   //  private String
 
 
+    public String getFoodId() {
+        return foodId;
+    }
+
+    public String getWhichTime() {
+        return whichTime;
+    }
+
+    public void setWhichTime(String whichTime) {
+        this.whichTime = whichTime;
+    }
+
+    public void setFoodId(String foodId) {
+        this.foodId = foodId;
+    }
+
+    public String getSendDate() {
+        return SendDate;
+    }
+
+    public void setSendDate(String sendDate) {
+        SendDate = sendDate;
+    }
+
+    public int getRoomId() {
+        return roomId;
+    }
+
+    public void setRoomId(int roomId) {
+        this.roomId = roomId;
+    }
 
     public SelectedFoodretrofit()
     {
@@ -33,7 +71,6 @@ public class SelectedFoodretrofit implements  Parcelable {
     protected SelectedFoodretrofit(Parcel in) {
         foodId = in.readString();
         foodName = in.readString();
-        UserId = in.readString();
         SendDate = in.readString();
         Calories = in.readFloat();
         Protein = in.readFloat();
@@ -93,13 +130,6 @@ public class SelectedFoodretrofit implements  Parcelable {
         SendDate = date;
     }
 
-    public String getUserId() {
-        return UserId;
-    }
-
-    public void setUserId(String userId) {
-        UserId = userId;
-    }
 
     public String getFoodid() {
         return foodId;
@@ -126,7 +156,7 @@ public class SelectedFoodretrofit implements  Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(foodId);
         dest.writeString(foodName);
-        dest.writeString(UserId);
+       // dest.writeString(UserId);
         dest.writeString(SendDate);
         dest.writeFloat(Calories);
         dest.writeFloat(Protein);

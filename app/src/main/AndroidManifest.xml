@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".activities.RegisterActivityHome"
+            android:name=".activities.BaseActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -42,6 +42,8 @@
         <activity android:name=".activities.FoodListPrieview" />
         <activity android:name=".activities.FoodListPrieviewNew" />
         <activity android:name=".activities.FoodList"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".completeRedesign.FoodListComplete"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".activities.CommunityActivities.FilterActivity"

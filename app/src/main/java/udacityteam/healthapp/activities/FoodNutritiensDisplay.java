@@ -46,6 +46,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import udacityteam.healthapp.Network.PHPService;
 import udacityteam.healthapp.PHP_Retrofit_API.APIService;
 import udacityteam.healthapp.PHP_Retrofit_API.APIUrl;
 import udacityteam.healthapp.Model.Result;
@@ -67,15 +68,15 @@ public class FoodNutritiensDisplay extends AppCompatActivity {
     String id = null;
     String foodname = null;
     String UserId = null;
-    FirebaseDatabase database;
-    DatabaseReference user;
-    DatabaseReference allusers;
-    DatabaseReference requests;
     String foodselection = null;
-    TextView productname, nutritionaldisplay;
-     DocumentReference userstorage;
     ProgressBar progressBar;
-    FirebaseFirestore storage;
+    TextView productname, nutritionaldisplay;
+   //  DocumentReference userstorage;
+    //  FirebaseDatabase database;
+   // DatabaseReference user;
+    //DatabaseReference allusers;
+ //   DatabaseReference requests;
+ //   FirebaseFirestore storage;
     String SharedFoodListDatabase;
     private Context context;
 
@@ -120,11 +121,11 @@ public class FoodNutritiensDisplay extends AppCompatActivity {
         Date newDate = new Date(date.getTime());
         SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd");
         String stringdate = dt.format(newDate);
-        storage = FirebaseFirestore.getInstance();
-        userstorage= storage.collection("Users").document(FirebaseAuth.getInstance().getCurrentUser().getUid()).collection(foodselection).document(stringdate);
-        database = FirebaseDatabase.getInstance();
-        allusers = database.getReference("MainFeed").child(foodselection);
-        user = database.getReference("User").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(foodselection);
+     //   storage = FirebaseFirestore.getInstance();
+//        userstorage= storage.collection("Users").document(FirebaseAuth.getInstance().getCurrentUser().getUid()).collection(foodselection).document(stringdate);
+//        database = FirebaseDatabase.getInstance();
+//        allusers = database.getReference("MainFeed").child(foodselection);
+//        user = database.getReference("User").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(foodselection);
 
 
 
@@ -172,8 +173,8 @@ public class FoodNutritiensDisplay extends AppCompatActivity {
         //Defining retrofit api service
         APIService service = retrofit.create(APIService.class);
 
-        Call<Result> call = service.addSelectedFood(
-                id,
+        Call<Result> call = PHPService.Factory.create().addSelectedFood(
+                id,"shshshshs",
                 ((ApplicationController)context.getApplicationContext()).getId(), timestamp, nutritiens.get(0)
                 ,nutritiens.get(1),nutritiens.get(2),nutritiens.get(3),
                 foodselection,0
@@ -196,17 +197,17 @@ public class FoodNutritiensDisplay extends AppCompatActivity {
         alluser1.setFoodid(id);
         alluser1.setUserId(UserId);
         alluser1.setFoodName(foodname);
-        userstorage.collection("TodaysFoods").add(alluser);
-
-        user.child(String.valueOf(System.currentTimeMillis()))
-                .setValue(thisuser);
-     //   allusers.child(String.valueOf(System.currentTimeMillis())).setValue(alluser);
-                Intent intent = new Intent(FoodNutritiensDisplay.this, FoodList.class);
-                intent.putExtra("requestdate", stringdate);
-                intent.putExtra("foodselection", foodselection);
-                intent.putExtra("SharedFoodListDatabase", SharedFoodListDatabase);
-                startActivity(intent);
-                finish();
+//        userstorage.collection("TodaysFoods").add(alluser);
+//
+//        user.child(String.valueOf(System.currentTimeMillis()))
+//                .setValue(thisuser);
+//     //   allusers.child(String.valueOf(System.currentTimeMillis())).setValue(alluser);
+//                Intent intent = new Intent(FoodNutritiensDisplay.this, FoodList.class);
+//                intent.putExtra("requestdate", stringdate);
+//                intent.putExtra("foodselection", foodselection);
+//                intent.putExtra("SharedFoodListDatabase", SharedFoodListDatabase);
+//                startActivity(intent);
+//                finish();
 
     }
 

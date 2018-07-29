@@ -1,5 +1,6 @@
 package udacityteam.healthapp.activities;
 
+import android.app.FragmentManager;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -40,6 +41,7 @@ import udacityteam.healthapp.Model.SelectedFoodretrofit;
 import udacityteam.healthapp.Model.UserRetrofitGood;
 import udacityteam.healthapp.R;
 import udacityteam.healthapp.activities.CommunityActivities.CommunityList;
+import udacityteam.healthapp.completeRedesign.FoodListComplete;
 import udacityteam.healthapp.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity
@@ -72,6 +74,10 @@ public class MainActivity extends AppCompatActivity
     private ActivityMainBinding binding;
     private  MainActivityViewModel mainActivityViewModel;
 
+    public static final String INTENT_WHICH_DATABASE = "SharedFoodListDatabase";
+    public static final String INTENT_WHICH_TIME = "foodselection";
+
+
     private String mUsername;
 
     @Override
@@ -92,6 +98,28 @@ public class MainActivity extends AppCompatActivity
         mainActivityViewModel.initifloatingfield(fabsettings);
         Snacks = (LinearLayout) this.findViewById(R.id.Snacks);
         Drinks = (LinearLayout) this.findViewById(R.id.Drinks);
+        Drinks.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(MainActivity.this, "ahahaa", Toast.LENGTH_SHORT).show();
+//                Intent intent = new Intent(MainActivity.this, FoodSearchActivity.class);
+//                intent.putExtra("SharedFoodListDatabase", "SharedDrinks");
+//                intent.putExtra("foodselection", "Drinks");
+//                startActivity(intent);
+                Bundle bundle = new Bundle();
+                bundle.putString(INTENT_WHICH_DATABASE, "SharedDrinks");
+                bundle.putString(INTENT_WHICH_TIME, "Drinks");
+                FoodSearchFragment fragment = new FoodSearchFragment();
+                android.support.v4.app.FragmentManager fragmentManager = MainActivity.this.getSupportFragmentManager();
+                fragmentManager.executePendingTransactions();
+                fragment.setArguments(bundle);
+                fragmentManager.beginTransaction().
+                        add(R.id.app_bar_main, fragment)
+                        .addToBackStack(null)
+                        .commit();
+
+            }
+        });
         Breakfast = (LinearLayout) this.findViewById(R.id.Breakfast);
         Dinner = (LinearLayout) this.findViewById(R.id.Dinner);
         Lunch = (LinearLayout) this.findViewById(R.id.Lunch);
@@ -130,36 +158,6 @@ public class MainActivity extends AppCompatActivity
 
 
     }
-//    private void InitUser()
-//    {
-//        Gson gson = new GsonBuilder()
-//                .setLenient()
-//                .create();
-//        Retrofit retrofit = new Retrofit.Builder()
-//                .baseUrl(APIUrl.BASE_URL)
-//                .addConverterFactory(GsonConverterFactory.create(gson))
-//                .build();
-//
-//        //Defining retrofit api service
-//        APIService service = retrofit.create(APIService.class);
-//
-//        Call<Result> call = service.getCurrentUser(
-//                FirebaseAuth.getInstance().getCurrentUser().getUid()
-//        );
-//        call.enqueue(new Callback<Result>() {
-//            @Override
-//            public void onResponse(Call<Result> call, Response<Result> response) {
-//                currentUser = response.body().getUser();
-//                ((ApplicationController)getApplicationContext()).setId(response.body().getUser().getId());
-//                Log.d("useris", currentUser.toString());
-//            }
-//
-//            @Override
-//            public void onFailure(Call<Result> call, Throwable t) {
-//
-//            }
-//    });
-//    }
 
     private void initButton()
     {
@@ -176,20 +174,10 @@ public class MainActivity extends AppCompatActivity
         final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         System.out.println();
         Log.d("ajaaz", format.format(calendar.getTime()));
-//        dinnerbtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent intent = new Intent(MainActivity.this, FoodList.class);
-//                intent.putExtra("foodselection", "Dinner");
-//                intent.putExtra("SharedFoodListDatabase", "SharedDinners");
-//                intent.putExtra("requestdate", format.format(calendar.getTime()));
-//                startActivity(intent);
-//            }
-//        });
         lunchbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, FoodList.class);
+                Intent intent = new Intent(MainActivity.this, FoodListComplete.class);
                 intent.putExtra("foodselection", "Lunch");
                 intent.putExtra("SharedFoodListDatabase", "SharedLunches");
                 intent.putExtra("requestdate", format.format(calendar.getTime()));
@@ -200,7 +188,7 @@ public class MainActivity extends AppCompatActivity
         breakfastbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, FoodList.class);
+                Intent intent = new Intent(MainActivity.this, FoodListComplete.class);
                 intent.putExtra("foodselection", "Breakfast");
                 intent.putExtra("SharedFoodListDatabase", "SharedBreakfasts");
                 intent.putExtra("requestdate", format.format(calendar.getTime()));
@@ -210,7 +198,7 @@ public class MainActivity extends AppCompatActivity
         snacksbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, FoodList.class);
+                Intent intent = new Intent(MainActivity.this, FoodListComplete.class);
                 intent.putExtra("foodselection", "Snacks");
                 intent.putExtra("SharedFoodListDatabase", "SharedSnacks");
                 intent.putExtra("requestdate", format.format(calendar.getTime()));
@@ -220,7 +208,7 @@ public class MainActivity extends AppCompatActivity
         drinksbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, FoodList.class);
+                Intent intent = new Intent(MainActivity.this, FoodListComplete.class);
                 intent.putExtra("foodselection", "Drinks");
                 intent.putExtra("UserId", currentUser.getId());
                 intent.putExtra("SharedFoodListDatabase", "SharedDrinks");
@@ -301,11 +289,6 @@ private void closeSubMenusFab(){
     {
         Log.d("hello123", "heaaz");
         Toast.makeText(MainActivity.this, "hello", Toast.LENGTH_SHORT).show();
-     //   Intent intent = new Intent(context, FoodList.class);
-       // intent.putExtra("foodselection", "Dinner");
-   //    intent.putExtra("SharedFoodListDatabase", "SharedDinners");
-        // intent.putExtra("requestdate", format.format(calendar.getTime()));
-     //   context.startActivity(intent);
     }
 
 
@@ -317,14 +300,25 @@ private void closeSubMenusFab(){
         Breakfast.setVisibility(View.VISIBLE);
         Dinner.setVisibility(View.VISIBLE);
         Lunch.setVisibility(View.VISIBLE);
+        RegisterWithMailFragment fragment = new RegisterWithMailFragment();
+        android.support.v4.app.FragmentManager fragmentManager = this.getSupportFragmentManager();
+        fragmentManager.executePendingTransactions();
         Drinks.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(MainActivity.this, "ahahaa", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(MainActivity.this, FoodSearchActivity.class);
-                intent.putExtra("SharedFoodListDatabase", "SharedDrinks");
-                intent.putExtra("foodselection", "Drinks");
-                startActivity(intent);
+//                Intent intent = new Intent(MainActivity.this, FoodSearchActivity.class);
+//                intent.putExtra("SharedFoodListDatabase", "SharedDrinks");
+//                intent.putExtra("foodselection", "Drinks");
+//                startActivity(intent);
+                Bundle bundle = new Bundle();
+                bundle.putString(INTENT_WHICH_DATABASE, "SharedDrinks");
+                bundle.putString(INTENT_WHICH_TIME, "Drinks");
+                fragment.setArguments(bundle);
+                fragmentManager.beginTransaction().
+                        add(R.id.fragmentContainer, fragment)
+                        .addToBackStack(null)
+                        .commit();
 
             }
         });
@@ -332,20 +326,28 @@ private void closeSubMenusFab(){
             @Override
             public void onClick(View view) {
                 Toast.makeText(MainActivity.this, "ooooo", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(MainActivity.this, FoodSearchActivity.class);
-                intent.putExtra("SharedFoodListDatabase", "SharedSnacks");
-                intent.putExtra("foodselection", "Snacks");
-                startActivity(intent);
+//                Intent intent = new Intent(MainActivity.this, FoodSearchActivity.class);
+//                intent.putExtra("SharedFoodListDatabase", "SharedSnacks");
+//                intent.putExtra("foodselection", "Snacks");
+//                startActivity(intent);
+                Bundle bundle = new Bundle();
+                bundle.putString(INTENT_WHICH_DATABASE, "SharedSnacks");
+                bundle.putString(INTENT_WHICH_TIME, "Snacks");
+                fragment.setArguments(bundle);
+                fragmentManager.beginTransaction().
+                        add(R.id.fragmentContainer, fragment)
+                        .addToBackStack(null)
+                        .commit();
             }
         });
         Breakfast.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Toast.makeText(MainActivity.this, "tttttt", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(MainActivity.this, FoodSearchActivity.class);
-                intent.putExtra("SharedFoodListDatabase", "SharedBreakfasts");
-                intent.putExtra("foodselection", "Breakfast");
-                startActivity(intent);
+//                Intent intent = new Intent(MainActivity.this, FoodSearchActivity.class);
+//                intent.putExtra("SharedFoodListDatabase", "SharedBreakfasts");
+//                intent.putExtra("foodselection", "Breakfast");
+//                startActivity(intent);
             }
         });
         Dinner.setOnClickListener(new View.OnClickListener() {
@@ -435,11 +437,12 @@ private void closeSubMenusFab(){
     }
     private void ReturntoRegister()
     {
+
         AuthUI.getInstance().signOut(this)
             .addOnCompleteListener(new OnCompleteListener<Void>() {
                 public void onComplete(@NonNull Task<Void> task) {
                     // user is now signed out
-                      Intent intent = new Intent(MainActivity.this, RegisterActivityHome.class);
+                    Intent intent = new Intent(MainActivity.this, BaseActivity.class);
                     intent.putExtra("offline", true);
                     startActivity(intent);
                     finish();
