@@ -218,7 +218,7 @@ public class FoodSearchActivity extends AppCompatActivity implements SearchView.
                 amm.append("https://api.nal.usda.gov/ndb/V2/reports?ndbno=");
                 amm.append(models.get(position).getId());
                 amm.append("&type=f&format=json&api_key=HXLecTDsMqy1Y6jNoYPw2n3DQ30FeGXxD2XBZqJh");
-                //new JSONTask().execute(amm.toString());
+                //new GETADDITIONALFOODINFORMATION().execute(amm.toString());
                 intent.putExtra("id", models.get(position).getId());
                 intent.putExtra("foodname", models.get(position).getName());
                 intent.putExtra("foodselection", FoodSearchActivity.foodselection);
@@ -428,8 +428,8 @@ public class FoodSearchActivity extends AppCompatActivity implements SearchView.
                     Log.d("sizeee",String.valueOf(models1.size()));
                     if (models1.size() != 0) {
                         main.setLayoutManager(liner);
-                        SearchFoodsAdapter adapter = new SearchFoodsAdapter(models1);
-                        main.setAdapter(adapter);
+                     //   SearchFoodsAdapter adapter = new SearchFoodsAdapter(models1);
+                      //  main.setAdapter(adapter);
                         main.setVisibility(View.VISIBLE);
 
                         noresultsdisplay.setVisibility(View.GONE);

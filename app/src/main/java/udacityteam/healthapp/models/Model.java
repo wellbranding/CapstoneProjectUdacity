@@ -1,10 +1,13 @@
 package udacityteam.healthapp.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by vvost on 11/21/2017.
  */
 
-public class Model {
+public class Model implements Parcelable{
 
     private String name;
     private String offset;
@@ -23,6 +26,24 @@ public class Model {
         this.id = id;
     }
 
+
+    protected Model(Parcel in) {
+        name = in.readString();
+        offset = in.readString();
+        id = in.readString();
+    }
+
+    public static final Creator<Model> CREATOR = new Creator<Model>() {
+        @Override
+        public Model createFromParcel(Parcel in) {
+            return new Model(in);
+        }
+
+        @Override
+        public Model[] newArray(int size) {
+            return new Model[size];
+        }
+    };
 
     public String getName() {
         return name;
@@ -57,5 +78,17 @@ public class Model {
     public String toString3()
     {
         return id;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(name);
+        dest.writeString(offset);
+        dest.writeString(id);
     }
 }

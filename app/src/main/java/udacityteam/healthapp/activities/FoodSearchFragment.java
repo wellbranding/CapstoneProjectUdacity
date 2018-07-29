@@ -46,6 +46,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Objects;
 
+import dagger.android.support.AndroidSupportInjection;
 import udacityteam.healthapp.R;
 import udacityteam.healthapp.adapters.SearchFoodsAdapter;
 import udacityteam.healthapp.models.Model;
@@ -74,6 +75,13 @@ public class FoodSearchFragment extends Fragment implements SearchView.OnQueryTe
     private MenuItem searchMenuItem;
     private SuggestAdapter suggestionsAdapter;
     private final ArrayList<String> dummyArray = new ArrayList<String>();
+    FoodListRecyclerViewListener mCallback;
+
+    public interface FoodListRecyclerViewListener {
+        public void onFoodListSelected(String id, String foodName,
+                                       String whichTime );
+    }
+
 
     @Nullable
     @Override
@@ -82,13 +90,12 @@ public class FoodSearchFragment extends Fragment implements SearchView.OnQueryTe
              container, false);
   //      Toolbar toolbar = view.findViewById(R.id.toolbar);
         Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
+     //   toolbar.setNavigationIcon(R.drawable.abc_ic_ab_back_material);
      ((MainActivity)getActivity()).setSupportActionBar(toolbar);
         setHasOptionsMenu(true);
 
         main = view.findViewById(R.id.main);
         noresultsdisplay = view.findViewById(R.id.noresultsdisplay);
-        Objects.requireNonNull(((AppCompatActivity) requireActivity()).getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-   //     ((AppCompatActivity)requireActivity()).setDisplayShowHomeEnabled(true);
         lv = (RecyclerView) view.findViewById(R.id.listViewCountry);
         lv.setVisibility(View.INVISIBLE);
         arrayCountry = new ArrayList<>();
@@ -101,16 +108,22 @@ public class FoodSearchFragment extends Fragment implements SearchView.OnQueryTe
         super.onCreate(savedInstanceState);
         FirebaseApp.initializeApp(requireActivity());
         Intent iin = requireActivity().getIntent();
-        Bundle b = iin.getExtras();
+        Bundle b = getArguments();
+      //  Bundle b = iin.getExtras();
         if(b!=null) {
             foodselection = (String) b.get("foodselection");
             SharedFoodListDatabase = (String) b.get("SharedFoodListDatabase");
+            Log.d("receivedFragmentSearch", String.valueOf(foodselection));
+            Log.d("receivedFragmentSearch", String.valueOf(SharedFoodListDatabase));
         }
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_search, menu);
+
+      //  (((AppCompatActivity)requireActivity()).getSupportActionBar()).setDisplayShowHomeEnabled(true);
+    //    Objects.requireNonNull(((AppCompatActivity) requireActivity()).getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         searchMenuItem = menu.findItem(R.id.menuSearch);
         searchManager = (SearchManager) requireActivity().getSystemService(Context.SEARCH_SERVICE);
         searchView = (SearchView) searchMenuItem.getActionView();
@@ -133,6 +146,19 @@ public class FoodSearchFragment extends Fragment implements SearchView.OnQueryTe
 
         return true;
     }
+    @Override
+    public void onAttach(Context context) {
+    //    AndroidSupportInjection.inject(this);
+        super.onAttach(context);
+
+        try {
+            mCallback = (FoodListRecyclerViewListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString()
+                    + " must implement OnHeadlineSelectedListener");
+        }
+    }
+
 
     @Override
     public boolean onQueryTextSubmit(final String query) {
@@ -206,17 +232,21 @@ public class FoodSearchFragment extends Fragment implements SearchView.OnQueryTe
 
             if (cursorInBounds(position)) {
 
+
                 Intent intent = new Intent(requireActivity(), FoodNutritiensDisplay.class);
                 StringBuilder amm = new StringBuilder();
                 amm.append("https://api.nal.usda.gov/ndb/V2/reports?ndbno=");
                 amm.append(models.get(position).getId());
                 amm.append("&type=f&format=json&api_key=HXLecTDsMqy1Y6jNoYPw2n3DQ30FeGXxD2XBZqJh");
-                //new JSONTask().execute(amm.toString());
-                intent.putExtra("id", models.get(position).getId());
-                intent.putExtra("foodname", models.get(position).getName());
-                intent.putExtra("foodselection", FoodSearchFragment.foodselection);
+                //new GETADDITIONALFOODINFORMATION().execute(amm.toString());
 
-                startActivity(intent);
+                mCallback.onFoodListSelected(models.get(position).getId(),
+                        models.get(position).getName(), foodselection);
+//                intent.putExtra("id", models.get(position).getId());
+//                intent.putExtra("foodname", models.get(position).getName());
+//                intent.putExtra("foodselection", foodselection);
+//
+//                startActivity(intent);
                 Log.d("ama", "Element " + position + " clicked.");
 
                 final String selected = mObjects.get(position).getId();
@@ -404,11 +434,11 @@ public class FoodSearchFragment extends Fragment implements SearchView.OnQueryTe
                     LinearLayoutManager liner = new LinearLayoutManager(requireActivity());
                     DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(main.getContext(),
                             liner.getOrientation());
-                    // main.addItemDecoration(dividerItemDecoration);
-                    Log.d("sizeee",String.valueOf(models1.size()));
                     if (models1.size() != 0) {
                         main.setLayoutManager(liner);
-                        SearchFoodsAdapter adapter = new SearchFoodsAdapter(models1);
+                        SearchFoodsAdapter adapter = new SearchFoodsAdapter(models1, foodselection, (id, name, whichTime) -> mCallback.onFoodListSelected(id,
+                                name, whichTime));
+
                         main.setAdapter(adapter);
                         main.setVisibility(View.VISIBLE);
                         noresultsdisplay.setVisibility(View.GONE);

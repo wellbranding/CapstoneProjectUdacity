@@ -50,7 +50,7 @@ public class SharedFoodListsAdapter extends RecyclerView.Adapter<SharedFoodLists
                     intent.putExtra("foodselection", DatabaseStorage);
 
 
-                    //new JSONTask().execute(amm.toString());
+                    //new GETADDITIONALFOODINFORMATION().execute(amm.toString());
                  //   intent.putExtra("arraylist", mDataSet.get(getAdapterPosition()).getSelectedFoods());
 //                    intent.putExtra("sharedfoodproduct", new SharedFoodProducts(mDataSet.get(getAdapterPosition()).
 //                            getUserId(),

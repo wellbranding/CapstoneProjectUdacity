@@ -24,10 +24,15 @@ import udacityteam.healthapp.models.Model;
 
 public class SearchFoodsAdapter extends RecyclerView.Adapter<SearchFoodsAdapter.ViewHolder>  {
     private static final String TAG = "CustomAdapter";
+    private String whichTime;
 
     private List<Model> mDataSet = new ArrayList<>();
-    private Context context;
+    public interface OnItemClickListener {
+        void onItemClick(String id, String name, String whichTime);
+    }
 
+    private Context context;
+    private final OnItemClickListener listener;
     /**
      * Provide a reference to the type of views that you are using (custom ViewHolder)
      */
@@ -44,16 +49,18 @@ public class SearchFoodsAdapter extends RecyclerView.Adapter<SearchFoodsAdapter.
                 public void onClick(View v) {
                    // Toast.makeText(SearchFoodsAdapter.this, models.get(i).getId(), Toast.LENGTH_LONG).show();
                     Intent intent = new Intent(context, FoodNutritiensDisplay.class);
-                    StringBuilder amm = new StringBuilder();
-                    amm.append("https://api.nal.usda.gov/ndb/V2/reports?ndbno=");
-                    amm.append(mDataSet.get(getAdapterPosition()).getId());
-                    amm.append("&type=f&format=json&api_key=HXLecTDsMqy1Y6jNoYPw2n3DQ30FeGXxD2XBZqJh");
-                    //new JSONTask().execute(amm.toString());
-                    intent.putExtra("id", mDataSet.get(getAdapterPosition()).getId());
-                    intent.putExtra("foodname", mDataSet.get(getAdapterPosition()).getName());
-                    intent.putExtra("foodselection", FoodSearchActivity.foodselection);
-
-                    context.startActivity(intent);
+//                    StringBuilder amm = new StringBuilder();
+//                    amm.append("https://api.nal.usda.gov/ndb/V2/reports?ndbno=");
+//                    amm.append(mDataSet.get(getAdapterPosition()).getId());
+//                    amm.append("&type=f&format=json&api_key=HXLecTDsMqy1Y6jNoYPw2n3DQ30FeGXxD2XBZqJh");
+                    //new GETADDITIONALFOODINFORMATION().execute(amm.toString());
+                    listener.onItemClick(mDataSet.get(getAdapterPosition()).getId(),
+                            mDataSet.get(getAdapterPosition()).getName(), whichTime );
+//                    intent.putExtra("id", mDataSet.get(getAdapterPosition()).getId());
+//                    intent.putExtra("foodname", mDataSet.get(getAdapterPosition()).getName());
+//                    intent.putExtra("foodselection", whichTime);
+//
+//                    context.startActivity(intent);
                     Log.d(TAG, "Element " + getAdapterPosition() + " clicked.");
                 }
             });
@@ -70,8 +77,10 @@ public class SearchFoodsAdapter extends RecyclerView.Adapter<SearchFoodsAdapter.
      *
      * @param dataSet String[] containing the data to populate views to be used by RecyclerView.
      */
-    public SearchFoodsAdapter(List<Model> dataSet) {
+    public SearchFoodsAdapter(List<Model> dataSet, String whichTime, OnItemClickListener listener) {
         mDataSet = dataSet;
+        this.whichTime = whichTime;
+        this.listener = listener;
 
 
     }

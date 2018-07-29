@@ -38,7 +38,11 @@
         <activity
             android:name=".activities.MainActivity"
             android:theme="@style/AppTheme.NoActionBar"
-            android:label="@string/title_activity_main2" />
+            android:label="@string/title_activity_main2" >
+            <!--<meta-data-->
+                <!--android:name="android.support.PARENT_ACTIVITY"-->
+                <!--android:value=".activities.MainActivity"/>-->
+        </activity>
         <activity android:name=".activities.FoodListPrieview" />
         <activity android:name=".activities.FoodListPrieviewNew" />
         <activity android:name=".activities.FoodList"

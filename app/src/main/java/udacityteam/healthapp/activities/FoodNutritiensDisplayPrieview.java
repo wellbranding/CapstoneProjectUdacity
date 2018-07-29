@@ -61,7 +61,7 @@ public class FoodNutritiensDisplayPrieview extends AppCompatActivity {
 //            amm.append("https://api.nal.usda.gov/ndb/V2/reports?ndbno=");
 //            amm.append(id);
 //            amm.append("&type=f&format=json&api_key=HXLecTDsMqy1Y6jNoYPw2n3DQ30FeGXxD2XBZqJh");
-//           JSONTask jsonTask =  new JSONTask();
+//           GETADDITIONALFOODINFORMATION jsonTask =  new GETADDITIONALFOODINFORMATION();
 //           jsonTask.execute(amm.toString());
 //          //  Textv.setText(j);
         }

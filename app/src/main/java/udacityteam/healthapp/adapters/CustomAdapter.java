@@ -42,7 +42,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
 
 
                     Intent intent = new Intent(context, FoodListPrieview.class);
-                    //new JSONTask().execute(amm.toString());
+                    //new GETADDITIONALFOODINFORMATION().execute(amm.toString());
                     intent.putExtra("key", mDataSet.get(getAdapterPosition()));
                     intent.putExtra("foodselection", CommunityFoodListsDisplayFragment0.value);
 

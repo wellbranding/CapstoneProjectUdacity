@@ -9,6 +9,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -35,6 +36,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 import butterknife.ButterKnife;
 import udacityteam.healthapp.Model.SelectedFoodretrofit;
@@ -45,13 +47,16 @@ import udacityteam.healthapp.completeRedesign.FoodListComplete;
 import udacityteam.healthapp.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, MainActivityViewModel.DataListener {
+        implements NavigationView.OnNavigationItemSelectedListener, MainActivityViewModel.DataListener,
+FoodSearchFragment.FoodListRecyclerViewListener{
 
     public static final String ANONYMOUS = "anonymous";
 
     public static final int RC_SIGN_IN = 1;
 
     FloatingActionButton fabsettings;
+
+    DrawerLayout mDrawer;
 
 
     private ChildEventListener mChildEventListener;
@@ -79,6 +84,12 @@ public class MainActivity extends AppCompatActivity
 
 
     private String mUsername;
+    private ActionBar mActionBar;
+    private ActionBarDrawerToggle mDrawerToggle;
+    private boolean mToolBarNavigationListenerIsRegistered;
+    private NavigationView navigationView;
+    private boolean isOpenedFragment = false;
+    private boolean isOpenedSecondFragmnet = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,7 +102,7 @@ public class MainActivity extends AppCompatActivity
 
         binding.appBarMain.calendarView.setViewModel(mainActivityViewModel);
         binding.appBarMain.layoutFloatingAction.setViewModel(mainActivityViewModel);
-        binding.appBarMain.recyclerView.setViewModel(mainActivityViewModel);
+       // binding.appBarMain.recyclerView.setViewModel(mainActivityViewModel);
         binding.appBarMain.buttons.setViewModel(mainActivityViewModel);
         mainActivityViewModel.InitUser();
         fabsettings = findViewById(R.id.fabSetting);
@@ -117,6 +128,8 @@ public class MainActivity extends AppCompatActivity
                         add(R.id.app_bar_main, fragment)
                         .addToBackStack(null)
                         .commit();
+                showUpButton(true);
+                isOpenedFragment = true;
 
             }
         });
@@ -139,24 +152,38 @@ public class MainActivity extends AppCompatActivity
         });
         closeSubMenusFab();
         Toolbar toolbar = findViewById(R.id.toolbar);
-
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("MainActivity");
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
 
-        NavigationView navigationView = findViewById(R.id.nav_view);
+
+        mActionBar = getSupportActionBar();
+        mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        mDrawerToggle.syncState();
+//        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+//        setSupportActionBar(toolbar);
+//        getSupportActionBar().setTitle("MainActivity");
+//        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+//                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+//        drawer.addDrawerListener(toggle);
+//        toggle.syncState();
+       navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         calendarinit();
     //    initRecyclerview();
         initButton();
         mainActivityViewModel.GetCalendarTime();
 
+        if(savedInstanceState != null){
+            resolveUpButtonWithFragmentStack();
+        } else {
+            // You probably want to add your ListFragment here.
+        }
 
 
+
+    }
+    private void resolveUpButtonWithFragmentStack() {
+        showUpButton(getSupportFragmentManager().getBackStackEntryCount() > 0);
     }
 
     private void initButton()
@@ -316,8 +343,8 @@ private void closeSubMenusFab(){
                 bundle.putString(INTENT_WHICH_TIME, "Drinks");
                 fragment.setArguments(bundle);
                 fragmentManager.beginTransaction().
-                        add(R.id.fragmentContainer, fragment)
-                        .addToBackStack(null)
+                        replace(R.id.fragmentContainer, fragment)
+                      //  .addToBackStack(null)
                         .commit();
 
             }
@@ -336,7 +363,7 @@ private void closeSubMenusFab(){
                 fragment.setArguments(bundle);
                 fragmentManager.beginTransaction().
                         add(R.id.fragmentContainer, fragment)
-                        .addToBackStack(null)
+                     //   .addToBackStack(null)
                         .commit();
             }
         });
@@ -379,24 +406,84 @@ private void closeSubMenusFab(){
 
 
 
-    private void onSignedInInitialize(String username) {
-        mUsername = username;
+    private void showUpButton(boolean show) {
+        // To keep states of ActionBar and ActionBarDrawerToggle synchronized,
+        // when you enable on one, you disable on the other.
+        // And as you may notice, the order for this operation is disable first, then enable - VERY VERY IMPORTANT.
+        if (show) {
+            // Remove hamburger
+            mDrawerToggle.setDrawerIndicatorEnabled(false);
+            // Show back button
+            mActionBar.setDisplayHomeAsUpEnabled(true);
+            // when DrawerToggle is disabled i.e. setDrawerIndicatorEnabled(false), navigation icon
+            // clicks are disabled i.e. the UP button will not work.
+            // We need to add a listener, as in below, so DrawerToggle will forward
+            // click events to this listener.
+            if (!mToolBarNavigationListenerIsRegistered) {
+                mDrawerToggle.setToolbarNavigationClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                     //   onBackPressed();
+                    }
+                });
+
+                mToolBarNavigationListenerIsRegistered = true;
+            }
+
+        } else {
+            // Remove back button
+            mActionBar.setDisplayHomeAsUpEnabled(false);
+
+
+            // Show hamburger
+            mDrawerToggle.setDrawerIndicatorEnabled(true);
+
+//            navigationView.setNavigationItemSelectedListener(this);
+//            // Remove the/any drawer toggle listener
+//          //  mDrawerToggle.setToolbarNavigationClickListener(null);
+//            mToolBarNavigationListenerIsRegistered = false;
+        }
     }
-
-    private void onSignedOutCleanup() {
-        mUsername = ANONYMOUS;
-    }
-
-
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
+
+        if (mDrawer.isDrawerOpen(GravityCompat.START)) {
+            mDrawer.closeDrawer(GravityCompat.START);
+
         } else {
-            super.onBackPressed();
+            int backStackCount = getSupportFragmentManager().getBackStackEntryCount();
+
+            if (backStackCount >= 1) {
+                getSupportFragmentManager().popBackStack();
+
+                // Change to hamburger icon if at bottom of stack
+                if(backStackCount == 1){
+                    isOpenedFragment = false;
+                    showUpButton(false);
+                }
+            } else {
+                super.onBackPressed();
+            }
         }
+//        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+//        Objects.requireNonNull(getSupportActionBar()).setDisplayShowHomeEnabled(true);
+//       getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        if (drawer.isDrawerOpen(GravityCompat.START)) {
+//            drawer.closeDrawer(GravityCompat.START);
+//        } else {
+//            super.onBackPressed();
+//        }
+//        android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+//        if (fm.getBackStackEntryCount() > 1) {
+//            int count = fm.getBackStackEntryCount();
+//            for (int i = 0; i < count; ++i) {
+//                fm.popBackStackImmediate();
+//            }
+//        } else {
+//            super.onBackPressed();
+//        }
+
     }
 
     @Override
@@ -424,11 +511,43 @@ private void closeSubMenusFab(){
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
+//        if (.onOptionsItemSelected(item)) {
+//            return true;
+//        }
         int id = item.getItemId();
 
         switch(item.getItemId()) {
             case R.id.action_settings:
                 return true;
+               case android.R.id.home:
+//                   if(!isOpenedFragment) {
+//                       mDrawer.openDrawer(GravityCompat.START);
+//                       return true;
+//                   }
+//                   else
+//                   {
+//                       isOpenedFragment = false;
+//                       onBackPressed();
+//                       return true;
+//                   }
+                   int backStackCount = getSupportFragmentManager().getBackStackEntryCount();
+
+                   if (backStackCount >= 1) {
+                       mDrawerToggle.setDrawerIndicatorEnabled(false);
+                       // Show back button
+                       mActionBar.setDisplayHomeAsUpEnabled(true);
+                       onBackPressed();
+                       return true;
+
+                   }
+                   else
+                   {
+                       mDrawerToggle.setDrawerIndicatorEnabled(true);
+                       // Show back button
+                       mActionBar.setDisplayHomeAsUpEnabled(false);
+                       mDrawer.openDrawer(GravityCompat.START);
+                     return true;
+                   }
             case R.id.action_sign_out:
                 ReturntoRegister();
             default:
@@ -515,5 +634,24 @@ private void closeSubMenusFab(){
     @Override
     public void onRepositoriesChanged(List<SelectedFoodretrofit> repositories) {
 
+    }
+
+    @Override
+    public void onFoodListSelected(String id, String foodName, String whichTime) {
+        Toast.makeText(this, "Opened requiredFragment", Toast.LENGTH_SHORT).show();
+        Bundle bundle = new Bundle();
+        bundle.putString("id", id);
+        bundle.putString("foodName", foodName);
+        bundle.putString("whichTime", whichTime);
+        FoodNutritiensDisplayFragment fragment = new FoodNutritiensDisplayFragment();
+        android.support.v4.app.FragmentManager fragmentManager = MainActivity.this.getSupportFragmentManager();
+        fragmentManager.executePendingTransactions();
+        fragment.setArguments(bundle);
+        fragmentManager.beginTransaction().
+                add(R.id.app_bar_main, fragment)
+                .addToBackStack(null)
+                .commit();
+        showUpButton(true);
+        isOpenedSecondFragmnet = true;
     }
 }

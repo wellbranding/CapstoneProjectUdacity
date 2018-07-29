@@ -180,10 +180,12 @@ public class BaseActivity extends AppCompatActivity implements
 
 
 
+
     private void updateUI(FirebaseUser user) {
         if (user != null && user.isEmailVerified()) {
             Intent intent = new Intent(BaseActivity.this, MainActivity.class);
             startActivity(intent);
+            finish();
         }
         else
             if(user!=null && !user.isEmailVerified())
