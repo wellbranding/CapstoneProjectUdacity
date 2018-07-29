@@ -1,12 +1,10 @@
-package udacityteam.healthapp.activities.CommunityActivities;
+package udacityteam.healthapp.completeRedesign;
 
-import android.app.Application;
-import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
+import android.arch.lifecycle.Transformations;
 import android.arch.lifecycle.ViewModel;
 import android.content.Context;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -25,14 +23,10 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-import rx.Subscriber;
 import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
 import udacityteam.healthapp.Model.OneSharedFoodProductsListRetrofit;
 import udacityteam.healthapp.Model.SelectedFoodretrofit;
 import udacityteam.healthapp.Model.SharedFoodProductsRetrofit;
-import udacityteam.healthapp.Model.UserProfile;
-import udacityteam.healthapp.Network.PHPService;
 import udacityteam.healthapp.PHP_Retrofit_API.APIService;
 import udacityteam.healthapp.PHP_Retrofit_API.APIUrl;
 import udacityteam.healthapp.activities.FoodNutritiensDisplayPrieview;
@@ -63,6 +57,20 @@ public class SharedFoodListsViewModelNew extends ViewModel {
     List<OneSharedFoodProductsListRetrofit> selectedFoodretrofits;
     RecipiesRepository repository;
 
+    MutableLiveData<String> whichTime = new MutableLiveData<>();
+    public void setWhichTime(String value)
+    {
+        if(whichTime.getValue()!=null) {
+            if (whichTime.getValue().equals(value)) {
+                return;
+            }
+        }else {
+
+                whichTime.setValue(value);
+            }
+
+    }
+
     public MutableLiveData<List<OneSharedFoodProductsListRetrofit>> mutableLiveData = new MutableLiveData<>();
     ApplicationController application = null;
 
@@ -72,8 +80,12 @@ public class SharedFoodListsViewModelNew extends ViewModel {
     }
 
     public LiveData<Resource<List<OneSharedFoodProductsListRetrofit>>> getRecipes() {
+//    recipes = Transformations.switchMap(whichTime,
+//              important -> repository.loadSharedFoodLists(important));
+//      return recipes;
+
         if (recipes == null) {
-            recipes = repository.loadRecipes();
+            recipes = repository.loadSharedFoodLists(whichTime.getValue());
         }
         return recipes;
     }
@@ -82,50 +94,7 @@ public class SharedFoodListsViewModelNew extends ViewModel {
         return selectedFoodretrofit.getFoodid();
     }
 
-    public void LoadFoodList( String SharedFoodListDatabase)
-    {
 
-        if (subscription != null && !subscription.isUnsubscribed()) subscription.unsubscribe();
-
-        PHPService phpService = application.getPHPService();
-        subscription = phpService.getAllSharedDiets(application.getId(),
-                SharedFoodListDatabase)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(application.defaultSubscribeScheduler())
-                .subscribe(new Subscriber<SharedFoodProductsRetrofit>() {
-                    @Override
-                    public void onCompleted() {
-                       for(int i=0;i< selectedFoodretrofits.size(); i++)
-                       {
-                           selectedFoodretrofits.get(i).setUserProfile(new UserProfile(
-                                   selectedFoodretrofits.get(i).getMail(), selectedFoodretrofits.get(i).getDisplayname()
-                           ));
-                       }
-                        Log.d("aryra", String.valueOf(selectedFoodretrofits.size()));
-                        InitSelectedfoods(selectedFoodretrofits);
-                    }
-
-                    @Override
-                    public void onError(Throwable error) {
-                        Log.e(TAG, "Error loading GitHub repos ", error);
-//                        if (isHttp404(error)) {
-//                            infoMessage.set("notfound");
-//                        } else {
-//                            infoMessage.set("good");
-//                        }
-//                        infoMessageVisibility.set(View.VISIBLE);
-                    }
-
-                    @Override
-                    public void onNext(SharedFoodProductsRetrofit repositories) {
-
-                        Log.i(TAG, "Repos loaded " + repositories);
-                        Log.d("aryra1", String.valueOf(repositories));
-                       // CommunityFoodListsDisplayFragment0.this.selectedFoodretrofits = repositories.getUsers().getClass();
-                        SharedFoodListsViewModelNew.this.selectedFoodretrofits =  repositories.getSelectedFoodretrofits();
-                    }
-                });
-    }
     public void InitSelectedfoods(List<OneSharedFoodProductsListRetrofit> ones)
     {
         mutableLiveData.setValue(ones);

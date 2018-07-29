@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,29 +22,16 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
-import java.util.List;
 
 import javax.inject.Inject;
 
 import dagger.android.support.AndroidSupportInjection;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-import udacityteam.healthapp.Model.OneSharedFoodProductsListRetrofit;
-import udacityteam.healthapp.Model.SharedFoodProductsRetrofit;
-import udacityteam.healthapp.PHP_Retrofit_API.APIService;
-import udacityteam.healthapp.PHP_Retrofit_API.APIUrl;
 import udacityteam.healthapp.R;
-import udacityteam.healthapp.activities.ApplicationClass;
 import udacityteam.healthapp.adapters.FoodViewHolder;
 import udacityteam.healthapp.adapters.SharedFoodListsAdapter;
 import udacityteam.healthapp.adapters.SharedFoodListsAdapterNew;
 import udacityteam.healthapp.completeRedesign.Repository.Status;
+import udacityteam.healthapp.completeRedesign.SharedFoodListsViewModelNew;
 import udacityteam.healthapp.databinding.CommunityListFragmentBinding;
 import udacityteam.healthapp.models.SelectedFood;
 
@@ -114,6 +100,7 @@ public class SharedFoodListFragmentNetwork extends Fragment{
             side = bundle.getString("foodselection", null);
             SharedFoodListDatabase =  bundle.getString("SharedFoodListDatabase");
         }
+        viewModel.setWhichTime(SharedFoodListDatabase);
 
         mAuth = FirebaseAuth.getInstance();
 

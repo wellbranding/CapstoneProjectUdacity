@@ -82,9 +82,9 @@ public interface APIService {
 
     );
     @GET("getSelectedFoods")
-    Observable<SelectedFoodretrofitarray> getselectedfoods(
+ LiveData<ApiResponse<SelectedFoodretrofitarray>> getSelectedFoods(
             @Query("UserId") Integer UserId,
-            @Query("whichtime") String whichtime,
+            @Query("whichtime") String whichTime,
             @Query("year") String year,
             @Query("month") String month,
             @Query("day") String day
@@ -119,7 +119,7 @@ public interface APIService {
     );
 
     @GET("IsShared")
-    Observable<Result> getIsShared
+    Call<Result> getIsShared
             (
                     @Query("UserId") Integer UserId,
                     @Query("date") Timestamp Date,

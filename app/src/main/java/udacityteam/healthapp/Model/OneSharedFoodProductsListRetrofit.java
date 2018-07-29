@@ -29,9 +29,18 @@ import udacityteam.healthapp.models.User;
     private float Fat;
     private float Carbohydrates;
     private String displayname;
+    private String whichDatabase;
     private String mail;
     @TypeConverters(DataConverterStep.class)
     private UserProfile userProfile;
+
+    public String getWhichDatabase() {
+        return whichDatabase;
+    }
+
+    public void setWhichDatabase(String whichDatabase) {
+        this.whichDatabase = whichDatabase;
+    }
 
     public OneSharedFoodProductsListRetrofit() {
     }

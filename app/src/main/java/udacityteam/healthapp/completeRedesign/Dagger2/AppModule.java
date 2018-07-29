@@ -51,7 +51,7 @@ public class AppModule {
     @Singleton
     @Provides
     MainDatabase mainDatabase_create(Application application) {
-        return Room.databaseBuilder(application, MainDatabase.class, "baking_app5").build();
+        return Room.databaseBuilder(application, MainDatabase.class, "health_app5").build();
     }
 
     @Provides

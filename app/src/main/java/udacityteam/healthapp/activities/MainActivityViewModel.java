@@ -182,14 +182,14 @@ public class MainActivityViewModel implements ViewModel {
         floatingActionButtonObservableField.get().setImageResource(R.drawable.ic_settings_black_24dp);
         initfloating.set(false);
     }
-    public void searchdrinks(View view)
-    {
-        Toast.makeText(context, "Drunkjs", Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(context, FoodSearchActivity.class);
-        intent.putExtra("SharedFoodListDatabase", "SharedDrinks");
-        intent.putExtra("foodselection", "Drinks");
-        context.startActivity(intent);
-    }
+//    public void searchdrinks(View view)
+//    {
+//        Toast.makeText(context, "Drunkjs", Toast.LENGTH_SHORT).show();
+//        Intent intent = new Intent(context, FoodSearchActivity.class);
+//        intent.putExtra("SharedFoodListDatabase", "SharedDrinks");
+//        intent.putExtra("foodselection", "Drinks");
+//        context.startActivity(intent);
+//    }
     public void searchbreakfasts(View view)
     {
         Toast.makeText(context, "Drunkjs", Toast.LENGTH_SHORT).show();

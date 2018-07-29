@@ -8,7 +8,7 @@ import udacityteam.healthapp.activities.BaseActivity;
 @Module
 public abstract class BaseActivityModule {
 
-    @ContributesAndroidInjector()
+    @ContributesAndroidInjector(modules = BaseActivityFragmentsModule.class)
     abstract BaseActivity contributeBaseActivity();
 }
 

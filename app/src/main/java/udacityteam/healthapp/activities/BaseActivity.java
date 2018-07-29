@@ -30,6 +30,7 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import javax.inject.Inject;
 
 import dagger.android.AndroidInjection;
+import dagger.android.DispatchingAndroidInjector;
 import udacityteam.healthapp.Model.Userretrofit;
 import udacityteam.healthapp.R;
 
@@ -53,6 +54,9 @@ public class BaseActivity extends AppCompatActivity implements
 
     @Inject
     ViewModelProvider.Factory ViewModelFactory;
+
+    @Inject
+    DispatchingAndroidInjector<android.support.v4.app.Fragment> dispatchingAndroidInjector;
 
     LoginRegisterViewModel viewModel;
 

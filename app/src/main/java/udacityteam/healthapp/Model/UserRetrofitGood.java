@@ -3,6 +3,8 @@ package udacityteam.healthapp.Model;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 
+import java.util.zip.Inflater;
+
 /**
  * Created by vvost on 1/27/2018.
  */
@@ -37,7 +39,7 @@ public class UserRetrofitGood {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

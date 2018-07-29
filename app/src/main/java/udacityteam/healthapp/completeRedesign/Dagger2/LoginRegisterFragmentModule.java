@@ -13,4 +13,5 @@ public abstract class LoginRegisterFragmentModule {
 //   @ContributesAndroidInjector()
 //   abstract SharedFoodListFragmentNetwork contributeSharedFoodListFragmentNetwork();
 
+
 }

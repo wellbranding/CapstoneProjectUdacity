@@ -4,6 +4,7 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.Toast;
@@ -45,6 +46,8 @@ public class LoginRegisterViewModel extends ViewModel {
     private RecipesMainDao recipesMainDao;
     private MainDatabase mainDatabase;
     @Inject
+    SharedPreferences sharedPreferences;
+    @Inject
     public LoginRegisterViewModel(RecipiesRepository recipiesRepository) {
         this.repository = recipiesRepository;
         this.recipesMainDao = recipiesRepository.getUserDao();
@@ -53,12 +56,8 @@ public class LoginRegisterViewModel extends ViewModel {
     MutableLiveData<Result> googleSigInRegister;
     public LiveData<Result> getRegisterWithGoogleSignInResponse(Userretrofit userretrofit)
     {
-        if(googleSigInRegister==null)
-        {
-            if(userretrofit!=null)
+        if(userretrofit!=null)
             registerWithGoogleSignIn(userretrofit);
-
-        }
         return googleSigInRegister;
 
     }
@@ -86,6 +85,9 @@ public class LoginRegisterViewModel extends ViewModel {
                     if (!result.getError()) {
                         googleSigInRegister.setValue(result);
                         UserRetrofitGood userRetrofitGood= result.getUser();
+                        sharedPreferences.edit().putInt("userId", userRetrofitGood.getId())
+                                .commit();
+                        Log.d("sharedSend", String.valueOf(sharedPreferences.getInt("userId", -1)));
                         Completable.fromAction(() ->
                                 recipesMainDao.insertCurrentUser(userRetrofitGood)).
                                 observeOn(AndroidSchedulers.mainThread())

@@ -6,8 +6,8 @@ import android.arch.lifecycle.ViewModelProvider;
 import dagger.Binds;
 import dagger.Module;
 import dagger.multibindings.IntoMap;
-import udacityteam.healthapp.activities.CommunityActivities.SharedFoodListFragmentNetwork;
-import udacityteam.healthapp.activities.CommunityActivities.SharedFoodListsViewModelNew;
+import udacityteam.healthapp.completeRedesign.FoodListViewModelComplete;
+import udacityteam.healthapp.completeRedesign.SharedFoodListsViewModelNew;
 import udacityteam.healthapp.activities.LoginRegisterViewModel;
 
 @Module
@@ -26,4 +26,9 @@ public abstract class ViewModelsModule {
     @IntoMap
     @ViewModelsKey(LoginRegisterViewModel.class)
     abstract ViewModel bindLoginRegisterViewModel(LoginRegisterViewModel mainViewModel);
+
+    @Binds
+    @IntoMap
+    @ViewModelsKey(FoodListViewModelComplete.class)
+    abstract ViewModel bindFoodListViewModelComplete(FoodListViewModelComplete foodListViewModelComplete);
 }

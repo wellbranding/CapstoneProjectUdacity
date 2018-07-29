@@ -43,6 +43,8 @@
         <activity android:name=".activities.FoodListPrieviewNew" />
         <activity android:name=".activities.FoodList"
             android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".completeRedesign.FoodListComplete"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".activities.CommunityActivities.FilterActivity"
             android:theme="@style/AppTheme.NoActionBar" />
