@@ -7,6 +7,7 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.content.Intent;
@@ -39,7 +40,7 @@ import udacityteam.healthapp.R;
  * Demonstrate Firebase Authentication using a Google ID Token.
  */
 public class BaseActivity extends AppCompatActivity implements
-        View.OnClickListener {
+        View.OnClickListener, RegisterWithMailFragment.RegisterSuccessListener {
 
     private static final String TAG = "GoogleActivity";
     private static final int RC_SIGN_IN = 9001;
@@ -99,8 +100,16 @@ public class BaseActivity extends AppCompatActivity implements
         loginmail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(BaseActivity.this, LoginWithMailPasword.class);
-                startActivity(intent);
+//                Intent intent = new Intent(BaseActivity.this, LoginWithMailPasword.class);
+//                startActivity(intent);
+                LoginWithMailFragment fragment = new LoginWithMailFragment();
+                android.support.v4.app.FragmentManager fragmentManager = BaseActivity.this.getSupportFragmentManager();
+                fragmentManager.popBackStack(BACK_STACK_ROOT_TAG_LOGIN, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                fragmentManager.beginTransaction().
+                        replace(R.id.fragmentContainer, fragment)
+                         .addToBackStack(BACK_STACK_ROOT_TAG_LOGIN)
+                        .commit();
+                fragmentManager.executePendingTransactions();
             }
         });
 
@@ -188,7 +197,7 @@ public class BaseActivity extends AppCompatActivity implements
             finish();
         }
         else
-            if(user!=null && !user.isEmailVerified())
+            if(user==null || !user.isEmailVerified())
             {
                //TODO
                 //Possibly add Verification button in MainActivity
@@ -201,6 +210,19 @@ public class BaseActivity extends AppCompatActivity implements
         if (i == R.id.sign_in_button) {
             signIn();
         }
+
+    }
+
+    @Override
+    public void onUserRegistered() {
+       LoginWithMailFragment fragment = new LoginWithMailFragment();
+        android.support.v4.app.FragmentManager fragmentManager = BaseActivity.this.getSupportFragmentManager();
+        fragmentManager.popBackStack(BACK_STACK_ROOT_TAG_LOGIN, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        fragmentManager.beginTransaction().
+                replace(R.id.fragmentContainer, fragment)
+             //   .addToBackStack(BACK_STACK_ROOT_TAG_LOGIN)
+                .commit();
+        fragmentManager.executePendingTransactions();
 
     }
 }

@@ -73,7 +73,7 @@ public class CommunityFoodListsDisplayFragment0 extends Fragment {
     private FirebaseAuth mAuth;
     DatabaseReference foodList;
     FirebaseDatabase database;
-    Button filterData, test;
+    Button filterData;
     String side, SharedFoodListDatabase;
 
     @Override
@@ -105,10 +105,8 @@ public class CommunityFoodListsDisplayFragment0 extends Fragment {
        // foodList = database.getReference("MainFeed").child(value).child("SharedDiets");
 
         mRecyclerView = rootView.findViewById(R.id.recyclerView);
-        listodydis = (TextView) rootView.findViewById(R.id.listodydis);
         progressBar = rootView.findViewById(R.id.progressbar);
         filterData = rootView.findViewById(R.id.filterdata);
-        test = rootView.findViewById(R.id.test);
         if(side!=null)
         {
             Log.d("pabvyko", "paby");
@@ -124,15 +122,6 @@ public class CommunityFoodListsDisplayFragment0 extends Fragment {
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
         RetrofitList();
-
-
-if(side!=null)
-{
-    final ArrayList<SharedFoodProducts> userlist = new ArrayList<>();
-    ArrayList<SelectedFood> fooda = new ArrayList<>();
-
-
-}
         return rootView;
     }
     private void RetrofitList()
@@ -145,7 +134,6 @@ if(side!=null)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
 
-        //Defining retrofit api service
         APIService service = retrofit.create(APIService.class);
 
         Call<SharedFoodProductsRetrofit> call = service.getAllSharedDiets(

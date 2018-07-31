@@ -81,8 +81,7 @@ public class CommunityList extends AppCompatActivity implements HasSupportFragme
         tofragment.putString("SharedFoodListDatabase", SharedFoodListDatabase);
         String[] tabTitles = new String[]{
                 res.getString(R.string.tab1_title),
-                res.getString(R.string.tab2_title),
-                res.getString(R.string.tab3_title)};
+                res.getString(R.string.tab2_title)};
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), tabTitles, tofragment);
 
         mViewPager = findViewById(R.id.container);
@@ -108,7 +107,7 @@ public class CommunityList extends AppCompatActivity implements HasSupportFragme
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main2, menu);
+        getMenuInflater().inflate(R.menu.main_blank, menu);
         return true;
     }
 
@@ -118,11 +117,6 @@ public class CommunityList extends AppCompatActivity implements HasSupportFragme
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -152,9 +146,9 @@ public class CommunityList extends AppCompatActivity implements HasSupportFragme
                 case 0:
                     return SharedFoodListFragmentNetwork.newInstance(queryParam);
                 case 1:
-                    return new CommunityFoodListsDisplayFragment1();
-                case 2:
-                    return new CommunityFoodListsDisplayFragment2();
+                    return new CommunityBlankFragment();
+//                case 2:
+//                    return new CommunityFoodListsDisplayFragment2();
                 default:
                     return null;
 
@@ -163,8 +157,7 @@ public class CommunityList extends AppCompatActivity implements HasSupportFragme
 
         @Override
         public int getCount() {
-            // Show 3 total pages.
-            return 3;
+            return 2;
         }
 
 

@@ -51,7 +51,7 @@ public interface APIService {
     );
     @FormUrlEncoded
     @POST("addSelectedFood")
-    Call<Result> addSelectedFood(
+    LiveData<ApiResponse<Result>> addSelectedFood(
             @Field("foodId") String foodId,
             @Field("foodName") String foodName,
             @Field("UserId") Integer UserId,
@@ -65,7 +65,7 @@ public interface APIService {
     );
     @FormUrlEncoded
     @POST("addSharedList")
-    Observable<Result> addSharedList(
+    Call<Result> addSharedList(
             @Field("UserId") Integer UserId,
             @Field("Date") Timestamp Date,
             @Field("SharedFoodListDatabase") String SharedFoodListDatabase,
@@ -104,7 +104,7 @@ public interface APIService {
             @Query("SharedFoodListDatabase") String SharedFoodListDatabase
     );
     @GET("getAllFilteredSharedDiets")
-    Observable<SharedFoodProductsRetrofit> getAllFilteredSharedDiets(
+    LiveData<ApiResponse<SharedFoodProductsRetrofit>> getAllFilteredSharedDiets(
             @Query("UserId") Integer UserId,
             @Query("SharedFoodListDatabase") String SharedFoodListDatabase,
             @Query("ProteinBegin") Integer proteinbegin,

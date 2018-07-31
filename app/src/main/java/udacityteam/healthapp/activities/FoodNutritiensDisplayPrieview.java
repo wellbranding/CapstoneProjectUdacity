@@ -25,7 +25,7 @@ import udacityteam.healthapp.databinding.FoodActivityBinding;
 public class FoodNutritiensDisplayPrieview extends AppCompatActivity {
     private static final String SELECTED_FOOD_PRIEVIEW = "EXTRA_REPOSITORY";
     String id = null;
-
+    TextView productName, carbos, protein, fats, calories;
     private FoodActivityBinding binding;
     private FoodNutritiensDisplayViewModel foodNutritiensDisplayViewModel;
     public static Intent newIntent(Context context, SelectedFoodretrofit selectedFoodretrofit) {
@@ -33,37 +33,28 @@ public class FoodNutritiensDisplayPrieview extends AppCompatActivity {
         intent.putExtra(SELECTED_FOOD_PRIEVIEW, selectedFoodretrofit);
         return intent;
     }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.food_activity);
 
+        productName = findViewById(R.id.ProductName);
+        carbos = findViewById(R.id.carbos2);
+        protein = findViewById(R.id.protein);
+        fats = findViewById(R.id.fats);
+        calories = findViewById(R.id.calories);
         SelectedFoodretrofit repository = getIntent().getParcelableExtra(SELECTED_FOOD_PRIEVIEW);
+        productName.setText(repository.getFoodName());
+        calories.setText("Calories:" + repository.getCalories());
+        fats.setText("Fats:" + repository.getFat());
+        carbos.setText("Carbohydrates:" + repository.getCarbohydrates());
+        protein.setText("Protein:" + repository.getProtein());
+
+
         foodNutritiensDisplayViewModel = new FoodNutritiensDisplayViewModel(this, repository);
+
         binding.setViewModel(foodNutritiensDisplayViewModel);
 
-
-//        if(b!=null)
-//        {
-//           id =(String) b.get("id");
-//           foodname = (String) b.get("foodname");
-//            foodselection = (String) b.get("foodselection");
-////            addtoSqlite.setOnClickListener(new View.OnClickListener() {
-////                @Override
-////                public void onClick(View view) {
-////                    AddFoodtoDatabase();
-////                }
-////            });
-//            getSupportActionBar().setTitle(foodselection);
-//            productname.setText(foodname);
-//            StringBuilder amm = new StringBuilder();
-//            amm.append("https://api.nal.usda.gov/ndb/V2/reports?ndbno=");
-//            amm.append(id);
-//            amm.append("&type=f&format=json&api_key=HXLecTDsMqy1Y6jNoYPw2n3DQ30FeGXxD2XBZqJh");
-//           GETADDITIONALFOODINFORMATION jsonTask =  new GETADDITIONALFOODINFORMATION();
-//           jsonTask.execute(amm.toString());
-//          //  Textv.setText(j);
         }
     @Override
     protected void onDestroy() {

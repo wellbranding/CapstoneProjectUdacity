@@ -1,17 +1,17 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">Diets App</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
-    <string name="action_settings">Settings</string>
-    <string name="title_activity_main2">Main2Activity</string>
+    <string name="action_logout">Logout</string>
+    <string name="title_food_information">Food Information</string>
     <string name="tab_text_1">Tab 1</string>
     <string name="tab_text_2">Tab 2</string>
     <string name="tab_text_3">Tab 3</string>
     <string name="section_format">Hello World from section: %1$d</string>
-    <string name="tab1_title">Tab 1</string>
-    <string name="tab2_title">Tab 2</string>
+    <string name="tab1_title">Community</string>
+    <string name="tab2_title">Favourites</string>
     <string name="tab3_title">Tab 3</string>
 
     <string name="facebook_application_id" translatable="false">APP_ID</string>
@@ -33,5 +33,21 @@
     <string name="title_activity_filter">FilterActivity</string>
     <string name="title_activity_main3">Main3Activity</string>
     <string name="title_activity_main4">Main4Activity</string>
+
+    <string name="Dinner">Dinner</string>
+    <string name="Lunch">Lunch</string>
+    <string name="Snacks">Snacks</string>
+    <string name="Drinks">Drinks</string>
+    <string name="Breakfast">Breakfast</string>
+    <string name="SharedDinners">SharedDinners</string>
+    <string name="SharedLunches">SharedLunches</string>
+    <string name="SharedSnacks">SharedSnacks</string>
+    <string name="SharedDrinks">SharedDrinks</string>
+    <string name="SharedBreakfasts">SharedBreakfasts</string>
+
+
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="favourites_to_be_added">Favourites to be added soon!</string>
 
 </resources>

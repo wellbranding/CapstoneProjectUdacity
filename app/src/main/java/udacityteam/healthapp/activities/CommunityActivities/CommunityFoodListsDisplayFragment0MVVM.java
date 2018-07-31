@@ -1,10 +1,10 @@
 package udacityteam.healthapp.activities.CommunityActivities;
 
-import android.app.FragmentManager;
 import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -118,7 +118,7 @@ public class CommunityFoodListsDisplayFragment0MVVM extends Fragment implements 
         filterData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FragmentManager ft = getActivity().getFragmentManager();
+                FragmentManager ft = getActivity().getSupportFragmentManager();
                 FilterActivity dialog = new FilterActivity();
            //     dialog.setTargetFragment(CommunityFoodListsDisplayFragment0MVVM.this, 1);
                 dialog.show(ft, "MyCustomDialog");

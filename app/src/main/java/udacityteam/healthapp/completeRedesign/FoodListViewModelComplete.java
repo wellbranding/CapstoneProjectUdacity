@@ -41,6 +41,7 @@ import udacityteam.healthapp.completeRedesign.Data.Networking.API.RetrofitFactor
 import udacityteam.healthapp.completeRedesign.Repository.RecipiesRepository;
 import udacityteam.healthapp.completeRedesign.Repository.Resource;
 import udacityteam.healthapp.completeRedesign.Repository.Status;
+import udacityteam.healthapp.completeRedesign.Utils.SingleLiveEvent;
 
 /**
  * View model for the MainActivity
@@ -69,6 +70,13 @@ public class FoodListViewModelComplete extends ViewModel {
     private String editTextUsernameValue;
     public  Float verte;
     public RecipiesRepository repository;
+
+    private MutableLiveData<Result> shareResult = new SingleLiveEvent<>();
+
+    public LiveData<Result> getShareResult() {
+        return shareResult;
+    }
+
 
     @Inject
     SharedPreferences sharedPreferences;
@@ -143,8 +151,8 @@ public class FoodListViewModelComplete extends ViewModel {
                     .year, dataForRequestMutableLiveData.getValue()
                     .month, dataForRequestMutableLiveData.getValue()
                     .day);
-            if(selectedFoodsLists.getValue().status== Status.SUCCESS)
-            CalculateNutritionsDisplay(selectedFoodsLists.getValue().data);
+          //  if(selectedFoodsLists.getValue().status== Status.SUCCESS)
+            //CalculateNutritionsDisplay(selectedFoodsLists.getValue().data);
         }
       return selectedFoodsLists;
 
@@ -246,9 +254,8 @@ public class FoodListViewModelComplete extends ViewModel {
         });
     }
 
-    public void ShareFoodList() //only if today
+    public void ShareFoodList(String foodselection, String sharedFoodListDatabase )
     {
-        Log.d("ggeee", "ggee");
 
 
             float protein = 0.0f, carbohydrates = 0.0f, fats = 0.0f, calories = 0.0f;
@@ -262,15 +269,26 @@ public class FoodListViewModelComplete extends ViewModel {
             Timestamp timestamp = new Timestamp(System.currentTimeMillis());
              udacityteam.healthapp.completeRedesign.Data.Networking.API.APIService service =
                 RetrofitFactoryNew.create();
-            subscription = service.addSharedList(sharedPreferences.getInt("userId", -1),
+             Call<Result> call = service.addSharedList(sharedPreferences.getInt("userId", -1),
                     timestamp,
                     sharedFoodListDatabase, foodselection,
-
                     calories, protein, fats, carbohydrates
-            )
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribeOn(Schedulers.io())
-                    .subscribe(this::handleResponse, this::handleError);
+            );
+             call.enqueue(new Callback<Result>() {
+                 @Override
+                 public void onResponse(Call<Result> call, Response<Result> response) {
+                     if(response.isSuccessful())
+                    shareResult.setValue(response.body());
+                     else
+                         shareResult.setValue(new Result(true, "Server issue", null));
+                 }
+
+                 @Override
+                 public void onFailure(Call<Result> call, Throwable t) {
+                     Log.d("pavyko", "nepavyko");
+                 }
+             });
+
 
 
 

@@ -35,6 +35,7 @@ public class FoodListPrieviewNew extends AppCompatActivity implements FoodListPr
     String id = null;
     OneSharedFoodProductsListRetrofit oneSharedFoodProductsListRetrofit;
     String foodselection;
+    TextView carboCount, fatCount, caloriesCount, proteinCount;
 
     private ActivityFoodListPreviewBinding binding;
     private FoodListPrieviewNewViewModel foodListPrieviewNewViewModel;
@@ -54,49 +55,30 @@ public class FoodListPrieviewNew extends AppCompatActivity implements FoodListPr
         binding = DataBindingUtil.setContentView(this, R.layout.activity_food_list_preview);
         foodListPrieviewNewViewModel = new FoodListPrieviewNewViewModel(this, this);
         binding.setViewModel(foodListPrieviewNewViewModel);
+        proteinCount = findViewById(R.id.proteincount);
+        caloriesCount = findViewById(R.id.caloriescount);
+        fatCount = findViewById(R.id.fatcount);
+        carboCount = findViewById(R.id.carbohncount);
       oneSharedFoodProductsListRetrofit = getIntent().getParcelableExtra(SELECTED_FOOD_PRIEVIEW);
+        proteinCount.setText("Protein " + oneSharedFoodProductsListRetrofit.getProtein());
+        carboCount.setText("Carbos " + oneSharedFoodProductsListRetrofit.getCarbohydrates());
+       fatCount.setText("Fats " + oneSharedFoodProductsListRetrofit.getFat());
+        caloriesCount.setText("Calories " + oneSharedFoodProductsListRetrofit.getCalories());
       foodselection = getIntent().getExtras().getString(FOOD_SELECTION);
-      Log.d("fooo", foodselection);
       foodListPrieviewNewViewModel.LoadFoodList(oneSharedFoodProductsListRetrofit.getParentSharedFoodsId(), foodselection);
-
-//        if(b!=null)
-//        {
-//           id =(String) b.get("id");
-//           foodname = (String) b.get("foodname");
-//            foodselection = (String) b.get("foodselection");
-////            addtoSqlite.setOnClickListener(new View.OnClickListener() {
-////                @Override
-////                public void onClick(View view) {
-////                    AddFoodtoDatabase();
-////                }
-////            });
-//            getSupportActionBar().setTitle(foodselection);
-//            productname.setText(foodname);
-//            StringBuilder amm = new StringBuilder();
-//            amm.append("https://api.nal.usda.gov/ndb/V2/reports?ndbno=");
-//            amm.append(id);
-//            amm.append("&type=f&format=json&api_key=HXLecTDsMqy1Y6jNoYPw2n3DQ30FeGXxD2XBZqJh");
-//           GETADDITIONALFOODINFORMATION jsonTask =  new GETADDITIONALFOODINFORMATION();
-//           jsonTask.execute(amm.toString());
-//          //  Textv.setText(j);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-     //   foodNutritiensDisplayViewModel.destroy();
     }
 
     @Override
     public void onRepositoriesChanged(List<SelectedFoodretrofit> repositories) {
-
-        FoodListRetrofitAdapterNew customAdapterFoodListPrievew= new
-                FoodListRetrofitAdapterNew(repositories);
-
-
+        FoodListRetrofitAdapterNew customAdapterFoodListPrievew= new FoodListRetrofitAdapterNew(repositories);
         customAdapterFoodListPrievew.setSelectedFoodretrofits(repositories);
         customAdapterFoodListPrievew.notifyDataSetChanged();
-       binding.recyclerFood.setLayoutManager(new LinearLayoutManager(this));
+        binding.recyclerFood.setLayoutManager(new LinearLayoutManager(this));
         binding.recyclerFood.setHasFixedSize(true);
         binding.recyclerFood.setAdapter(customAdapterFoodListPrievew);
     }

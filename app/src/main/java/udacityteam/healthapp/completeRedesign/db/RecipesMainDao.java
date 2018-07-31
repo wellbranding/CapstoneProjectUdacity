@@ -38,6 +38,7 @@ public interface RecipesMainDao {
     )
     LiveData<List<SelectedFoodretrofit>> getAddedFoodsNew(String whichTime, String query
     );
+
     @Delete
     public void deleteCurrentUser(UserRetrofitGood userRetrofitGood);
    @Insert
@@ -53,6 +54,9 @@ public interface RecipesMainDao {
 //    public abstract void insertAllRecipes(List<Recipe> recipeList);
   @Insert
   public void insertAllAddedFoodLists(List<SelectedFoodretrofit> oneSelectedFoodRetrofit);
+
+    @Insert
+    public void insertOneAddedFood(SelectedFoodretrofit oneSelectedFoodRetrofit);
     @Insert
     public void insertAllOneSharedFoodProductsListRetrofit(List<OneSharedFoodProductsListRetrofit> oneSharedFoodProductsListRetrofits);
     @Insert

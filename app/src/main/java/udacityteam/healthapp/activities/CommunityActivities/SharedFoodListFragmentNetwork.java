@@ -1,12 +1,12 @@
 package udacityteam.healthapp.activities.CommunityActivities;
 
-import android.app.FragmentManager;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -115,7 +115,7 @@ public class SharedFoodListFragmentNetwork extends Fragment{
         filterData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FragmentManager ft = getActivity().getFragmentManager();
+                FragmentManager ft = getActivity().getSupportFragmentManager();
                 FilterActivity dialog = new FilterActivity();
                 dialog.show(ft, "MyCustomDialog");
             }
@@ -132,17 +132,22 @@ public class SharedFoodListFragmentNetwork extends Fragment{
 private void observeResult()
 {
 
+    SharedFoodListsAdapterNew customAdapterFoodListPrievew = new
+            SharedFoodListsAdapterNew(side);
+    communityListFragmentBinding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+    communityListFragmentBinding.recyclerView.setHasFixedSize(true);
+    communityListFragmentBinding.recyclerView.setAdapter(customAdapterFoodListPrievew);
     viewModel.getRecipes().observe(this,repositories->
     {
         if(repositories.status== Status.SUCCESS) {
-            SharedFoodListsAdapterNew customAdapterFoodListPrievew = new
-                    SharedFoodListsAdapterNew(side);
             customAdapterFoodListPrievew.setSelectedFoods(repositories.data);
             customAdapterFoodListPrievew.notifyDataSetChanged();
-            communityListFragmentBinding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-            communityListFragmentBinding.recyclerView.setHasFixedSize(true);
-            communityListFragmentBinding.recyclerView.setAdapter(customAdapterFoodListPrievew);
         }
+    });
+    viewModel.getFilteredData().observe(this, filtered->
+    {
+        customAdapterFoodListPrievew.setSelectedFoods(filtered.data);
+        customAdapterFoodListPrievew.notifyDataSetChanged();
     });
 
 }
@@ -150,16 +155,16 @@ private void observeResult()
 
     private void InitializeRecyclerView()
     {
-        SharedFoodListsAdapterNew customAdapterFoodListPrievew= new
-                SharedFoodListsAdapterNew(side);
-        viewModel.mutableLiveData.observe(getActivity(), (selectedfoods)->{
-            customAdapterFoodListPrievew.setSelectedFoods(selectedfoods);
-            customAdapterFoodListPrievew.notifyDataSetChanged();
-
-        } );
-        mLayoutManager = new LinearLayoutManager(getActivity());
-        communityListFragmentBinding.recyclerView.setLayoutManager(mLayoutManager);
-        communityListFragmentBinding.recyclerView.setAdapter(customAdapterFoodListPrievew);
+//        SharedFoodListsAdapterNew customAdapterFoodListPrievew= new
+//                SharedFoodListsAdapterNew(side);
+//        viewModel.mutableLiveData.observe(getActivity(), (selectedfoods)->{
+//            customAdapterFoodListPrievew.setSelectedFoods(selectedfoods);
+//            customAdapterFoodListPrievew.notifyDataSetChanged();
+//
+//        } );
+//        mLayoutManager = new LinearLayoutManager(getActivity());
+//        communityListFragmentBinding.recyclerView.setLayoutManager(mLayoutManager);
+//        communityListFragmentBinding.recyclerView.setAdapter(customAdapterFoodListPrievew);
 
     }
 

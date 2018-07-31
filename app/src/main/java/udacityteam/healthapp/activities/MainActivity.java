@@ -1,12 +1,15 @@
 package udacityteam.healthapp.activities;
 
-import android.app.FragmentManager;
+import android.arch.lifecycle.ViewModelProvider;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -38,22 +41,33 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
+import javax.inject.Inject;
+
 import butterknife.ButterKnife;
+import dagger.android.AndroidInjection;
+import dagger.android.AndroidInjector;
+import dagger.android.DispatchingAndroidInjector;
+import dagger.android.support.HasSupportFragmentInjector;
 import udacityteam.healthapp.Model.SelectedFoodretrofit;
 import udacityteam.healthapp.Model.UserRetrofitGood;
 import udacityteam.healthapp.R;
 import udacityteam.healthapp.activities.CommunityActivities.CommunityList;
 import udacityteam.healthapp.completeRedesign.FoodListComplete;
+import udacityteam.healthapp.completeRedesign.FoodListViewModelComplete;
 import udacityteam.healthapp.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, MainActivityViewModel.DataListener,
-FoodSearchFragment.FoodListRecyclerViewListener{
+        implements NavigationView.OnNavigationItemSelectedListener,
+        FoodSearchFragment.FoodListRecyclerViewListener,
+        HasSupportFragmentInjector
+
+{
 
     public static final String ANONYMOUS = "anonymous";
 
     public static final int RC_SIGN_IN = 1;
 
+    private String calendarCurrentTime;
     FloatingActionButton fabsettings;
 
     DrawerLayout mDrawer;
@@ -77,7 +91,7 @@ FoodSearchFragment.FoodListRecyclerViewListener{
     Calendar today;
     public static UserRetrofitGood currentUser;
     private ActivityMainBinding binding;
-    private  MainActivityViewModel mainActivityViewModel;
+    private  MainActivityViewModelGood mainActivityViewModel;
 
     public static final String INTENT_WHICH_DATABASE = "SharedFoodListDatabase";
     public static final String INTENT_WHICH_TIME = "foodselection";
@@ -90,74 +104,53 @@ FoodSearchFragment.FoodListRecyclerViewListener{
     private NavigationView navigationView;
     private boolean isOpenedFragment = false;
     private boolean isOpenedSecondFragmnet = false;
+    Toolbar mToolbar;
+
+    @Inject
+    ViewModelProvider.Factory ViewModelFactory;
+
+    @Inject
+    DispatchingAndroidInjector<Fragment> dispatchingAndroidInjector;
+    private String mCurrentTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
-        mainActivityViewModel = new MainActivityViewModel(this, this);
+        mainActivityViewModel =  ViewModelProviders.of(this, ViewModelFactory).
+                get(MainActivityViewModelGood.class);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
-        binding.setViewModel(mainActivityViewModel);
-//        binding.appBarMain.setViewModel(mainActivityViewModel);
-        binding.appBarMain.setViewModel(mainActivityViewModel);
-
-        binding.appBarMain.calendarView.setViewModel(mainActivityViewModel);
-        binding.appBarMain.layoutFloatingAction.setViewModel(mainActivityViewModel);
-       // binding.appBarMain.recyclerView.setViewModel(mainActivityViewModel);
-        binding.appBarMain.buttons.setViewModel(mainActivityViewModel);
-        mainActivityViewModel.InitUser();
         fabsettings = findViewById(R.id.fabSetting);
-        mainActivityViewModel.initifloatingfield(fabsettings);
-        Snacks = (LinearLayout) this.findViewById(R.id.Snacks);
-        Drinks = (LinearLayout) this.findViewById(R.id.Drinks);
-        Drinks.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "ahahaa", Toast.LENGTH_SHORT).show();
-//                Intent intent = new Intent(MainActivity.this, FoodSearchActivity.class);
-//                intent.putExtra("SharedFoodListDatabase", "SharedDrinks");
-//                intent.putExtra("foodselection", "Drinks");
-//                startActivity(intent);
-                Bundle bundle = new Bundle();
-                bundle.putString(INTENT_WHICH_DATABASE, "SharedDrinks");
-                bundle.putString(INTENT_WHICH_TIME, "Drinks");
-                FoodSearchFragment fragment = new FoodSearchFragment();
-                android.support.v4.app.FragmentManager fragmentManager = MainActivity.this.getSupportFragmentManager();
-                fragmentManager.executePendingTransactions();
-                fragment.setArguments(bundle);
-                fragmentManager.beginTransaction().
-                        add(R.id.app_bar_main, fragment)
-                        .addToBackStack(null)
-                        .commit();
-                showUpButton(true);
-                isOpenedFragment = true;
 
-            }
-        });
         Breakfast = (LinearLayout) this.findViewById(R.id.Breakfast);
         Dinner = (LinearLayout) this.findViewById(R.id.Dinner);
         Lunch = (LinearLayout) this.findViewById(R.id.Lunch);
-        //  layoutFabEdit = (LinearLayout) this.findViewById(R.id.layoutFabEdit);
-        //   layoutFabPhoto = (LinearLayout) this.findViewById(R.id.layoutFabPhoto);
+        Snacks = (LinearLayout) this.findViewById(R.id.Snacks);
+        Drinks = (LinearLayout) this.findViewById(R.id.Drinks);
         fabsettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Intent intent = new Intent(MainActivity.this, FoodSearchActivity.class);
-                //  startActivity(intent);
-                if (fabExpanded == true) {
+                if (fabExpanded) {
                     closeSubMenusFab();
                 } else {
+                    Date date = new Date();
+                    Date newDate = new Date(date.getTime());
+                    SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd");
+                   String stringdate = dt.format(newDate);
+                   if(stringdate.equals(calendarCurrentTime))
                     openSubMenusFab();
+                   else
+                       Toast.makeText(MainActivity.this, "Can add food only to today!", Toast.LENGTH_SHORT).show();
                 }
             }
         });
         closeSubMenusFab();
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
+         mToolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
 
         mActionBar = getSupportActionBar();
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawer, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         mDrawerToggle.syncState();
 //        DrawerLayout drawer = findViewById(R.id.drawer_layout);
 //        setSupportActionBar(toolbar);
@@ -169,9 +162,7 @@ FoodSearchFragment.FoodListRecyclerViewListener{
        navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         calendarinit();
-    //    initRecyclerview();
         initButton();
-        mainActivityViewModel.GetCalendarTime();
 
         if(savedInstanceState != null){
             resolveUpButtonWithFragmentStack();
@@ -207,8 +198,7 @@ FoodSearchFragment.FoodListRecyclerViewListener{
                 Intent intent = new Intent(MainActivity.this, FoodListComplete.class);
                 intent.putExtra("foodselection", "Lunch");
                 intent.putExtra("SharedFoodListDatabase", "SharedLunches");
-                intent.putExtra("requestdate", format.format(calendar.getTime()));
-
+                intent.putExtra("requestdate", calendarCurrentTime);
                 startActivity(intent);
             }
         });
@@ -218,7 +208,7 @@ FoodSearchFragment.FoodListRecyclerViewListener{
                 Intent intent = new Intent(MainActivity.this, FoodListComplete.class);
                 intent.putExtra("foodselection", "Breakfast");
                 intent.putExtra("SharedFoodListDatabase", "SharedBreakfasts");
-                intent.putExtra("requestdate", format.format(calendar.getTime()));
+                intent.putExtra("requestdate", calendarCurrentTime);
                 startActivity(intent);
             }
         });
@@ -228,7 +218,7 @@ FoodSearchFragment.FoodListRecyclerViewListener{
                 Intent intent = new Intent(MainActivity.this, FoodListComplete.class);
                 intent.putExtra("foodselection", "Snacks");
                 intent.putExtra("SharedFoodListDatabase", "SharedSnacks");
-                intent.putExtra("requestdate", format.format(calendar.getTime()));
+                intent.putExtra("requestdate", calendarCurrentTime);
                 startActivity(intent);
             }
         });
@@ -237,9 +227,18 @@ FoodSearchFragment.FoodListRecyclerViewListener{
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, FoodListComplete.class);
                 intent.putExtra("foodselection", "Drinks");
-                intent.putExtra("UserId", currentUser.getId());
                 intent.putExtra("SharedFoodListDatabase", "SharedDrinks");
-                intent.putExtra("requestdate", format.format(calendar.getTime()));
+                intent.putExtra("requestdate", calendarCurrentTime);
+                startActivity(intent);
+            }
+        });
+       dinnerbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, FoodListComplete.class);
+                intent.putExtra("foodselection", "Dinner");
+                intent.putExtra("SharedFoodListDatabase", "SharedDinners");
+                intent.putExtra("requestdate", calendarCurrentTime);
                 startActivity(intent);
             }
         });
@@ -267,17 +266,15 @@ FoodSearchFragment.FoodListRecyclerViewListener{
 
 
         Calendar beginning = Calendar.getInstance();
-      // today.setTime(date);
         beginning.set(beginning.get(Calendar.YEAR), beginning.get(Calendar.MONTH), beginning.get(Calendar.DAY_OF_MONTH)-10);
         Log.d("aaa", beginning.toString());
        today = Calendar.getInstance();
        today.set(today.get(Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar.DAY_OF_MONTH));
+        calendarCurrentTime = dt.format(Calendar.getInstance().getTime());
+        Log.d("current123",calendarCurrentTime);
         binding.appBarMain.calendarView.calendarView.setCurrentDate(today);
-
-        //  widget.setSelectionMode();
         Calendar end = Calendar.getInstance();
         end.set(end.get(Calendar.YEAR),  end.get(Calendar.MONTH), end.get(Calendar.DAY_OF_MONTH)+10);
-
         binding.appBarMain.calendarView.calendarView.setArrowColor(this.getResources().getColor(R.color.colorPrimary));
         binding.appBarMain.calendarView.calendarView.setSelectionColor(this.getResources().getColor(R.color.colorPrimary));
         binding.appBarMain.calendarView.calendarView.setSelectedDate(today);
@@ -285,19 +282,18 @@ FoodSearchFragment.FoodListRecyclerViewListener{
         minimum.set(minimum.get(Calendar.YEAR),minimum.get(Calendar.MONTH), minimum.get(Calendar.DAY_OF_MONTH)-50);
         Calendar maximum = Calendar.getInstance();
         maximum.set(maximum.get(Calendar.YEAR),maximum.get(Calendar.MONTH), maximum.get(Calendar.DAY_OF_MONTH)+50);
-
         binding.appBarMain.calendarView.calendarView.state().edit()
                 .setMinimumDate(minimum.getTime())
                 .setMaximumDate(maximum.getTime())
                 .commit();
-        mainActivityViewModel.SetCalendar(binding.appBarMain.calendarView.calendarView);
+        //mainActivityViewModel.SetCalendar(binding.appBarMain.calendarView.calendarView);
         binding.appBarMain.calendarView.calendarView.setOnDateChangedListener(new OnDateSelectedListener() {
             @Override
             public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
-                mainActivityViewModel.GetCalendarTime();
+                calendarCurrentTime = dt.format(date.getDate().getTime());
+                Log.d("current123",calendarCurrentTime);
     }
 });
-        //  mainActivityViewModel.SetCalendar(binding.appBarMain.contentMain.calendarView);
 
 
         }
@@ -311,11 +307,6 @@ private void closeSubMenusFab(){
         Lunch.setVisibility(View.INVISIBLE);
         fabsettings.setImageResource(R.drawable.ic_settings_black_24dp);
         fabExpanded = false;
-    }
-    public void clickbtndinner()
-    {
-        Log.d("hello123", "heaaz");
-        Toast.makeText(MainActivity.this, "hello", Toast.LENGTH_SHORT).show();
     }
 
 
@@ -349,52 +340,99 @@ private void closeSubMenusFab(){
 
             }
         });
+
+        Drinks.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putString(INTENT_WHICH_DATABASE, "SharedDrinks");
+                bundle.putString(INTENT_WHICH_TIME, "Drinks");
+                FoodSearchFragment fragment = new FoodSearchFragment();
+                android.support.v4.app.FragmentManager fragmentManager = MainActivity.this.getSupportFragmentManager();
+                fragmentManager.executePendingTransactions();
+                fragment.setArguments(bundle);
+                fragmentManager.beginTransaction().
+                        add(R.id.app_bar_main, fragment, "YOUR_TARGET_FRAGMENT_TAG")
+                        .addToBackStack(null)
+                        .commit();
+                showUpButton(true);
+                isOpenedFragment = true;
+
+            }
+        });
         Snacks.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(MainActivity.this, "ooooo", Toast.LENGTH_SHORT).show();
-//                Intent intent = new Intent(MainActivity.this, FoodSearchActivity.class);
-//                intent.putExtra("SharedFoodListDatabase", "SharedSnacks");
-//                intent.putExtra("foodselection", "Snacks");
-//                startActivity(intent);
                 Bundle bundle = new Bundle();
                 bundle.putString(INTENT_WHICH_DATABASE, "SharedSnacks");
                 bundle.putString(INTENT_WHICH_TIME, "Snacks");
+                FoodSearchFragment fragment = new FoodSearchFragment();
+                android.support.v4.app.FragmentManager fragmentManager = MainActivity.this.getSupportFragmentManager();
+                fragmentManager.executePendingTransactions();
                 fragment.setArguments(bundle);
                 fragmentManager.beginTransaction().
-                        add(R.id.fragmentContainer, fragment)
-                     //   .addToBackStack(null)
+                        add(R.id.app_bar_main, fragment, "YOUR_TARGET_FRAGMENT_TAG")
+                        .addToBackStack(null)
                         .commit();
+                showUpButton(true);
+                isOpenedFragment = true;
             }
         });
         Breakfast.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Toast.makeText(MainActivity.this, "tttttt", Toast.LENGTH_SHORT).show();
-//                Intent intent = new Intent(MainActivity.this, FoodSearchActivity.class);
-//                intent.putExtra("SharedFoodListDatabase", "SharedBreakfasts");
-//                intent.putExtra("foodselection", "Breakfast");
-//                startActivity(intent);
+                Bundle bundle = new Bundle();
+                bundle.putString(INTENT_WHICH_DATABASE, "SharedBreakfasts");
+                bundle.putString(INTENT_WHICH_TIME, "Breakfast");
+                FoodSearchFragment fragment = new FoodSearchFragment();
+                android.support.v4.app.FragmentManager fragmentManager = MainActivity.this.getSupportFragmentManager();
+                fragmentManager.executePendingTransactions();
+                fragment.setArguments(bundle);
+                fragmentManager.beginTransaction().
+                        add(R.id.app_bar_main, fragment, "YOUR_TARGET_FRAGMENT_TAG")
+                        .addToBackStack(null)
+                        .commit();
+                showUpButton(true);
+                isOpenedFragment = true;
             }
         });
         Dinner.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Toast.makeText(MainActivity.this, "tttttt", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(MainActivity.this, FoodSearchActivity.class);
-                intent.putExtra("SharedFoodListDatabase", "SharedDinners");
-                intent.putExtra("foodselection", "Dinner");
-                startActivity(intent);
+                Bundle bundle = new Bundle();
+                bundle.putString(INTENT_WHICH_DATABASE, "SharedDinners");
+                bundle.putString(INTENT_WHICH_TIME, "Dinner");
+                FoodSearchFragment fragment = new FoodSearchFragment();
+                android.support.v4.app.FragmentManager fragmentManager = MainActivity.this.getSupportFragmentManager();
+                fragmentManager.executePendingTransactions();
+                fragment.setArguments(bundle);
+                fragmentManager.beginTransaction().
+                        add(R.id.app_bar_main, fragment, "YOUR_TARGET_FRAGMENT_TAG")
+                        .addToBackStack(null)
+                        .commit();
+                showUpButton(true);
+                isOpenedFragment = true;
             }
         });
         Lunch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Toast.makeText(MainActivity.this, "tttttt", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(MainActivity.this, FoodSearchActivity.class);
-                intent.putExtra("SharedFoodListDatabase", "SharedLunches");
-                intent.putExtra("foodselection", "Lunch");
-                startActivity(intent);
+                Bundle bundle = new Bundle();
+                bundle.putString(INTENT_WHICH_DATABASE, "SharedLunches");
+                bundle.putString(INTENT_WHICH_TIME, "Lunch");
+                FoodSearchFragment fragment = new FoodSearchFragment();
+                android.support.v4.app.FragmentManager fragmentManager = MainActivity.this.getSupportFragmentManager();
+                fragmentManager.executePendingTransactions();
+                fragment.setArguments(bundle);
+                fragmentManager.beginTransaction().
+                        add(R.id.app_bar_main, fragment, "YOUR_TARGET_FRAGMENT_TAG")
+                        .addToBackStack(null)
+                        .commit();
+                showUpButton(true);
+                isOpenedFragment = true;
             }
         });
         //Change settings icon to 'X' icon
@@ -448,17 +486,30 @@ private void closeSubMenusFab(){
     @Override
     public void onBackPressed() {
 
+  //  mToolbar.getMenu().clear();
         if (mDrawer.isDrawerOpen(GravityCompat.START)) {
             mDrawer.closeDrawer(GravityCompat.START);
 
         } else {
             int backStackCount = getSupportFragmentManager().getBackStackEntryCount();
-
             if (backStackCount >= 1) {
                 getSupportFragmentManager().popBackStack();
-
-                // Change to hamburger icon if at bottom of stack
+                Fragment fragment = getSupportFragmentManager().findFragmentByTag("YOUR_TARGET_FRAGMENT_TAG");
+                if (fragment instanceof FoodNutritiensDisplayFragment) {
+                    mToolbar.setTitle(mCurrentTitle);
+                }
+                if(fragment instanceof FoodSearchFragment)
+                {
+                    mToolbar.setTitle(getResources().getString(R.string.app_name));
+                }
                 if(backStackCount == 1){
+                    if (fragment instanceof FoodNutritiensDisplayFragment) {
+                        mToolbar.setTitle(mCurrentTitle);
+                    }
+                    if(fragment instanceof FoodSearchFragment)
+                    {
+                        mToolbar.setTitle(getResources().getString(R.string.app_name));
+                    }
                     isOpenedFragment = false;
                     showUpButton(false);
                 }
@@ -466,70 +517,28 @@ private void closeSubMenusFab(){
                 super.onBackPressed();
             }
         }
-//        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-//        Objects.requireNonNull(getSupportActionBar()).setDisplayShowHomeEnabled(true);
-//       getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//        if (drawer.isDrawerOpen(GravityCompat.START)) {
-//            drawer.closeDrawer(GravityCompat.START);
-//        } else {
-//            super.onBackPressed();
-//        }
-//        android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
-//        if (fm.getBackStackEntryCount() > 1) {
-//            int count = fm.getBackStackEntryCount();
-//            for (int i = 0; i < count; ++i) {
-//                fm.popBackStackImmediate();
-//            }
-//        } else {
-//            super.onBackPressed();
-//        }
-
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-      //  mFirebaseAuth.addAuthStateListener(mAuthStateListener);
-    }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if (mAuthStateListener != null) {
-          //  mFirebaseAuth.removeAuthStateListener(mAuthStateListener);
-        }
-    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
+        menu.clear();
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-//        if (.onOptionsItemSelected(item)) {
-//            return true;
-//        }
+
         int id = item.getItemId();
 
         switch(item.getItemId()) {
-            case R.id.action_settings:
-                return true;
+            case R.id.action_logout:
+                ReturntoRegister();
+                return  true
+                        ;
                case android.R.id.home:
-//                   if(!isOpenedFragment) {
-//                       mDrawer.openDrawer(GravityCompat.START);
-//                       return true;
-//                   }
-//                   else
-//                   {
-//                       isOpenedFragment = false;
-//                       onBackPressed();
-//                       return true;
-//                   }
+
                    int backStackCount = getSupportFragmentManager().getBackStackEntryCount();
 
                    if (backStackCount >= 1) {
@@ -538,7 +547,6 @@ private void closeSubMenusFab(){
                        mActionBar.setDisplayHomeAsUpEnabled(true);
                        onBackPressed();
                        return true;
-
                    }
                    else
                    {
@@ -548,8 +556,6 @@ private void closeSubMenusFab(){
                        mDrawer.openDrawer(GravityCompat.START);
                      return true;
                    }
-            case R.id.action_sign_out:
-                ReturntoRegister();
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -560,11 +566,30 @@ private void closeSubMenusFab(){
         AuthUI.getInstance().signOut(this)
             .addOnCompleteListener(new OnCompleteListener<Void>() {
                 public void onComplete(@NonNull Task<Void> task) {
-                    // user is now signed out
-                    Intent intent = new Intent(MainActivity.this, BaseActivity.class);
-                    intent.putExtra("offline", true);
-                    startActivity(intent);
-                    finish();
+                    if(task.isSuccessful()) {
+                       mainActivityViewModel.signOut().observe(MainActivity.this, response->
+                       {
+                           if(response!=null)
+                           {
+                               if(response.equals("Success"))
+                               {
+                                   Toast.makeText(MainActivity.this, "succesfully Sign out", Toast.LENGTH_SHORT).show();
+                                   Intent intent = new Intent(MainActivity.this, BaseActivity.class);
+                                   intent.putExtra("offline", true);
+                                   startActivity(intent);
+                                   finish();
+                               }
+                               else
+                                   Toast.makeText(MainActivity.this, "Try again", Toast.LENGTH_SHORT).show();
+                           }
+                       });
+//                        Intent intent = new Intent(MainActivity.this, BaseActivity.class);
+//                        intent.putExtra("offline", true);
+//                        startActivity(intent);
+//                        finish();
+                    }
+                    else
+                        Toast.makeText(MainActivity.this, "Could not to logout, try again later!", Toast.LENGTH_SHORT).show();
                 }
             });
     }
@@ -619,6 +644,7 @@ private void closeSubMenusFab(){
             //test
 
         } else if (id == R.id.nav_drinks_cocktails) {
+            setCurrentTitle(getResources().getString(R.string.Drinks));
             Intent intent = new Intent(this, CommunityList.class);
             Bundle extras = intent.getExtras();
             intent.putExtra("titlename", "Drinks/Coctails");
@@ -631,27 +657,56 @@ private void closeSubMenusFab(){
         return true;
     }
 
-    @Override
-    public void onRepositoriesChanged(List<SelectedFoodretrofit> repositories) {
+
+    private void setCurrentTitle(String title)
+
+    {
+        mCurrentTitle = title;
+    }
+    private String determineWhichType(String whichTime)
+    {
+        if(whichTime.equals(getResources().getString(R.string.Drinks)))
+        {
+
+            return getResources().getString(R.string.SharedDrinks) ;
+        }
+      else if(whichTime.equals(getResources().getString(R.string.Snacks)))
+        {
+            return getResources().getString(R.string.SharedSnacks) ;
+        }
+        else if(whichTime.equals(getResources().getString(R.string.Lunch)))
+        {
+            return getResources().getString(R.string.SharedLunches) ;
+        }
+        else if(whichTime.equals(getResources().getString(R.string.Breakfast)))
+        {
+            return getResources().getString(R.string.SharedBreakfasts) ;
+        }
+        else return getResources().getString(R.string.SharedDinners) ;
 
     }
-
     @Override
     public void onFoodListSelected(String id, String foodName, String whichTime) {
         Toast.makeText(this, "Opened requiredFragment", Toast.LENGTH_SHORT).show();
         Bundle bundle = new Bundle();
         bundle.putString("id", id);
-        bundle.putString("foodName", foodName);
-        bundle.putString("whichTime", whichTime);
+        bundle.putString("foodname", foodName);
+        bundle.putString("whichtime", whichTime);
+        bundle.putString(INTENT_WHICH_DATABASE, determineWhichType(whichTime));
         FoodNutritiensDisplayFragment fragment = new FoodNutritiensDisplayFragment();
         android.support.v4.app.FragmentManager fragmentManager = MainActivity.this.getSupportFragmentManager();
         fragmentManager.executePendingTransactions();
         fragment.setArguments(bundle);
         fragmentManager.beginTransaction().
-                add(R.id.app_bar_main, fragment)
+                add(R.id.app_bar_main, fragment, "YOUR_TARGET_FRAGMENT_TAG")
                 .addToBackStack(null)
                 .commit();
         showUpButton(true);
         isOpenedSecondFragmnet = true;
+    }
+
+    @Override
+    public AndroidInjector<Fragment> supportFragmentInjector() {
+        return dispatchingAndroidInjector;
     }
 }

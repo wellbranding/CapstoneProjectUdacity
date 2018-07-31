@@ -1,40 +1,23 @@
 package udacityteam.healthapp.activities.CommunityActivities;
 
-import android.app.DialogFragment;
+import android.content.Context;
+import android.support.v4.app.DialogFragment;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
+import javax.inject.Inject;
 
 import io.apptik.widget.MultiSlider;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-import udacityteam.healthapp.PHP_Retrofit_API.APIService;
-import udacityteam.healthapp.PHP_Retrofit_API.APIUrl;
-import udacityteam.healthapp.Model.OneSharedFoodProductsListRetrofit;
-import udacityteam.healthapp.Model.SharedFoodProductsRetrofit;
 import udacityteam.healthapp.R;
-import udacityteam.healthapp.activities.ApplicationClass;
+import udacityteam.healthapp.completeRedesign.SharedFoodListsViewModelNew;
 
 public class FilterActivity extends DialogFragment {
   //  private DialogInterface.OnDismissListener onDismissListener;
@@ -49,7 +32,11 @@ public class FilterActivity extends DialogFragment {
     String SharedFoodListDatabase;
     Button confirm;
 
-    CommunityFoodListDisplayFragment0MVVMViewModel viewModel;
+    SharedFoodListsViewModelNew viewModel;
+
+
+    @Inject
+    ViewModelProvider.Factory ViewModelFactory;
 
     @Nullable
     @Override
@@ -64,8 +51,6 @@ public class FilterActivity extends DialogFragment {
         fatsend = view.findViewById(R.id.fatnend);
         confirm = view.findViewById(R.id.confirm);
 
-        viewModel = ViewModelProviders.of((FragmentActivity) getActivity()).get(CommunityFoodListDisplayFragment0MVVMViewModel.class);
-        viewModel.Hello();
 
         Intent iin = getActivity().getIntent();
 
@@ -75,7 +60,7 @@ public class FilterActivity extends DialogFragment {
 
 
         carbohydrates = view.findViewById(R.id.carbohydrates);
-        protein = view.findViewById(R.id.protein);
+        protein = view.findViewById(R.id.carbos);
         calories = view.findViewById(R.id.calories);
         fats = view.findViewById(R.id.fat);
         carbohydrates.setMax(10000);
@@ -168,6 +153,7 @@ public class FilterActivity extends DialogFragment {
     private void GetFilteredSharedDiets() //only if today
     {
 
+      //  viewModel.Transofrmations();
         viewModel.GetFilteredSharedDiets(protein, calories, carbohydrates, fats, SharedFoodListDatabase );
 
 
@@ -209,10 +195,17 @@ public class FilterActivity extends DialogFragment {
 
     }
 
+    @Override
+    public void onAttach(Context context) {
+//        AndroidSupportInjection.inject(this);
+        super.onAttach(context);
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        viewModel = ViewModelProviders.of(getActivity(), ViewModelFactory).
+                get(SharedFoodListsViewModelNew.class);
 
 
     }

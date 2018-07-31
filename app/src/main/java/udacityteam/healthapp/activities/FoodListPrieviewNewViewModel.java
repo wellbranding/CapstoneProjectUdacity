@@ -51,14 +51,10 @@ public class FoodListPrieviewNewViewModel implements ViewModel {
     public ObservableInt recyclerViewVisibility;
     public ObservableInt searchButtonVisibility;
     public ObservableField<String> infoMessage;
-    public ObservableField<String> canshare;
     private DataListener dataListener;
-
     private Context context;
     private Subscription subscription;
     List<SelectedFoodretrofit> selectedFoodretrofits;
-    //private List<Repository> repositories;
-    private String editTextUsernameValue;
 
     public FoodListPrieviewNewViewModel(Context context, DataListener dataListener) {
         this.context = context;
@@ -67,7 +63,6 @@ public class FoodListPrieviewNewViewModel implements ViewModel {
         recyclerViewVisibility = new ObservableInt(View.VISIBLE);
         searchButtonVisibility = new ObservableInt(View.GONE);
         infoMessage = new ObservableField<>("message");
-        canshare = new ObservableField<>("message");
     }
 
     public void LoadFoodList(Integer SharedListId,  String foodselection)
@@ -80,56 +75,13 @@ public class FoodListPrieviewNewViewModel implements ViewModel {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(application.defaultSubscribeScheduler())
                 .subscribe(this::handleResponse,this::handleError);
-//                .subscribe(new Subscriber<SelectedFoodretrofitarray>() {
-//                    @Override
-//                    public void onCompleted() {
-//                        Log.d("aryra", String.valueOf(selectedFoodretrofits.size()));
-//                         dataListener.onRepositoriesChanged(selectedFoodretrofits);
-//                         if(!selectedFoodretrofits.isEmpty())
-//                             recyclerViewVisibility.set(View.VISIBLE);
-//                         else
-//                         {
-//                             Toast.makeText(application, "Is empty", Toast.LENGTH_SHORT).show();
-//                         }
-//
-//
-//                    }
-//
-//                    @Override
-//                    public void onError(Throwable error) {
-//                        Log.e(TAG, "Error loading GitHub repos ", error);
-////                        if (isHttp404(error)) {
-////                            infoMessage.set("notfound");
-////                        } else {
-////                            infoMessage.set("good");
-////                        }
-////                        infoMessageVisibility.set(View.VISIBLE);
-//                    }
-//
-//                    @Override
-//                    public void onNext(SelectedFoodretrofitarray repositories) {
-//
-//                        Log.i(TAG, "Repos loaded " + repositories);
-//                        for(int i = 0; i<repositories.getUsers().size(); i++)
-//                            Log.d("naujassi", String.valueOf(repositories.getUsers().get(i)));
-//                        Log.d("naujassi", String.valueOf(repositories));
-//                        Log.d("naujassi", String.valueOf(repositories.getUsers()));
-//                        FoodListViewModel.this.selectedFoodretrofits = repositories.getUsers();
-//                        //FoodListViewModel.this.repositories = repositories;
-//                    }
-//                });
     }
     private void handleResponse(SelectedFoodretrofitarray androidList) {
-        Log.d("kietass", "jauu");
-
         selectedFoodretrofits = new ArrayList<>(androidList.getUsers());
-        Log.d("kietass", String.valueOf(selectedFoodretrofits.size()));
-
         dataListener.onRepositoriesChanged(selectedFoodretrofits);
     }
     private void handleError(Throwable error) {
 
-        //   Toast.makeText(this, "Error "+error.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
     }
 
 
@@ -139,14 +91,9 @@ public class FoodListPrieviewNewViewModel implements ViewModel {
         if (subscription != null && !subscription.isUnsubscribed()) subscription.unsubscribe();
         subscription = null;
         context = null;
-        //  dataListener = null;
     }
 
 
-
-    private static boolean isHttp404(Throwable error) {
-        return error instanceof HttpException && ((HttpException) error).code() == 404;
-    }
     public interface DataListener {
         void onRepositoriesChanged(List<SelectedFoodretrofit> repositories);
     }

@@ -17,6 +17,7 @@ import udacityteam.healthapp.app.ApplicationController;
         RemoteViewsService.class,
         BaseActivityModule.class,
         FoodListActivityModule.class,
+        MainActivityModule.class,
        // BakingAppWidgetModule.class,
         AppModule.class})
 

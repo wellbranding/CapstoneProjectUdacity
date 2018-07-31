@@ -152,6 +152,7 @@ public class RegisterWithMailPasword extends AppCompatActivity implements
                                 Toast.makeText(RegisterWithMailPasword.this,
                                         "Verification email sent to " + user.getEmail(),
                                         Toast.LENGTH_SHORT).show();
+
                                 Intent intent = new Intent(RegisterWithMailPasword.this, LoginWithMailPasword.class);
                                 startActivity(intent);
                             }

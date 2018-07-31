@@ -29,8 +29,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.FirebaseApp;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -83,6 +82,7 @@ public class FoodSearchFragment extends Fragment implements SearchView.OnQueryTe
     }
 
 
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -93,6 +93,7 @@ public class FoodSearchFragment extends Fragment implements SearchView.OnQueryTe
      //   toolbar.setNavigationIcon(R.drawable.abc_ic_ab_back_material);
      ((MainActivity)getActivity()).setSupportActionBar(toolbar);
         setHasOptionsMenu(true);
+        toolbar.setTitle(foodselection);
 
         main = view.findViewById(R.id.main);
         noresultsdisplay = view.findViewById(R.id.noresultsdisplay);
@@ -120,6 +121,7 @@ public class FoodSearchFragment extends Fragment implements SearchView.OnQueryTe
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.clear();
         inflater.inflate(R.menu.menu_search, menu);
 
       //  (((AppCompatActivity)requireActivity()).getSupportActionBar()).setDisplayShowHomeEnabled(true);
@@ -148,7 +150,7 @@ public class FoodSearchFragment extends Fragment implements SearchView.OnQueryTe
     }
     @Override
     public void onAttach(Context context) {
-    //    AndroidSupportInjection.inject(this);
+        AndroidSupportInjection.inject(this);
         super.onAttach(context);
 
         try {
@@ -233,13 +235,13 @@ public class FoodSearchFragment extends Fragment implements SearchView.OnQueryTe
             if (cursorInBounds(position)) {
 
 
-                Intent intent = new Intent(requireActivity(), FoodNutritiensDisplay.class);
-                StringBuilder amm = new StringBuilder();
-                amm.append("https://api.nal.usda.gov/ndb/V2/reports?ndbno=");
-                amm.append(models.get(position).getId());
-                amm.append("&type=f&format=json&api_key=HXLecTDsMqy1Y6jNoYPw2n3DQ30FeGXxD2XBZqJh");
+//                Intent intent = new Intent(requireActivity(), FoodNutritiensDisplay.class);
+//                StringBuilder amm = new StringBuilder();
+//                amm.append("https://api.nal.usda.gov/ndb/V2/reports?ndbno=");
+//                amm.append(models.get(position).getId());
+//                amm.append("&type=f&format=json&api_key=HXLecTDsMqy1Y6jNoYPw2n3DQ30FeGXxD2XBZqJh");
                 //new GETADDITIONALFOODINFORMATION().execute(amm.toString());
-
+                
                 mCallback.onFoodListSelected(models.get(position).getId(),
                         models.get(position).getName(), foodselection);
 //                intent.putExtra("id", models.get(position).getId());

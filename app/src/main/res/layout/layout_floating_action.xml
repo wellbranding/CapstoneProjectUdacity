@@ -2,12 +2,6 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
-    <data>
-
-        <variable
-            name="viewModel"
-            type="udacityteam.healthapp.activities.MainActivityViewModel"/>
-    </data>
 <FrameLayout
     android:id="@+id/fabFrame"
     android:layout_width="match_parent"
@@ -25,8 +19,6 @@
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:layout_gravity="bottom|end"
-        android:onClick="@{(v) -> viewModel.searchsnacks(v)}"
-        android:visibility="@{viewModel.snacksvisibility}"
         android:layout_marginRight="8dp"
         android:layout_marginBottom="120dp"
         android:layout_marginEnd="8dp"
@@ -70,7 +62,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:visibility="@{viewModel.drinksvisibility}"
         android:layout_gravity="bottom|end"
         android:layout_marginRight="8dp"
         android:layout_marginEnd="8dp"
@@ -116,9 +107,6 @@
         android:gravity="center_vertical"
         android:layout_gravity="bottom|end"
         android:layout_marginRight="8dp"
-
-        android:onClick="@{(v) -> viewModel.searchbreakfasts(v)}"
-        android:visibility="@{viewModel.breakfastvisibility}"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="220dp"
         android:orientation="horizontal">
@@ -160,8 +148,6 @@
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:layout_gravity="bottom|end"
-        android:onClick="@{(v) -> viewModel.searchlunches(v)}"
-        android:visibility="@{viewModel.lunchvisibility}"
         android:layout_marginRight="8dp"
         android:layout_marginBottom="270dp"
         android:layout_marginEnd="8dp"
@@ -204,8 +190,6 @@
         android:layout_gravity="bottom|end"
         android:layout_marginRight="8dp"
         android:layout_marginBottom="320dp"
-        android:onClick="@{(v) -> viewModel.searchdinners(v)}"
-        android:visibility="@{viewModel.dinnervisibility}"
         android:layout_marginEnd="8dp"
         android:orientation="horizontal">
 
@@ -252,7 +236,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
-            android:onClick="@{(v) -> viewModel.initfloatingbutton(v)}"
             android:src="@drawable/ic_settings_black_24dp"
             app:backgroundTint="?attr/colorPrimary"
             app:fabSize="normal" />

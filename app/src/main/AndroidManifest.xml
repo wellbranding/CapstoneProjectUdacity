@@ -23,28 +23,32 @@
         </activity>
         <activity
             android:name=".activities.CommunityActivities.CommunityList"
-            android:label="@string/title_activity_main2"
+            android:label="@string/title_food_information"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.FoodNutritiensDisplay"
-            android:label="@string/title_activity_main2" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:label="@string/title_food_information" />
         <activity
             android:name=".activities.FoodSearchActivity"
             android:theme="@style/AppTheme.NoActionBar"
-            android:label="@string/title_activity_main2" />
+            android:label="@string/title_food_information" />
         <activity
             android:name=".activities.FoodNutritiensDisplayPrieview"
-            android:label="@string/title_activity_main2" />
+            android:label="@string/title_food_information" />
         <activity
             android:name=".activities.MainActivity"
             android:theme="@style/AppTheme.NoActionBar"
-            android:label="@string/title_activity_main2" >
+            android:label="@string/app_name" >
             <!--<meta-data-->
                 <!--android:name="android.support.PARENT_ACTIVITY"-->
                 <!--android:value=".activities.MainActivity"/>-->
         </activity>
-        <activity android:name=".activities.FoodListPrieview" />
-        <activity android:name=".activities.FoodListPrieviewNew" />
+        <activity android:name=".activities.FoodListPrieview"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".activities.FoodListPrieviewNew"
+            android:theme="@style/AppTheme.NoActionBar"
+            />
         <activity android:name=".activities.FoodList"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".completeRedesign.FoodListComplete"

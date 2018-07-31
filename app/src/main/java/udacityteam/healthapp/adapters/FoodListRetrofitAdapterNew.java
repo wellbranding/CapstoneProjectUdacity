@@ -71,8 +71,7 @@ public class FoodListRetrofitAdapterNew extends RecyclerView.Adapter<FoodListRet
             if (binding.getViewModel() == null) {
                 binding.setViewModel(new FoodListItemViewModel(itemView.getContext(), repository));
             } else {
-              //  binding.getViewModel().
-              //  binding.se
+
 
                 binding.getViewModel().setSelectectedFoood(repository);
             }

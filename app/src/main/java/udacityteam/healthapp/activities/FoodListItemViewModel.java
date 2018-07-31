@@ -16,7 +16,7 @@ public class FoodListItemViewModel extends BaseObservable implements ViewModel {
     private Context context;
     private String foodId;
     private String foodName;
-    private String UserId= FirebaseAuth.getInstance().getCurrentUser().getUid();
+    private String UserId;
     private String SendDate;
     private float Calories;
     private float Protein;
@@ -31,31 +31,8 @@ public class FoodListItemViewModel extends BaseObservable implements ViewModel {
     public String getName() {
         return selectedFoodretrofit.getFoodid();
     }
-//
-//    public String getDescription() {
-//        return selectedFoodretrofit.description;
-//    }
-//
-//    public String getStars() {
-//        return context.getString(R.string.text_stars, selectedFoodretrofit.stars);
-//    }
-//
-//    public String getWatchers() {
-//        return context.getString(R.string.text_watchers, selectedFoodretrofit.watchers);
-//    }
-//
-//    public String getForks() {
-//        return context.getString(R.string.text_forks, selectedFoodretrofit.forks);
-//    }
-
-//    public void onItemClick(View view) {
-//        context.startActivity(RepositoryActivity.newIntent(context, selectedFoodretrofit));
-//    }
-
-    // Allows recycling ItemRepoViewModels within the recyclerview adapter
     public void setSelectectedFoood(SelectedFoodretrofit selectedFoodretrofit) {
         this.selectedFoodretrofit = selectedFoodretrofit;
-//        notify();
     }
     public void onItemClick(View view) {
         context.startActivity(FoodNutritiensDisplayPrieview.newIntent(context, selectedFoodretrofit));
@@ -63,7 +40,6 @@ public class FoodListItemViewModel extends BaseObservable implements ViewModel {
 
     @Override
     public void destroy() {
-        //In this case destroy doesn't need to do anything because there is not async calls
     }
 
 }

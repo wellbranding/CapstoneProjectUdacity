@@ -30,6 +30,8 @@ public class MyCustomDialog extends DialogFragment {
     }
     public OnInputSelected mOnInputSelected;
 
+
+
     //widgets
     private EditText mInput;
     private TextView mActionOk, mActionCancel;

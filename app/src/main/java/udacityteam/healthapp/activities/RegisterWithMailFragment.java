@@ -1,6 +1,7 @@
 package udacityteam.healthapp.activities;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -56,6 +57,25 @@ public class RegisterWithMailFragment extends Fragment implements
     private FirebaseAuth mAuth;
     // [END declare_auth]
 
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            mCallback = (RegisterWithMailFragment.RegisterSuccessListener) context;
+        }
+        catch (ClassCastException e) {
+            throw new ClassCastException(context.toString()
+                    + " must implement OnHeadlineSelectedListener");
+        }
+
+    }
+
+    RegisterWithMailFragment.RegisterSuccessListener mCallback;
+
+    public interface RegisterSuccessListener {
+        public void onUserRegistered();
+    }
     @Override
     public void onCreate(Bundle savedInstanceState) {
         mAuth = FirebaseAuth.getInstance();
@@ -145,8 +165,9 @@ public class RegisterWithMailFragment extends Fragment implements
                                 Toast.makeText(requireActivity(),
                                         "Verification email sent to " + user.getEmail(),
                                         Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(requireActivity(), LoginWithMailPasword.class);
-                                startActivity(intent);
+                                mCallback.onUserRegistered();
+                               // Intent intent = new Intent(requireActivity(), LoginWithMailPasword.class);
+                               // startActivity(intent);
                             }
                         }
                     });

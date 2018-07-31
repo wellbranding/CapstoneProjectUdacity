@@ -20,6 +20,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -53,6 +54,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
 import udacityteam.healthapp.Model.Result;
 import udacityteam.healthapp.Model.SelectedFoodretrofit;
 import udacityteam.healthapp.PHP_Retrofit_API.APIService;
@@ -65,6 +68,8 @@ import udacityteam.healthapp.activities.FoodListViewModel;
 import udacityteam.healthapp.activities.LoginRegisterViewModel;
 import udacityteam.healthapp.adapters.FoodListRetrofitAdapterNew;
 import udacityteam.healthapp.adapters.FoodViewHolder;
+import udacityteam.healthapp.app.ApplicationController;
+import udacityteam.healthapp.completeRedesign.Data.Networking.API.RetrofitFactoryNew;
 import udacityteam.healthapp.completeRedesign.Repository.Status;
 import udacityteam.healthapp.databinding.ActivityFoodListBinding;
 import udacityteam.healthapp.models.SelectedFood;
@@ -100,6 +105,8 @@ public class FoodListComplete extends AppCompatActivity implements   NavigationV
     List<SelectedFoodretrofit> receivedSelectedFoods;
     FoodListRetrofitAdapterNew customAdapterFoodListPrievew;
 
+
+
     @Inject
     ViewModelProvider.Factory ViewModelFactory;
 
@@ -111,6 +118,7 @@ public class FoodListComplete extends AppCompatActivity implements   NavigationV
         super.onCreate(savedInstanceState);
         foodListViewModel = ViewModelProviders.of(this, ViewModelFactory).
                 get(FoodListViewModelComplete.class);
+        receivedSelectedFoods = new ArrayList<>();
         Intent iin = getIntent();
         Bundle b = iin.getExtras();
         foodselection = (String) b.get("foodselection");
@@ -140,20 +148,50 @@ public class FoodListComplete extends AppCompatActivity implements   NavigationV
         navigationView.setNavigationItemSelectedListener(this);
 
         getSupportActionBar().setTitle(foodselection);
-        share.setEnabled(true);
+        SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd");
+        share.setVisibility(View.INVISIBLE);
+        String todays = dt.format(new Date(new Date().getTime()));
+
+
+        foodListViewModel.getShareResult().observe(this, response->
+        {
+           if(response!=null) {
+
+               Toast.makeText(this, response.getMessage(), Toast.LENGTH_SHORT).show();
+               Log.d("response", response.getMessage());
+           }
+        });
+        share.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String todays = dt.format(new Date(new Date().getTime()));
+                if(todays.equals(stringdate) && receivedSelectedFoods.size()>=1)
+                foodListViewModel.ShareFoodList(foodselection, SharedFoodListDatabase);
+                else if(!todays.equals(stringdate))
+                    Toast.makeText(FoodListComplete.this, "Can only share Today's diet", Toast.LENGTH_SHORT).show();
+                else if(receivedSelectedFoods.size()>=1)
+                {
+                    foodListViewModel.ShareFoodList(foodselection, SharedFoodListDatabase);
+                }
+                else if(receivedSelectedFoods.size()==0)
+                {
+                    Toast.makeText(FoodListComplete.this, "Can't share empty Diet", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
 
         if (requestedString != null)
             stringdate = requestedString;
         else {
             Date date = new Date();
             Date newDate = new Date(date.getTime());
-            SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd");
             stringdate = dt.format(newDate);
         }
         Log.d("reqss", stringdate);
 
         selectedFoods = new ArrayList<>();
-        foodListViewModel.IsShared(foodselection);
+      //  foodListViewModel.IsShared(foodselection);
 
         String year = requestedString.substring(0, 4);
         String month = requestedString.substring(5, 7);
@@ -165,8 +203,12 @@ public class FoodListComplete extends AppCompatActivity implements   NavigationV
             if(response!=null) {
                 if (response.status == Status.SUCCESS) {
 
+                    receivedSelectedFoods = response.data;
                     customAdapterFoodListPrievew.setSelectedFoodretrofits(response.data);
                     customAdapterFoodListPrievew.notifyDataSetChanged();
+                    CalculateNutritionsDisplay(response.data);
+                    share.setEnabled(true);
+                    share.setVisibility(View.VISIBLE);
 
                 }
             }
@@ -175,6 +217,29 @@ public class FoodListComplete extends AppCompatActivity implements   NavigationV
                 Toast.makeText(this, "Server issue", Toast.LENGTH_SHORT).show();
             }
         });
+
+
+
+    }
+    public void CalculateNutritionsDisplay(List<SelectedFoodretrofit> selectedFoodretrofits)
+    {
+        float calories = 0;
+        float protein = 0;
+        float carbos = 0;
+        float fats = 0;
+        for(int i = 0; i<selectedFoodretrofits.size(); i++)
+        {
+            calories+=selectedFoodretrofits.get(i).getCalories();
+            protein+=selectedFoodretrofits.get(i).getProtein();
+            carbos+=selectedFoodretrofits.get(i).getCarbohydrates();
+            fats+=selectedFoodretrofits.get(i).getFat();
+
+
+        }
+        caloriescounter.setText(String.valueOf(Math.round(calories*100.0)/100.0));
+        proteincounter.setText(String.valueOf(Math.round(protein*100.0)/100.0));
+        carbohycounter.setText(String.valueOf(Math.round(carbos*100.0)/100.0));
+        fatcounter.setText(String.valueOf(Math.round(fats*100.0)/100.0));
 
 
 

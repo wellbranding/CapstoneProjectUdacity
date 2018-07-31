@@ -241,69 +241,7 @@ public class MainActivityViewModel implements ViewModel {
         final Calendar calendar = Calendar.getInstance();
         calendar.setTime(this.calendar.get().getSelectedDate().getDate());
         Log.d("ajaaz", format.format(calendar.getTime()));
-  //      Log.d("calendarrr", format.format(this.calendar.get().getSelectedDate().getDate()));
-//        calendar.setTime(binding.appBarMain.contentMain.calendarView.getSelectedDate().getDate());
-//        final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-//        System.out.println();
-//        Log.d("ajaaz", format.format(calendar.getTime()));
-////        dinnerbtn.setOnClickListener(new View.OnClickListener() {
-////            @Override
-////            public void onClick(View view) {
-////                Intent intent = new Intent(MainActivity.this, FoodList.class);
-////                intent.putExtra("foodselection", "Dinner");
-////                intent.putExtra("SharedFoodListDatabase", "SharedDinners");
-////                intent.putExtra("requestdate", format.format(calendar.getTime()));
-////                startActivity(intent);
-////            }
-////        });
-//        lunchbtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent intent = new Intent(MainActivity.this, FoodList.class);
-//                intent.putExtra("foodselection", "Lunch");
-//                intent.putExtra("SharedFoodListDatabase", "SharedLunches");
-//                intent.putExtra("requestdate", format.format(calendar.getTime()));
-//
-//                startActivity(intent);
-//            }
-//        });
-//        breakfastbtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent intent = new Intent(MainActivity.this, FoodList.class);
-//                intent.putExtra("foodselection", "Breakfast");
-//                intent.putExtra("SharedFoodListDatabase", "SharedBreakfasts");
-//                intent.putExtra("requestdate", format.format(calendar.getTime()));
-//                startActivity(intent);
-//            }
-//        });
-//        snacksbtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent intent = new Intent(MainActivity.this, FoodList.class);
-//                intent.putExtra("foodselection", "Snacks");
-//                intent.putExtra("SharedFoodListDatabase", "SharedSnacks");
-//                intent.putExtra("requestdate", format.format(calendar.getTime()));
-//                startActivity(intent);
-//            }
-//        });
-//        drinksbtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent intent = new Intent(MainActivity.this, FoodList.class);
-//                intent.putExtra("foodselection", "Drinks");
-//                intent.putExtra("UserId", currentUser.getId());
-//                intent.putExtra("SharedFoodListDatabase", "SharedDrinks");
-//                intent.putExtra("requestdate", format.format(calendar.getTime()));
-//                startActivity(intent);
-//            }
-//        });
-//        dailybtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Toast.makeText(MainActivity.this, "Currently not Available", Toast.LENGTH_SHORT).show();
-//            }
-//        });
+
 
 
     }
@@ -350,9 +288,6 @@ public class MainActivityViewModel implements ViewModel {
 
 
 
-    private static boolean isHttp404(Throwable error) {
-        return error instanceof HttpException && ((HttpException) error).code() == 404;
-    }
     public interface DataListener {
         void onRepositoriesChanged(List<SelectedFoodretrofit> repositories);
     }

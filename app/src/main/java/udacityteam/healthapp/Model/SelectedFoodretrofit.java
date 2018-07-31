@@ -68,6 +68,17 @@ public class SelectedFoodretrofit implements  Parcelable {
 
     }
 
+    public SelectedFoodretrofit(String foodId, String foodName, String whichTime, String sendDate, float calories, float protein, float fat, float carbohydrates) {
+        this.foodId = foodId;
+        this.foodName = foodName;
+        this.whichTime = whichTime;
+        SendDate = sendDate;
+        Calories = calories;
+        Protein = protein;
+        Fat = fat;
+        Carbohydrates = carbohydrates;
+    }
+
     protected SelectedFoodretrofit(Parcel in) {
         foodId = in.readString();
         foodName = in.readString();

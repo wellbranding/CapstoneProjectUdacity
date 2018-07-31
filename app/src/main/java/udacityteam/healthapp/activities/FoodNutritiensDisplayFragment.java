@@ -1,9 +1,9 @@
 package udacityteam.healthapp.activities;
 
-import android.app.SearchManager;
+import android.arch.lifecycle.ViewModelProvider;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -44,6 +44,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import javax.inject.Inject;
+
+import dagger.android.support.AndroidSupportInjection;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -55,7 +58,8 @@ import udacityteam.healthapp.PHP_Retrofit_API.APIService;
 import udacityteam.healthapp.PHP_Retrofit_API.APIUrl;
 import udacityteam.healthapp.R;
 import udacityteam.healthapp.app.ApplicationController;
-import udacityteam.healthapp.databases.DatabaseHelper;
+import udacityteam.healthapp.completeRedesign.FoodListComplete;
+import udacityteam.healthapp.completeRedesign.SharedFoodListsViewModelNew;
 import udacityteam.healthapp.models.SelectedFood;
 import udacityteam.healthapp.models.SelectedFoodmodel;
 
@@ -75,6 +79,13 @@ public class FoodNutritiensDisplayFragment extends Fragment {
     String SharedFoodListDatabase;
     private Context context;
 
+    private MainActivityViewModelGood viewModel;
+
+    @Inject
+    ViewModelProvider.Factory ViewModelFactory;
+
+    private boolean isHasAdded = false;
+
 
     @Nullable
     @Override
@@ -85,10 +96,11 @@ public class FoodNutritiensDisplayFragment extends Fragment {
         Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
         //   toolbar.setNavigationIcon(R.drawable.abc_ic_ab_back_material);
         ((MainActivity)getActivity()).setSupportActionBar(toolbar);
+        ((MainActivity)getActivity()).getSupportActionBar().setTitle(foodname);
         setHasOptionsMenu(true);
-        toolbar.setTitle(foodname);
         progressBar = view.findViewById(R.id.progressbar);
         productname = view.findViewById(R.id.ProductName);
+
         nutritionaldisplay = view.findViewById(R.id.nutritionaldysplay);
         addtoSqlite = view.findViewById(R.id.button2);
         addtoSqlite.setActivated(false);
@@ -112,25 +124,52 @@ public class FoodNutritiensDisplayFragment extends Fragment {
         super.onCreateOptionsMenu(menu, inflater);
 
     }
+    @Override
+    public void onAttach(Context context) {
+        AndroidSupportInjection.inject(this);
+        super.onAttach(context);
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        viewModel = ViewModelProviders.of(getActivity(), ViewModelFactory).
+                get(MainActivityViewModelGood.class);
 
         Bundle b = getArguments();
 
+        viewModel.getResultMediatorLiveData().observe(this, resultApiResponse ->
+        {
+            if(resultApiResponse!=null)
+            if (resultApiResponse.isSuccessful()
+                    && isHasAdded) {
+
+                Intent intent = new Intent(requireActivity(), FoodListComplete.class);
+                Date date = new Date();
+                Date newDate = new Date(date.getTime());
+                SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd");
+                Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+                Log.d("timestamp", timestamp.toString());
+                String stringdate = dt.format(newDate);
+                intent.putExtra("foodselection", foodselection);
+                intent.putExtra("SharedFoodListDatabase", SharedFoodListDatabase);
+                intent.putExtra("requestdate", stringdate);
+                startActivity(intent);
+                Log.d("importnant", resultApiResponse.body.getMessage());
+                Toast.makeText(requireActivity(), resultApiResponse.body.getMessage(), Toast.LENGTH_SHORT).show();
+
+            }
+        });
 
 
         if(b!=null)
         {
             id =(String) b.get("id");
             foodname = (String) b.get("foodname");
-            foodselection = (String) b.get("foodselection");
+            foodselection = (String) b.get("whichtime");
             SharedFoodListDatabase = (String) b.get("SharedFoodListDatabase");
 
-            Log.d("receivedFragment", String.valueOf(id));
-
-
+            Log.d("receivedFragment", String.valueOf(foodname));
 
         }
 
@@ -293,7 +332,11 @@ public class FoodNutritiensDisplayFragment extends Fragment {
                 addtoSqlite.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        AddFoodtoDatabase(nutritiens);
+                      //  AddFoodtoDatabase(nutritiens);
+                        viewModel.IfHasPosted();
+                        viewModel.AddFoodtoDatabase(foodselection, id,
+                                foodname, nutritiens);
+                        isHasAdded = true;
                     }
                 });
                 productname.setVisibility(View.VISIBLE);

@@ -1,12 +1,16 @@
 package udacityteam.healthapp.completeRedesign.Repository;
 
 import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.MediatorLiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -18,6 +22,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import udacityteam.healthapp.Model.OneSharedFoodProductsListRetrofit;
+import udacityteam.healthapp.Model.Result;
 import udacityteam.healthapp.Model.SelectedFoodretrofit;
 import udacityteam.healthapp.Model.SelectedFoodretrofitarray;
 import udacityteam.healthapp.Model.SharedFoodProductsRetrofit;
@@ -44,11 +49,99 @@ public class RecipiesRepository {
         return mainDatabase;
     }
 
+    private MutableLiveData<String> signOut;
+
 
 
     public RecipesMainDao getUserDao() {
         return userDao;
     }
+
+    private MediatorLiveData<ApiResponse<Result>> resultMediatorLiveData = new MediatorLiveData<>();
+    private LiveData<ApiResponse<Result>> apiResponseLiveData;
+
+    public MediatorLiveData<ApiResponse<Result>> getResultMediatorLiveData() {
+        return resultMediatorLiveData;
+    }
+
+
+
+    public LiveData<String> SignOut()
+    {
+        sharedPreferences.edit().putInt("userId", -1);
+        Completable.fromAction(() ->
+           mainDatabase.clearAllTables()).
+            observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(Schedulers.io()).subscribe(new CompletableObserver() {
+                @Override
+                public void onSubscribe(Disposable d) {
+                }
+
+                @Override
+                public void onComplete() {
+                    signOut.setValue("Success");
+                }
+
+                @Override
+                public void onError(Throwable e) {
+                    signOut.setValue("Error");
+                }
+            });
+        return signOut;
+
+    }
+    public void AddFoodtoDatabase(String foodselection, String foodId, String foodName, List<Float> nutritiens) {
+        Date date = new Date();
+        Date newDate = new Date(date.getTime());
+        SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd");
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        Log.d("timestamp", timestamp.toString());
+
+        String stringdate = dt.format(newDate);
+        SelectedFoodretrofit selectedFoodretrofit = new SelectedFoodretrofit(
+                foodId, foodName, foodselection, stringdate, nutritiens.get(0)
+                ,nutritiens.get(1),nutritiens.get(2),nutritiens.get(3)
+        );
+        apiResponseLiveData = RetrofitFactoryNew.create().addSelectedFood(
+                foodId,foodName,
+                2, timestamp, nutritiens.get(0)
+                ,nutritiens.get(1),nutritiens.get(2),nutritiens.get(3),
+                foodselection,0
+
+        );
+
+        resultMediatorLiveData.removeSource(apiResponseLiveData);
+        resultMediatorLiveData.addSource(apiResponseLiveData, result->
+        {
+            resultMediatorLiveData.removeSource(apiResponseLiveData);
+            if (result != null && result.isSuccessful()) {
+                resultMediatorLiveData.removeSource(apiResponseLiveData);
+                Completable.fromAction(() ->
+                        userDao.insertOneAddedFood(selectedFoodretrofit)).
+                        observeOn(AndroidSchedulers.mainThread())
+                        .subscribeOn(Schedulers.io()).subscribe(new CompletableObserver() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        resultMediatorLiveData.postValue(result);
+                        //in order to not remember state
+                        resultMediatorLiveData.setValue(null);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                    }
+                });
+
+            }
+        });
+
+    }
+
+
 
     public MutableLiveData<UserRetrofitGood> curentUser = new MutableLiveData<>();
 
@@ -86,6 +179,7 @@ public class RecipiesRepository {
         this.appExecutors = appExecutors;
         this.mainDatabase = mainDatabase;
         this.apiService = apiService;
+         signOut= new MutableLiveData<>();
 
     }
     public LiveData<Resource<List<SelectedFoodretrofit>>> getAddedFoods(String whichTime, String year,
@@ -133,7 +227,7 @@ public class RecipiesRepository {
 
 
     public LiveData<Resource<List<OneSharedFoodProductsListRetrofit>>> loadSharedFoodLists(String whichDatabase) {
-        return new NetworkBoundResource<List<OneSharedFoodProductsListRetrofit>,SharedFoodProductsRetrofit >(appExecutors) {
+        return new  NetworkBoundResource<List<OneSharedFoodProductsListRetrofit>,SharedFoodProductsRetrofit >(appExecutors) {
             @Override
             protected void saveCallResult(@NonNull SharedFoodProductsRetrofit item) {
                 for(int i =0; i<item.getSelectedFoodretrofits().size(); i++)
@@ -164,6 +258,8 @@ public class RecipiesRepository {
 
 
         }.getAsLiveData();
+
+
     }
 }
 

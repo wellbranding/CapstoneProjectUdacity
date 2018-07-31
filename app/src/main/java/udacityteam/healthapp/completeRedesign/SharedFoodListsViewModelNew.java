@@ -33,6 +33,7 @@ import udacityteam.healthapp.activities.FoodNutritiensDisplayPrieview;
 import udacityteam.healthapp.app.ApplicationController;
 import udacityteam.healthapp.completeRedesign.Repository.RecipiesRepository;
 import udacityteam.healthapp.completeRedesign.Repository.Resource;
+import udacityteam.healthapp.completeRedesign.Repository.Status;
 
 /**
  * View model for each item in the repositories RecyclerView
@@ -71,12 +72,21 @@ public class SharedFoodListsViewModelNew extends ViewModel {
 
     }
 
-    public MutableLiveData<List<OneSharedFoodProductsListRetrofit>> mutableLiveData = new MutableLiveData<>();
+
+
+
+    public MutableLiveData<Resource<List<OneSharedFoodProductsListRetrofit>>> mutableLiveData = new MutableLiveData<>();
     ApplicationController application = null;
+
+    public LiveData<Resource<List<OneSharedFoodProductsListRetrofit>>> getFilteredData()
+    {
+        return mutableLiveData;
+    }
 
     @Inject
     public SharedFoodListsViewModelNew(RecipiesRepository recipiesRepository) {
         this.repository = recipiesRepository;
+        //Transofrmations();
     }
 
     public LiveData<Resource<List<OneSharedFoodProductsListRetrofit>>> getRecipes() {
@@ -94,14 +104,23 @@ public class SharedFoodListsViewModelNew extends ViewModel {
         return selectedFoodretrofit.getFoodid();
     }
 
-
-    public void InitSelectedfoods(List<OneSharedFoodProductsListRetrofit> ones)
+//
+//    public void InitSelectedfoods(List<OneSharedFoodProductsListRetrofit> ones)
+//    {
+//        mutableLiveData.setValue(ones);
+//    }
+//    public MutableLiveData<List<OneSharedFoodProductsListRetrofit>> getMutableLiveData()
+//    {
+//        return mutableLiveData;
+//    }
+    public void Transofrmations()
     {
-        mutableLiveData.setValue(ones);
-    }
-    public MutableLiveData<List<OneSharedFoodProductsListRetrofit>> getMutableLiveData()
-    {
-        return mutableLiveData;
+       recipes = Transformations.switchMap(mutableLiveData,
+                response->
+                {
+                    recipes = mutableLiveData;
+                   return recipes;
+                });
     }
     public void setSelectectedFoood(SelectedFoodretrofit selectedFoodretrofit) {
         this.selectedFoodretrofit = selectedFoodretrofit;
@@ -110,10 +129,7 @@ public class SharedFoodListsViewModelNew extends ViewModel {
     public void onItemClick(View view) {
         application.getApplicationContext().startActivity(FoodNutritiensDisplayPrieview.newIntent(context, selectedFoodretrofit));
     }
-    public void Hello()
-    {
-        Toast.makeText(application.getApplicationContext(), "heeeeeeeeee", Toast.LENGTH_LONG).show();
-    }
+
     public  void GetFilteredSharedDiets(MultiSlider protein, MultiSlider calories,
                                         MultiSlider carbohydrates, MultiSlider fats
     , String SharedFoodListDatabase) //only if today
@@ -131,7 +147,7 @@ public class SharedFoodListsViewModelNew extends ViewModel {
         //Defining retrofit api service
         APIService service = retrofit.create(APIService.class);
 
-        Call<SharedFoodProductsRetrofit> call = service.getAllFilteredSharedDiets(application.getId()
+        Call<SharedFoodProductsRetrofit> call = service.getAllFilteredSharedDiets(2
                 , SharedFoodListDatabase, protein.getThumb(0).getValue(), protein.getThumb(1).getValue(),
                 calories.getThumb(0).getValue(), calories.getThumb(1).getValue(),
                 carbohydrates.getThumb(0).getValue(), carbohydrates.getThumb(1).getValue(),
@@ -142,11 +158,15 @@ public class SharedFoodListsViewModelNew extends ViewModel {
             public void onResponse(Call<SharedFoodProductsRetrofit> call, Response<SharedFoodProductsRetrofit> response) {
                 List<OneSharedFoodProductsListRetrofit> selectedFoodretrofits = response.body().
                         getSelectedFoodretrofits();
-                mutableLiveData.setValue(selectedFoodretrofits);
+                if(response.isSuccessful()){
+                    mutableLiveData.setValue(new Resource(Status.SUCCESS, response.body().getSelectedFoodretrofits(), "SUCCESS"));
+                }
+             //   mutableLiveData.setValue(selectedFoodretrofits);
+
                 //notify();
 
                 if (selectedFoodretrofits.size() != 0) {
-                    Toast.makeText(application.getApplicationContext(), String.valueOf(selectedFoodretrofits.get(0).getCalories()), Toast.LENGTH_SHORT).show();
+                //    Toast.makeText(application.getApplicationContext(), String.valueOf(selectedFoodretrofits.get(0).getCalories()), Toast.LENGTH_SHORT).show();
                 }
             }
 

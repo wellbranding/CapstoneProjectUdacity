@@ -18,7 +18,6 @@ public class SharedFoodListItemViewModel extends BaseObservable implements ViewM
     private  String foodselection;
     private String foodId;
     private String foodName;
-    private String UserId= FirebaseAuth.getInstance().getCurrentUser().getUid();
     private String SendDate;
     private float Calories;
     private float Protein;
@@ -33,30 +32,8 @@ public class SharedFoodListItemViewModel extends BaseObservable implements ViewM
     }
 
     public String getName() {
-        return selectedFoodretrofit.getUserId();
+        return selectedFoodretrofit.getDisplayname();
     }
-//
-//    public String getDescription() {
-//        return selectedFoodretrofit.description;
-//    }
-//
-//    public String getStars() {
-//        return context.getString(R.string.text_stars, selectedFoodretrofit.stars);
-//    }
-//
-//    public String getWatchers() {
-//        return context.getString(R.string.text_watchers, selectedFoodretrofit.watchers);
-//    }
-//
-//    public String getForks() {
-//        return context.getString(R.string.text_forks, selectedFoodretrofit.forks);
-//    }
-
-//    public void onItemClick(View view) {
-//        context.startActivity(RepositoryActivity.newIntent(context, selectedFoodretrofit));
-//    }
-
-    // Allows recycling ItemRepoViewModels within the recyclerview adapter
     public void setSelectectedFoood(OneSharedFoodProductsListRetrofit selectedFoodretrofit) {
         this.selectedFoodretrofit = selectedFoodretrofit;
         notifyChange();

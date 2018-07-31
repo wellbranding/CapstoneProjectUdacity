@@ -65,7 +65,7 @@ public class LoginWithMailFragment extends Fragment implements
 
     @Override
     public void onAttach(Context context) {
-        AndroidSupportInjection.inject(this);
+       // AndroidSupportInjection.inject(this);
         super.onAttach(context);
     }
 
@@ -127,12 +127,18 @@ public class LoginWithMailFragment extends Fragment implements
 
 
                                 //Defining the user object as we need to pass it with the call
-                                Userretrofit retrofituser = new Userretrofit(user.getDisplayName(), user.getEmail(), mAuth.getCurrentUser().getUid());
+                                Userretrofit retrofituser;
+                                if(user.getDisplayName()==null)
+                                {
+                                    retrofituser = new Userretrofit("unknown", user.getEmail(), mAuth.getCurrentUser().getUid());
+                                }
+                             else   retrofituser = new Userretrofit(user.getDisplayName(), user.getEmail(), mAuth.getCurrentUser().getUid());
+
                                 viewModel.getRegisterWithGoogleSignInResponse(retrofituser).observe(requireActivity(),
                                         result ->
                                         {
                                             if(result!=null)
-                                                if(!result.getError())
+                                                if(!result.getError() || result.getMessage().equals(""))
                                                 {
                                                     Intent intent = new Intent(requireActivity(), MainActivity.class);
                                                     startActivity(intent);
