@@ -1,4 +1,4 @@
-package udacityteam.healthapp.activities;
+package udacityteam.healthapp.completeRedesign.UI.AddedFoods.Views;
 
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
@@ -18,13 +18,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ProgressBar;
-import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -47,35 +42,23 @@ import java.util.Locale;
 import javax.inject.Inject;
 
 import dagger.android.support.AndroidSupportInjection;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-import udacityteam.healthapp.Model.Result;
-import udacityteam.healthapp.Network.PHPService;
-import udacityteam.healthapp.PHP_Retrofit_API.APIService;
-import udacityteam.healthapp.PHP_Retrofit_API.APIUrl;
 import udacityteam.healthapp.R;
-import udacityteam.healthapp.app.ApplicationController;
+import udacityteam.healthapp.activities.MainActivity;
 import udacityteam.healthapp.completeRedesign.FoodListComplete;
-import udacityteam.healthapp.completeRedesign.SharedFoodListsViewModelNew;
-import udacityteam.healthapp.models.SelectedFood;
-import udacityteam.healthapp.models.SelectedFoodmodel;
+import udacityteam.healthapp.completeRedesign.UI.MainActivity.ViewModels.MainActivityViewModelGood;
 
 /**
  * Created by vvost on 11/26/2017.
  */
 
 public class FoodNutritiensDisplayFragment extends Fragment {
-    TextView Textv;
+    TextView  mCalories, mProtein, mFats, mCarbos;
     Button addtoSqlite;
     String id = null;
     String foodname = null;
-    String UserId = null;
     String foodselection = null;
     ProgressBar progressBar;
-    TextView productname, nutritionaldisplay;
+    TextView productname;
     String SharedFoodListDatabase;
     private Context context;
 
@@ -100,21 +83,21 @@ public class FoodNutritiensDisplayFragment extends Fragment {
         setHasOptionsMenu(true);
         progressBar = view.findViewById(R.id.progressbar);
         productname = view.findViewById(R.id.ProductName);
+        mCalories = view.findViewById(R.id.calories_display);
+        mProtein = view.findViewById(R.id.protein_display);
+        mCarbos= view.findViewById(R.id.carbos_display);
+        mFats = view.findViewById(R.id.fats_display);
 
-        nutritionaldisplay = view.findViewById(R.id.nutritionaldysplay);
         addtoSqlite = view.findViewById(R.id.button2);
         addtoSqlite.setActivated(false);
-        UserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        Textv = (TextView)view.findViewById(R.id.tv2);
-
-        StringBuilder amm = new StringBuilder();
-        amm.append("https://api.nal.usda.gov/ndb/V2/reports?ndbno=");
-        amm.append(id);
-        amm.append("&type=f&format=json&api_key=HXLecTDsMqy1Y6jNoYPw2n3DQ30FeGXxD2XBZqJh");
+        productname.setText(foodname);
+        String amm = "https://api.nal.usda.gov/ndb/V2/reports?ndbno=" +
+                id +
+                "&type=f&format=json&api_key=HXLecTDsMqy1Y6jNoYPw2n3DQ30FeGXxD2XBZqJh";
         GETADDITIONALFOODINFORMATION GETADDITIONALFOODINFORMATION =
                 new GETADDITIONALFOODINFORMATION();
-        GETADDITIONALFOODINFORMATION.execute(amm.toString());
-      return view;
+        GETADDITIONALFOODINFORMATION.execute(amm);
+        return view;
     }
 
     @Override
@@ -169,75 +152,9 @@ public class FoodNutritiensDisplayFragment extends Fragment {
             foodselection = (String) b.get("whichtime");
             SharedFoodListDatabase = (String) b.get("SharedFoodListDatabase");
 
-            Log.d("receivedFragment", String.valueOf(foodname));
-
         }
 
 
-
-    }
-    private void AddFoodtoDatabase(List<Float> nutritiens) {
-        Date date = new Date();
-        Date newDate = new Date(date.getTime());
-        SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd");
-        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-        Log.d("timestamp", timestamp.toString());
-
-        String stringdate = dt.format(newDate);
-        SelectedFood thisuser = new SelectedFood(
-                id,
-                foodname,
-                stringdate
-        );
-        SelectedFood alluser = new SelectedFood(
-                id,
-                foodname,
-                UserId, timestamp, nutritiens.get(0)
-                ,nutritiens.get(1),nutritiens.get(2),nutritiens.get(3)
-        );
-        SelectedFoodmodel alluser1 = new SelectedFoodmodel(
-                id,
-                foodname,
-                UserId, stringdate
-        );
-
-
-
-        Gson gson = new GsonBuilder()
-                .setLenient()
-                .create();
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(APIUrl.BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .build();
-
-        //Defining retrofit api service
-        APIService service = retrofit.create(APIService.class);
-
-        Call<Result> call = PHPService.Factory.create().addSelectedFood(
-                id,"shshshshs",
-                ((ApplicationController)context.getApplicationContext()).getId(), timestamp, nutritiens.get(0)
-                ,nutritiens.get(1),nutritiens.get(2),nutritiens.get(3),
-                foodselection,0
-        );
-        call.enqueue(new Callback<Result>() {
-            @Override
-            public void onResponse(Call<Result> call, Response<Result> response) {
-                //change Result
-                Toast.makeText(requireActivity(), response.message(), Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onFailure(Call<Result> call, Throwable t) {
-                // progressDialog.dismiss();
-                Toast.makeText(requireActivity(), t.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        });
-
-        alluser1.setDate(stringdate);
-        alluser1.setFoodid(id);
-        alluser1.setUserId(UserId);
-        alluser1.setFoodName(foodname);
 
     }
 
@@ -248,8 +165,6 @@ public class FoodNutritiensDisplayFragment extends Fragment {
             super.onPreExecute();
             productname.setVisibility(View.INVISIBLE);
             progressBar.setVisibility(View.VISIBLE);
-            nutritionaldisplay.setVisibility(View.INVISIBLE);
-            Textv.setVisibility(View.INVISIBLE);
         }
 
         @Override
@@ -277,7 +192,6 @@ public class FoodNutritiensDisplayFragment extends Fragment {
                 String finalJson = buffer.toString();
            JSONObject parentObject = new JSONObject(finalJson);
            JSONArray parentArray = parentObject.getJSONArray("foods");
-            StringBuffer finalBufferData = new StringBuffer();
 
             JSONObject finalobject = parentArray.getJSONObject(0);
             JSONObject aaa = finalobject.getJSONObject("food");
@@ -339,15 +253,15 @@ public class FoodNutritiensDisplayFragment extends Fragment {
                         isHasAdded = true;
                     }
                 });
+                mCalories.setText("CALORIES: " + nutritiens.get(0));
+                mProtein.setText("PROTEIN: " + nutritiens.get(1));
+                mFats.setText("FATS: " + nutritiens.get(2));
+                mCarbos.setText("CARBOHYDRATES: " + nutritiens.get(3));
                 productname.setVisibility(View.VISIBLE);
                 progressBar.setVisibility(View.INVISIBLE);
-                nutritionaldisplay.setVisibility(View.VISIBLE);
-                Textv.setVisibility(View.VISIBLE);
-                Textv.setText("CALORIES PER 100G " + nutritiens.get(3) + " KCAL");
             }
             else
             {
-                Textv.setText("Oups Error");
             }
         }
 

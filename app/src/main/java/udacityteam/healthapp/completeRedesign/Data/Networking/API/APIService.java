@@ -104,7 +104,7 @@ public interface APIService {
             @Query("SharedFoodListDatabase") String SharedFoodListDatabase
     );
     @GET("getAllFilteredSharedDiets")
-    LiveData<ApiResponse<SharedFoodProductsRetrofit>> getAllFilteredSharedDiets(
+   Call<SharedFoodProductsRetrofit> getAllFilteredSharedDiets(
             @Query("UserId") Integer UserId,
             @Query("SharedFoodListDatabase") String SharedFoodListDatabase,
             @Query("ProteinBegin") Integer proteinbegin,

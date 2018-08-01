@@ -2,6 +2,7 @@ package udacityteam.healthapp.completeRedesign;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
+import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.Transformations;
 import android.arch.lifecycle.ViewModel;
 import android.content.Context;
@@ -9,6 +10,7 @@ import android.content.SharedPreferences;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 
@@ -46,20 +48,19 @@ import udacityteam.healthapp.completeRedesign.Utils.SingleLiveEvent;
 /**
  * View model for the MainActivity
  */
-public class FoodListViewModelComplete extends ViewModel {
+public class FoodListViewModelComplete extends ViewModel implements Observer<Resource<List<SelectedFoodretrofit>>> {
 
     private static final String TAG = "MainViewModel";
 
-    public ObservableInt infoMessageVisibility;
-    public ObservableInt recyclerViewVisibility;
-    public ObservableInt searchButtonVisibility;
     public ObservableField<String> infoMessage;
     public ObservableField<String> canshare;
     public  ObservableField<Boolean> isshared;
-    public  ObservableField<String> caloriesCount;
-    public  ObservableField<String> proteinCount;
-    public  ObservableField<String> fatsCount;
-    public  ObservableField<String> carbosCount;
+    public  String caloriesCount;
+    public  String proteinCount;
+    public  String fatsCount;
+    public  String carbosCount;
+
+
 
     private Subscription subscription;
     String foodselection;
@@ -78,18 +79,33 @@ public class FoodListViewModelComplete extends ViewModel {
     }
 
 
+    private MutableLiveData<List<String>> nutritionDisplay;
     @Inject
     SharedPreferences sharedPreferences;
 
     @Inject
     public FoodListViewModelComplete(RecipiesRepository recipiesRepository) {
         this.repository = recipiesRepository;
+        nutritionDisplay = new MutableLiveData<>();
 
     }
 
     LiveData<Resource<List<SelectedFoodretrofit>>> selectedFoodsLists;
 
     MutableLiveData<DataForRequest> dataForRequestMutableLiveData = new MutableLiveData<>();
+
+    @Override
+    public void onChanged(@Nullable Resource<List<SelectedFoodretrofit>> listResource) {
+        if(listResource!=null) {
+            if (listResource.status == Status.SUCCESS) {
+
+                if(listResource.data!=null)
+                {
+                    CalculateNutritionsDisplay(listResource.data);
+                }
+            }
+        }
+    }
 
     private class DataForRequest
     {
@@ -151,37 +167,14 @@ public class FoodListViewModelComplete extends ViewModel {
                     .year, dataForRequestMutableLiveData.getValue()
                     .month, dataForRequestMutableLiveData.getValue()
                     .day);
-          //  if(selectedFoodsLists.getValue().status== Status.SUCCESS)
-            //CalculateNutritionsDisplay(selectedFoodsLists.getValue().data);
+         //   if(selectedFoodsLists.getValue()!=null && selectedFoodsLists.getValue().data!=null)
+        //    CalculateNutritionsDisplay(selectedFoodsLists.getValue().data);
+           selectedFoodsLists.observeForever(this);
         }
       return selectedFoodsLists;
-
-
-//        if (selectedFoodsLists == null) {
-//            selectedFoodsLists = repository.getAddedFoods(dataForRequestMutableLiveData.getValue()
-//            .whichTime, dataForRequestMutableLiveData.getValue()
-//                    .year, dataForRequestMutableLiveData.getValue()
-//                    .month, dataForRequestMutableLiveData.getValue()
-//                    .day);
-//        }
-//        return selectedFoodsLists;
     }
 
 
-//    public void LoadFoodList( String foodselection, String year, String month, String day)
-//    {
-//
-//        if (subscription != null && !subscription.isUnsubscribed()) subscription.unsubscribe();
-//        ApplicationController application = ApplicationController.get(context);
-//        Toast.makeText(context, ((ApplicationController)context.getApplicationContext()).getId().toString(), Toast.LENGTH_LONG).show();
-//        PHPService phpService = application.getPHPService();
-//        subscription = phpService.getselectedfoods(((ApplicationController)context.getApplicationContext()).getId(),
-//                foodselection, year, month, day)
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribeOn(application.defaultSubscribeScheduler())
-//                .subscribe(this::handleResponse,this::handleError);
-////
-//    }
     public void CalculateNutritionsDisplay(List<SelectedFoodretrofit> selectedFoodretrofits)
     {
         float calories = 0;
@@ -196,22 +189,34 @@ public class FoodListViewModelComplete extends ViewModel {
             fats+=selectedFoodretrofits.get(i).getFat();
 
         }
-        caloriesCount.set(String.valueOf(Math.round(calories*100.0)/100.0));
-        proteinCount.set(String.valueOf(Math.round(protein*100.0)/100.0));
-        carbosCount.set(String.valueOf(Math.round(carbos*100.0)/100.0));
-        fatsCount.set(String.valueOf(Math.round(fats*100.0)/100.0));
+        caloriesCount = (String.valueOf(Math.round(calories*100.0)/100.0));
+        proteinCount = (String.valueOf(Math.round(protein*100.0)/100.0));
+        carbosCount=(String.valueOf(Math.round(carbos*100.0)/100.0));
+        fatsCount=(String.valueOf(Math.round(fats*100.0)/100.0));
+        List<String> nutritiens = new ArrayList<>();
+        nutritiens.add(caloriesCount);
+        nutritiens.add(proteinCount);
+        nutritiens.add(carbosCount);
+        nutritiens.add(fatsCount);
+        nutritionDisplay.setValue(nutritiens);
 
+    }
+    public LiveData<List<String>> getNutritionalValue()
 
+    {
 
+        return  nutritionDisplay;
     }
     private void handleResponse(SelectedFoodretrofitarray androidList) {
         Log.d("kietass", "jauu");
 
     }
-    private void handleError(Throwable error) {
 
-        Log.d("erroraa", error.getMessage());
-}
+    @Override
+    protected void onCleared() {
+        super.onCleared();
+    }
+
 
     public void IsShared(String foodselection)
     {
@@ -295,20 +300,6 @@ public class FoodListViewModelComplete extends ViewModel {
 
 
     }
-
-    private void handleResponse(Result result) {
-
-        Log.d("pavyko", "pavyko");
-        if (isshared.get()) {
-            //Toast.makeText(context, "Shared Successfuly", Toast.LENGTH_SHORT).show();
-        }
-        if (!isshared.get()) {
-           // Toast.makeText(context, "Updated Successfuly", Toast.LENGTH_SHORT).show();
-        }
-        Log.d("vertee", isshared.get().toString());
-    }
-
-
 
 
 

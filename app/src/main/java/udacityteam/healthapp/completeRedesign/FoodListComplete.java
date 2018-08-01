@@ -1,8 +1,9 @@
 package udacityteam.healthapp.completeRedesign;
 
-import android.arch.lifecycle.MutableLiveData;
+import android.appwidget.AppWidgetManager;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -19,58 +20,30 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
-import java.io.File;
-import java.io.IOException;
-import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
 import dagger.android.AndroidInjection;
-import okhttp3.Cache;
-import okhttp3.CacheControl;
-import okhttp3.Interceptor;
-import okhttp3.Request;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
-import udacityteam.healthapp.Model.Result;
 import udacityteam.healthapp.Model.SelectedFoodretrofit;
-import udacityteam.healthapp.PHP_Retrofit_API.APIService;
-import udacityteam.healthapp.PHP_Retrofit_API.APIUrl;
 import udacityteam.healthapp.R;
-import udacityteam.healthapp.activities.ApplicationClass;
 import udacityteam.healthapp.activities.CommunityActivities.CommunityList;
-import udacityteam.healthapp.activities.Currentuser;
-import udacityteam.healthapp.activities.FoodListViewModel;
-import udacityteam.healthapp.activities.LoginRegisterViewModel;
-import udacityteam.healthapp.adapters.FoodListRetrofitAdapterNew;
-import udacityteam.healthapp.adapters.FoodViewHolder;
-import udacityteam.healthapp.app.ApplicationController;
-import udacityteam.healthapp.completeRedesign.Data.Networking.API.RetrofitFactoryNew;
+import udacityteam.healthapp.completeRedesign.UI.AddedFoods.Adapters.FoodListRetrofitAdapterNew;
 import udacityteam.healthapp.completeRedesign.Repository.Status;
+import udacityteam.healthapp.completeRedesign.Widget.BakingAppWidget;
 import udacityteam.healthapp.databinding.ActivityFoodListBinding;
 import udacityteam.healthapp.models.SelectedFood;
 
@@ -79,9 +52,6 @@ public class FoodListComplete extends AppCompatActivity implements   NavigationV
     RecyclerView recyclerView;
     RecyclerView.LayoutManager layoutManager;
     String foodselection;
-
-    String catergoryId = "ff";
-    FirebaseRecyclerAdapter<SelectedFood, FoodViewHolder> adapter;
     String stringdate;
     TextView message;
     String requestedString;
@@ -93,12 +63,6 @@ public class FoodListComplete extends AppCompatActivity implements   NavigationV
    FirebaseFirestore storage;
     String newstring=null;
     TextView caloriescounter, proteincounter, fatcounter, carbohycounter;
-    float carbohydrates = 0, protein=0, fats =0, calories =0;
-    private static final String CACHE_CONTROL = "Cache-Control";
-    Integer UserId=0;
-
-    int cacheSize = 10 * 1024 * 1024; // 10 MiB
-    ArrayList<SelectedFoodretrofit> nauji;
     ArrayList<SelectedFood> selectedFoods;
     private FoodListViewModelComplete foodListViewModel;
     private ActivityFoodListBinding activityFoodListBinding;
@@ -109,6 +73,9 @@ public class FoodListComplete extends AppCompatActivity implements   NavigationV
 
     @Inject
     ViewModelProvider.Factory ViewModelFactory;
+
+    @Inject
+    SharedPreferences sharedPreferences;
 
 
 
@@ -132,8 +99,6 @@ public class FoodListComplete extends AppCompatActivity implements   NavigationV
 
         message = findViewById(R.id.message);
         share = findViewById(R.id.share);
-      //  activityFoodListBinding.setViewModel(foodListViewModel);
-
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -150,7 +115,6 @@ public class FoodListComplete extends AppCompatActivity implements   NavigationV
         getSupportActionBar().setTitle(foodselection);
         SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd");
         share.setVisibility(View.INVISIBLE);
-        String todays = dt.format(new Date(new Date().getTime()));
 
 
         foodListViewModel.getShareResult().observe(this, response->
@@ -161,9 +125,11 @@ public class FoodListComplete extends AppCompatActivity implements   NavigationV
                Log.d("response", response.getMessage());
            }
         });
+
         share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 String todays = dt.format(new Date(new Date().getTime()));
                 if(todays.equals(stringdate) && receivedSelectedFoods.size()>=1)
                 foodListViewModel.ShareFoodList(foodselection, SharedFoodListDatabase);
@@ -191,7 +157,6 @@ public class FoodListComplete extends AppCompatActivity implements   NavigationV
         Log.d("reqss", stringdate);
 
         selectedFoods = new ArrayList<>();
-      //  foodListViewModel.IsShared(foodselection);
 
         String year = requestedString.substring(0, 4);
         String month = requestedString.substring(5, 7);
@@ -206,7 +171,6 @@ public class FoodListComplete extends AppCompatActivity implements   NavigationV
                     receivedSelectedFoods = response.data;
                     customAdapterFoodListPrievew.setSelectedFoodretrofits(response.data);
                     customAdapterFoodListPrievew.notifyDataSetChanged();
-                    CalculateNutritionsDisplay(response.data);
                     share.setEnabled(true);
                     share.setVisibility(View.VISIBLE);
 
@@ -217,34 +181,65 @@ public class FoodListComplete extends AppCompatActivity implements   NavigationV
                 Toast.makeText(this, "Server issue", Toast.LENGTH_SHORT).show();
             }
         });
-
-
-
-    }
-    public void CalculateNutritionsDisplay(List<SelectedFoodretrofit> selectedFoodretrofits)
-    {
-        float calories = 0;
-        float protein = 0;
-        float carbos = 0;
-        float fats = 0;
-        for(int i = 0; i<selectedFoodretrofits.size(); i++)
+        foodListViewModel.getNutritionalValue().observe(this, response->
         {
-            calories+=selectedFoodretrofits.get(i).getCalories();
-            protein+=selectedFoodretrofits.get(i).getProtein();
-            carbos+=selectedFoodretrofits.get(i).getCarbohydrates();
-            fats+=selectedFoodretrofits.get(i).getFat();
-
-
-        }
-        caloriescounter.setText(String.valueOf(Math.round(calories*100.0)/100.0));
-        proteincounter.setText(String.valueOf(Math.round(protein*100.0)/100.0));
-        carbohycounter.setText(String.valueOf(Math.round(carbos*100.0)/100.0));
-        fatcounter.setText(String.valueOf(Math.round(fats*100.0)/100.0));
+            if(response!=null)
+            {
+                if(response.size()==4)
+                {
+                    caloriescounter.setText("Calories: " + response.get(0));
+                    proteincounter.setText("Protein: " + response.get(1));
+                    carbohycounter.setText("Carbos:" + response.get(2));
+                    fatcounter.setText("Fats:" + response.get(3));
+                }
+            }
+        });
 
 
 
     }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_food_list, menu);
+        return true;
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.to_widget) {
+            SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd");
+            String todays = dt.format(new Date(new Date().getTime()));
+            if(foodselection!=null)
+            addToWidget(todays, foodselection);
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+
+    private void addToWidget(String query, String whichTime )
+    {
+        query = query+"%";
+        sharedPreferences.edit().putString("query_widget", query).apply();
+        sharedPreferences.edit().putString("whichtime_widget", whichTime).apply();
+        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(FoodListComplete.this);
+        int[] appWidgetIds = appWidgetManager.getAppWidgetIds(
+                new ComponentName(FoodListComplete.this, BakingAppWidget.class));
+
+
+        BakingAppWidget bakingAppWidget = new BakingAppWidget();
+        bakingAppWidget.updateAppWidget(FoodListComplete.this, appWidgetManager, appWidgetIds);
+        appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.recipe_list_widget);
+        Toast.makeText(FoodListComplete.this, "Track in your widget", Toast.LENGTH_SHORT).show();
+    }
 
 
 

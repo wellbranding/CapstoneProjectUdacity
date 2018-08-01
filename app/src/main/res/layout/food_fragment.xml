@@ -8,7 +8,7 @@
             name="viewModel"
             type="udacityteam.healthapp.activities.FoodNutritiensDisplayViewModel"/>
     </data>
-<RelativeLayout
+<android.support.constraint.ConstraintLayout
     android:layout_width="match_parent"
     android:background="@color/white"
     android:layout_marginTop="56dp"
@@ -20,17 +20,20 @@
         android:id="@+id/progressbar"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_alignTop="@+id/ProductName"
-        android:layout_centerHorizontal="true"
-        android:foregroundGravity="center_vertical" />
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:foregroundGravity="center_vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.5"
+        android:layout_alignParentLeft="true" />
 
     <TextView
         android:id="@+id/tv2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/nutritionaldysplay"
-        android:layout_alignStart="@+id/nutritionaldysplay"
-        android:layout_below="@+id/nutritionaldysplay"
         android:layout_marginTop="39dp"
         android:text="@{viewModel.foodId}"
         android:textSize="18sp"
@@ -41,10 +44,18 @@
         android:id="@+id/button2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:text="Add food" />
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:background="@color/colorPrimary"
+        android:text="Add food"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/ProductName"
@@ -53,23 +64,67 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginLeft="30dp"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="50dp"
-        android:gravity="center_vertical"
-        android:text="TextView"
-        android:textSize="25sp" />
+        android:layout_marginEnd="8dp"
+        android:padding="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="32dp"
+        android:gravity="center_vertical|center|center_horizontal"
+        android:text="ProductName"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/nutritionaldysplay"
+        android:id="@+id/protein_display"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:layout_alignLeft="@+id/ProductName"
-        android:layout_alignStart="@+id/ProductName"
-        android:layout_below="@+id/ProductName"
-        android:text="@{Float.toString(viewModel.nutritional)}"
-        android:layout_marginTop="17dp"
-        />
-</RelativeLayout>
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="Protein"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/carbos_display" />
+
+    <TextView
+        android:id="@+id/calories_display"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="Calories"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ProductName" />
+
+    <TextView
+        android:id="@+id/fats_display"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="Fats"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/calories_display" />
+
+    <TextView
+        android:id="@+id/carbos_display"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="Carbos"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fats_display" />
+
+</android.support.constraint.ConstraintLayout>
 </layout>

@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="udacityteam.healthapp.activities.CommunityActivities.CommunityFoodListsDisplayFragment0MVVM" />
+            type="udacityteam.healthapp.completeRedesign.SharedFoodListsViewModelNew" />
     </data>
 
 <RelativeLayout
@@ -39,9 +39,9 @@
         android:id="@+id/progressbar"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_alignTop="@id/recyclerView"
-        android:layout_below="@+id/filterdata"
+        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
+        android:layout_marginTop="76dp"
         android:foregroundGravity="center_vertical" />
 </RelativeLayout>
 </layout>

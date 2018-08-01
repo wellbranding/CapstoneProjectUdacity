@@ -1,20 +1,17 @@
-package udacityteam.healthapp.adapters;
+package udacityteam.healthapp.completeRedesign.UI.AddedFoods.Adapters;
 
 import android.databinding.DataBindingUtil;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import java.util.Collections;
 import java.util.List;
 
 
-import udacityteam.healthapp.Model.OneSharedFoodProductsListRetrofit;
 import udacityteam.healthapp.Model.SelectedFoodretrofit;
 import udacityteam.healthapp.R;
-import udacityteam.healthapp.activities.FoodListItemViewModel;
+import udacityteam.healthapp.completeRedesign.UI.AddedFoods.ViewModels.FoodListItemViewModel;
 import udacityteam.healthapp.databinding.FoodListItemBinding;
 
 

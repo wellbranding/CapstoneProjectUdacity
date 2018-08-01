@@ -39,7 +39,7 @@ import udacityteam.healthapp.R;
 import udacityteam.healthapp.activities.ApplicationClass;
 import udacityteam.healthapp.adapters.FoodViewHolder;
 import udacityteam.healthapp.adapters.SharedFoodListsAdapter;
-import udacityteam.healthapp.adapters.SharedFoodListsAdapterNew;
+import udacityteam.healthapp.completeRedesign.UI.Community.Adapters.SharedFoodListsAdapterNew;
 import udacityteam.healthapp.databinding.CommunityListFragmentBinding;
 import udacityteam.healthapp.models.SelectedFood;
 

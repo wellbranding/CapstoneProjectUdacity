@@ -4,14 +4,9 @@ import android.arch.lifecycle.MutableLiveData;
 import android.content.Context;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
-import android.util.Pair;
-import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -19,19 +14,17 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import rx.android.schedulers.AndroidSchedulers;
-import android.widget.TextView;
+
 import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import java.lang.reflect.Field;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.adapter.rxjava.HttpException;
-import rx.Subscriber;
 import rx.Subscription;
 import udacityteam.healthapp.Model.Result;
 import udacityteam.healthapp.Model.SelectedFoodretrofit;
@@ -40,8 +33,7 @@ import udacityteam.healthapp.Network.PHPService;
 import udacityteam.healthapp.PHP_Retrofit_API.APIService;
 import udacityteam.healthapp.PHP_Retrofit_API.APIUrl;
 import udacityteam.healthapp.app.ApplicationController;
-
-import static udacityteam.healthapp.activities.FoodSearchActivity.foodselection;
+import udacityteam.healthapp.completeRedesign.Utils.ViewModel;
 
 /**
  * View model for the MainActivity

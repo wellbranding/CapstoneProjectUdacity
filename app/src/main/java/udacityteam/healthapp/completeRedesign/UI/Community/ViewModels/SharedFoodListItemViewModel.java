@@ -1,12 +1,12 @@
-package udacityteam.healthapp.activities;
+package udacityteam.healthapp.completeRedesign.UI.Community.ViewModels;
 
 import android.content.Context;
 import android.databinding.BaseObservable;
 import android.view.View;
 
-import com.google.firebase.auth.FirebaseAuth;
-
 import udacityteam.healthapp.Model.OneSharedFoodProductsListRetrofit;
+import udacityteam.healthapp.activities.FoodListPrieviewNew;
+import udacityteam.healthapp.completeRedesign.Utils.ViewModel;
 
 /**
  * View model for each item in the repositories RecyclerView
@@ -44,7 +44,6 @@ public class SharedFoodListItemViewModel extends BaseObservable implements ViewM
 
     @Override
     public void destroy() {
-        //In this case destroy doesn't need to do anything because there is not async calls
     }
 
 }

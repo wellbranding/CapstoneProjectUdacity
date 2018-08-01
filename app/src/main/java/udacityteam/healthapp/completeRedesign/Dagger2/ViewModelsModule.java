@@ -6,10 +6,10 @@ import android.arch.lifecycle.ViewModelProvider;
 import dagger.Binds;
 import dagger.Module;
 import dagger.multibindings.IntoMap;
-import udacityteam.healthapp.activities.MainActivityViewModelGood;
+import udacityteam.healthapp.completeRedesign.UI.MainActivity.ViewModels.MainActivityViewModelGood;
 import udacityteam.healthapp.completeRedesign.FoodListViewModelComplete;
 import udacityteam.healthapp.completeRedesign.SharedFoodListsViewModelNew;
-import udacityteam.healthapp.activities.LoginRegisterViewModel;
+import udacityteam.healthapp.completeRedesign.UI.BaseActivityLoginRegister.ViewModels.LoginRegisterViewModel;
 
 @Module
 public abstract class ViewModelsModule {

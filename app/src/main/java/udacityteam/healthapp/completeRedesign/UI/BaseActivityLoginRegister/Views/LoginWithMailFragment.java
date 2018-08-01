@@ -1,4 +1,4 @@
-package udacityteam.healthapp.activities;
+package udacityteam.healthapp.completeRedesign.UI.BaseActivityLoginRegister.Views;
 
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,23 +22,14 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import javax.inject.Inject;
 
-import dagger.android.support.AndroidSupportInjection;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-import udacityteam.healthapp.Model.Result;
 import udacityteam.healthapp.Model.UserRetrofitGood;
 import udacityteam.healthapp.Model.Userretrofit;
-import udacityteam.healthapp.PHP_Retrofit_API.APIService;
-import udacityteam.healthapp.PHP_Retrofit_API.APIUrl;
 import udacityteam.healthapp.R;
+import udacityteam.healthapp.activities.MainActivity;
+import udacityteam.healthapp.completeRedesign.UI.BaseActivityLoginRegister.ViewModels.LoginRegisterViewModel;
 
 
 public class LoginWithMailFragment extends Fragment implements
@@ -53,7 +43,6 @@ public class LoginWithMailFragment extends Fragment implements
     private EditText mPasswordField;
     public static UserRetrofitGood currentuser;
 
-    // [START declare_auth]
     private FirebaseAuth mAuth;
 
     @Inject

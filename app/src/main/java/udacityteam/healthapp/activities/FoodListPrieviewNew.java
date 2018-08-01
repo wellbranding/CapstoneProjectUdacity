@@ -2,28 +2,19 @@ package udacityteam.healthapp.activities;
 
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
-import android.util.Log;
-import android.widget.Button;
-import android.widget.ProgressBar;
 import android.widget.TextView;
-
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.List;
 
 import udacityteam.healthapp.Model.OneSharedFoodProductsListRetrofit;
 import udacityteam.healthapp.Model.SelectedFoodretrofit;
 import udacityteam.healthapp.R;
-import udacityteam.healthapp.adapters.FoodListRetrofitAdapterNew;
-import udacityteam.healthapp.databases.DatabaseHelper;
+import udacityteam.healthapp.completeRedesign.UI.AddedFoods.Adapters.FoodListRetrofitAdapterNew;
 import udacityteam.healthapp.databinding.ActivityFoodListPreviewBinding;
-import udacityteam.healthapp.databinding.FoodActivityBinding;
 
 /**
  * Created by vvost on 11/26/2017.

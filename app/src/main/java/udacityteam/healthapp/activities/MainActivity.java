@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -38,8 +37,6 @@ import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
-import java.util.Objects;
 
 import javax.inject.Inject;
 
@@ -48,12 +45,14 @@ import dagger.android.AndroidInjection;
 import dagger.android.AndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.support.HasSupportFragmentInjector;
-import udacityteam.healthapp.Model.SelectedFoodretrofit;
 import udacityteam.healthapp.Model.UserRetrofitGood;
 import udacityteam.healthapp.R;
 import udacityteam.healthapp.activities.CommunityActivities.CommunityList;
 import udacityteam.healthapp.completeRedesign.FoodListComplete;
-import udacityteam.healthapp.completeRedesign.FoodListViewModelComplete;
+import udacityteam.healthapp.completeRedesign.UI.AddedFoods.Views.FoodNutritiensDisplayFragment;
+import udacityteam.healthapp.completeRedesign.UI.BaseActivityLoginRegister.Views.RegisterWithMailFragment;
+import udacityteam.healthapp.completeRedesign.UI.MainActivity.ViewModels.MainActivityViewModelGood;
+import udacityteam.healthapp.completeRedesign.UI.MainActivity.Views.FoodSearchFragment;
 import udacityteam.healthapp.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity
@@ -91,7 +90,7 @@ public class MainActivity extends AppCompatActivity
     Calendar today;
     public static UserRetrofitGood currentUser;
     private ActivityMainBinding binding;
-    private  MainActivityViewModelGood mainActivityViewModel;
+    private MainActivityViewModelGood mainActivityViewModel;
 
     public static final String INTENT_WHICH_DATABASE = "SharedFoodListDatabase";
     public static final String INTENT_WHICH_TIME = "foodselection";
@@ -186,9 +185,9 @@ public class MainActivity extends AppCompatActivity
        snacksbtn = this.findViewById(R.id.btnscancks);
        drinksbtn = this.findViewById(R.id.btndrinks);
        dailybtn = this.findViewById(R.id.btndaily);
-        binding.appBarMain.calendarView.calendarView.getSelectedDate();
+        binding.appBarMain.contentgood.calendarView.calendarView.getSelectedDate();
         final Calendar calendar = Calendar.getInstance();
-        calendar.setTime( binding.appBarMain.calendarView.calendarView.getSelectedDate().getDate());
+        calendar.setTime( binding.appBarMain.contentgood.calendarView.calendarView.getSelectedDate().getDate());
         final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         System.out.println();
         Log.d("ajaaz", format.format(calendar.getTime()));
@@ -259,10 +258,10 @@ public class MainActivity extends AppCompatActivity
         SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd");
         ButterKnife.bind(this);
 
-        binding.appBarMain.calendarView.calendarView.state().edit()
+        binding.appBarMain.contentgood.calendarView.calendarView.state().edit()
                 .setCalendarDisplayMode(CalendarMode.WEEKS)
                 .commit();
-        binding.appBarMain.calendarView.calendarView.setShowOtherDates(MaterialCalendarView.SHOW_OTHER_MONTHS);
+        binding.appBarMain.contentgood.calendarView.calendarView.setShowOtherDates(MaterialCalendarView.SHOW_OTHER_MONTHS);
 
 
         Calendar beginning = Calendar.getInstance();
@@ -272,22 +271,22 @@ public class MainActivity extends AppCompatActivity
        today.set(today.get(Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar.DAY_OF_MONTH));
         calendarCurrentTime = dt.format(Calendar.getInstance().getTime());
         Log.d("current123",calendarCurrentTime);
-        binding.appBarMain.calendarView.calendarView.setCurrentDate(today);
+        binding.appBarMain.contentgood.calendarView.calendarView.setCurrentDate(today);
         Calendar end = Calendar.getInstance();
         end.set(end.get(Calendar.YEAR),  end.get(Calendar.MONTH), end.get(Calendar.DAY_OF_MONTH)+10);
-        binding.appBarMain.calendarView.calendarView.setArrowColor(this.getResources().getColor(R.color.colorPrimary));
-        binding.appBarMain.calendarView.calendarView.setSelectionColor(this.getResources().getColor(R.color.colorPrimary));
-        binding.appBarMain.calendarView.calendarView.setSelectedDate(today);
+        binding.appBarMain.contentgood.calendarView.calendarView.setArrowColor(this.getResources().getColor(R.color.colorPrimary));
+        binding.appBarMain.contentgood.calendarView.calendarView.setSelectionColor(this.getResources().getColor(R.color.colorPrimary));
+        binding.appBarMain.contentgood.calendarView.calendarView.setSelectedDate(today);
         Calendar minimum = Calendar.getInstance();
         minimum.set(minimum.get(Calendar.YEAR),minimum.get(Calendar.MONTH), minimum.get(Calendar.DAY_OF_MONTH)-50);
         Calendar maximum = Calendar.getInstance();
         maximum.set(maximum.get(Calendar.YEAR),maximum.get(Calendar.MONTH), maximum.get(Calendar.DAY_OF_MONTH)+50);
-        binding.appBarMain.calendarView.calendarView.state().edit()
+        binding.appBarMain.contentgood.calendarView.calendarView.state().edit()
                 .setMinimumDate(minimum.getTime())
                 .setMaximumDate(maximum.getTime())
                 .commit();
         //mainActivityViewModel.SetCalendar(binding.appBarMain.calendarView.calendarView);
-        binding.appBarMain.calendarView.calendarView.setOnDateChangedListener(new OnDateSelectedListener() {
+        binding.appBarMain.contentgood.calendarView.calendarView.setOnDateChangedListener(new OnDateSelectedListener() {
             @Override
             public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
                 calendarCurrentTime = dt.format(date.getDate().getTime());

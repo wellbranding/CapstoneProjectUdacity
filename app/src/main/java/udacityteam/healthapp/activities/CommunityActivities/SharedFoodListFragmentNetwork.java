@@ -18,10 +18,6 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import javax.inject.Inject;
 
@@ -29,7 +25,7 @@ import dagger.android.support.AndroidSupportInjection;
 import udacityteam.healthapp.R;
 import udacityteam.healthapp.adapters.FoodViewHolder;
 import udacityteam.healthapp.adapters.SharedFoodListsAdapter;
-import udacityteam.healthapp.adapters.SharedFoodListsAdapterNew;
+import udacityteam.healthapp.completeRedesign.UI.Community.Adapters.SharedFoodListsAdapterNew;
 import udacityteam.healthapp.completeRedesign.Repository.Status;
 import udacityteam.healthapp.completeRedesign.SharedFoodListsViewModelNew;
 import udacityteam.healthapp.databinding.CommunityListFragmentBinding;
@@ -46,7 +42,6 @@ public class SharedFoodListFragmentNetwork extends Fragment{
     private static final int DATASET_COUNT = 60;
    private RecyclerView.LayoutManager layoutManager;
     FirebaseRecyclerAdapter<SelectedFood, FoodViewHolder> adapter;
-    FirebaseFirestore storage;
 
 
     private enum LayoutManagerType {
@@ -67,13 +62,11 @@ public class SharedFoodListFragmentNetwork extends Fragment{
     public static String value = "Breakfast";
     ProgressBar progressBar;
 
-    private FirebaseAuth mAuth;
-    DatabaseReference foodList;
-    FirebaseDatabase database;
-    Button filterData, test;
+    Button filterData;
     String side, SharedFoodListDatabase;
     private CommunityListFragmentBinding communityListFragmentBinding;
     private SharedFoodListsViewModelNew viewModel;
+    SharedFoodListsAdapterNew customAdapterFoodListPrievew;
 
     @Inject
     ViewModelProvider.Factory ViewModelFactory;
@@ -102,7 +95,6 @@ public class SharedFoodListFragmentNetwork extends Fragment{
         }
         viewModel.setWhichTime(SharedFoodListDatabase);
 
-        mAuth = FirebaseAuth.getInstance();
 
     }
     @Override
@@ -111,6 +103,7 @@ public class SharedFoodListFragmentNetwork extends Fragment{
         InitializeRecyclerView();
         observeResult();
         filterData =  communityListFragmentBinding.getRoot().findViewById(R.id.filterdata);
+        progressBar = communityListFragmentBinding.getRoot().findViewById(R.id.progressbar);
 
         filterData.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -132,16 +125,20 @@ public class SharedFoodListFragmentNetwork extends Fragment{
 private void observeResult()
 {
 
-    SharedFoodListsAdapterNew customAdapterFoodListPrievew = new
-            SharedFoodListsAdapterNew(side);
-    communityListFragmentBinding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-    communityListFragmentBinding.recyclerView.setHasFixedSize(true);
-    communityListFragmentBinding.recyclerView.setAdapter(customAdapterFoodListPrievew);
     viewModel.getRecipes().observe(this,repositories->
     {
         if(repositories.status== Status.SUCCESS) {
+            progressBar.setVisibility(View.INVISIBLE);
             customAdapterFoodListPrievew.setSelectedFoods(repositories.data);
             customAdapterFoodListPrievew.notifyDataSetChanged();
+        }
+        else if(repositories.status==Status.ERROR)
+        {
+            progressBar.setVisibility(View.INVISIBLE);
+        }
+        else if(repositories.status == Status.LOADING)
+        {
+            progressBar.setVisibility(View.VISIBLE);
         }
     });
     viewModel.getFilteredData().observe(this, filtered->
@@ -155,17 +152,11 @@ private void observeResult()
 
     private void InitializeRecyclerView()
     {
-//        SharedFoodListsAdapterNew customAdapterFoodListPrievew= new
-//                SharedFoodListsAdapterNew(side);
-//        viewModel.mutableLiveData.observe(getActivity(), (selectedfoods)->{
-//            customAdapterFoodListPrievew.setSelectedFoods(selectedfoods);
-//            customAdapterFoodListPrievew.notifyDataSetChanged();
-//
-//        } );
-//        mLayoutManager = new LinearLayoutManager(getActivity());
-//        communityListFragmentBinding.recyclerView.setLayoutManager(mLayoutManager);
-//        communityListFragmentBinding.recyclerView.setAdapter(customAdapterFoodListPrievew);
-
+       customAdapterFoodListPrievew = new
+                SharedFoodListsAdapterNew(side);
+        communityListFragmentBinding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        communityListFragmentBinding.recyclerView.setHasFixedSize(true);
+        communityListFragmentBinding.recyclerView.setAdapter(customAdapterFoodListPrievew);
     }
 
 

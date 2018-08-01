@@ -1,4 +1,4 @@
-package udacityteam.healthapp.activities;
+package udacityteam.healthapp.completeRedesign.UI.MainActivity.Views;
 
 import android.app.SearchManager;
 import android.content.Context;
@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -43,14 +42,12 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Objects;
 
 import dagger.android.support.AndroidSupportInjection;
 import udacityteam.healthapp.R;
+import udacityteam.healthapp.activities.MainActivity;
 import udacityteam.healthapp.adapters.SearchFoodsAdapter;
 import udacityteam.healthapp.models.Model;
-
-import static com.firebase.ui.auth.AuthUI.getApplicationContext;
 
 
 public class FoodSearchFragment extends Fragment implements SearchView.OnQueryTextListener {

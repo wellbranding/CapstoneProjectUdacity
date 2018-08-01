@@ -77,14 +77,6 @@ public class FilterActivity extends DialogFragment {
         calories.getThumb(0).setValue(0);
         calories.getThumb(1).setValue(10000);
         carbohydratesend.setText("Any");
-//        carbohydratesbegin.setText(String.valueOf(carbohydrates.getThumb(0).getValue()));
-//        carbohydratesend.setText(String.valueOf(carbohydrates.getThumb(1).getValue()));
-//        proteinbegin.setText(String.valueOf(protein.getThumb(0).getValue()));
-//        proteinend.setText(String.valueOf(protein.getThumb(1).getValue()));
-//        caloriesbegin.setText(String.valueOf(calories.getThumb(0).getValue()));
-//        caloriesend.setText(String.valueOf(calories.getThumb(1).getValue()));
-//        fatsbegin.setText(String.valueOf(fats.getThumb(0).getValue()));
-//        fatsend.setText(String.valueOf(fats.getThumb(1).getValue()));
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -152,52 +144,12 @@ public class FilterActivity extends DialogFragment {
 
     private void GetFilteredSharedDiets() //only if today
     {
-
-      //  viewModel.Transofrmations();
         viewModel.GetFilteredSharedDiets(protein, calories, carbohydrates, fats, SharedFoodListDatabase );
-
-
-//        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-//        Gson gson = new GsonBuilder()
-//                .setLenient()
-//                .create();
-//        Retrofit retrofit = new Retrofit.Builder()
-//                .baseUrl(APIUrl.BASE_URL)
-//                .addConverterFactory(GsonConverterFactory.create(gson))
-//                .build();
-//
-//        //Defining retrofit api service
-//        APIService service = retrofit.create(APIService.class);
-//
-//        Call<SharedFoodProductsRetrofit> call = service.getAllFilteredSharedDiets(((ApplicationClass) getActivity().getApplicationContext()).getId()
-//                , SharedFoodListDatabase, protein.getThumb(0).getValue(), protein.getThumb(1).getValue(),
-//                calories.getThumb(0).getValue(), calories.getThumb(1).getValue(),
-//                carbohydrates.getThumb(0).getValue(), carbohydrates.getThumb(1).getValue(),
-//                fats.getThumb(0).getValue(), fats.getThumb(1).getValue()
-//        );
-//        call.enqueue(new Callback<SharedFoodProductsRetrofit>() {
-//            @Override
-//            public void onResponse(Call<SharedFoodProductsRetrofit> call, Response<SharedFoodProductsRetrofit> response) {
-//                List<OneSharedFoodProductsListRetrofit> selectedFoodretrofits = response.body().
-//                        getSelectedFoodretrofits();
-//
-//                if (selectedFoodretrofits.size() != 0) {
-//                    Toast.makeText(getActivity(), String.valueOf(selectedFoodretrofits.get(0).getCalories()), Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<SharedFoodProductsRetrofit> call, Throwable t) {
-//
-//            }
-//
-//        });
 
     }
 
     @Override
     public void onAttach(Context context) {
-//        AndroidSupportInjection.inject(this);
         super.onAttach(context);
     }
 

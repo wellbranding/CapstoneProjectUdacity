@@ -70,7 +70,7 @@ public class FoodNutritiensDisplay extends AppCompatActivity {
     String UserId = null;
     String foodselection = null;
     ProgressBar progressBar;
-    TextView productname, nutritionaldisplay;
+    TextView productname;
    //  DocumentReference userstorage;
     //  FirebaseDatabase database;
    // DatabaseReference user;
@@ -87,7 +87,6 @@ public class FoodNutritiensDisplay extends AppCompatActivity {
         progressBar = findViewById(R.id.progressbar);
         productname = findViewById(R.id.ProductName);
         context = getApplicationContext();
-        nutritionaldisplay = findViewById(R.id.nutritionaldysplay);
         UserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         Textv = (TextView)findViewById(R.id.tv2);
 
@@ -218,7 +217,6 @@ public class FoodNutritiensDisplay extends AppCompatActivity {
             super.onPreExecute();
             productname.setVisibility(View.INVISIBLE);
             progressBar.setVisibility(View.VISIBLE);
-            nutritionaldisplay.setVisibility(View.INVISIBLE);
             Textv.setVisibility(View.INVISIBLE);
         }
 
@@ -307,7 +305,6 @@ public class FoodNutritiensDisplay extends AppCompatActivity {
                 });
                 productname.setVisibility(View.VISIBLE);
                 progressBar.setVisibility(View.INVISIBLE);
-                nutritionaldisplay.setVisibility(View.VISIBLE);
                 Textv.setVisibility(View.VISIBLE);
                 Textv.setText("CALORIES PER 100G " + nutritiens.get(3) + " KCAL");
             }

@@ -4,8 +4,6 @@ import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.MutableLiveData;
 import android.content.Context;
-import android.databinding.BaseObservable;
-import android.databinding.ObservableList;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -23,24 +21,19 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import udacityteam.healthapp.Model.OneSharedFoodProductsListRetrofit;
 import udacityteam.healthapp.Model.SelectedFoodretrofit;
-import udacityteam.healthapp.Model.SelectedFoodretrofitarray;
 import udacityteam.healthapp.Model.SharedFoodProductsRetrofit;
 import udacityteam.healthapp.Model.UserProfile;
 import udacityteam.healthapp.Network.PHPService;
 import udacityteam.healthapp.PHP_Retrofit_API.APIService;
 import udacityteam.healthapp.PHP_Retrofit_API.APIUrl;
-import udacityteam.healthapp.activities.ApplicationClass;
-import udacityteam.healthapp.activities.FoodListViewModel;
 import udacityteam.healthapp.activities.FoodNutritiensDisplayPrieview;
-import udacityteam.healthapp.activities.ViewModel;
+import udacityteam.healthapp.completeRedesign.Utils.ViewModel;
 import udacityteam.healthapp.app.ApplicationController;
-import udacityteam.healthapp.models.SharedFoodProducts;
 
 /**
  * View model for each item in the repositories RecyclerView

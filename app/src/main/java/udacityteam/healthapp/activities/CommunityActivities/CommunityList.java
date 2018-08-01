@@ -27,7 +27,6 @@ import udacityteam.healthapp.R;
 
 public class CommunityList extends AppCompatActivity implements HasSupportFragmentInjector {
 
-    // Resources
     Resources res;
 
     @Inject
@@ -37,19 +36,8 @@ public class CommunityList extends AppCompatActivity implements HasSupportFragme
         return dispatchingAndroidInjector;
     }
 
-    /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-     */
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
     private ViewPager mViewPager;
     RecyclerView.LayoutManager layoutManager;
 
@@ -72,9 +60,7 @@ public class CommunityList extends AppCompatActivity implements HasSupportFragme
             value = (String) b.get("titlename");
             foodselection = (String) b.get("foodselection");
             SharedFoodListDatabase = (String) b.get("SharedFoodListDatabase");
-
             getSupportActionBar().setTitle(value);
-            //  Textv.setText(j);
         }
         Bundle tofragment = new Bundle();
         tofragment.putString("foodselection", foodselection);
@@ -92,16 +78,6 @@ public class CommunityList extends AppCompatActivity implements HasSupportFragme
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
 
-
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
     }
 
     @Override
@@ -113,18 +89,9 @@ public class CommunityList extends AppCompatActivity implements HasSupportFragme
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
-     * one of the sections/tabs/pages.
-     */
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
         private String[] tabTitles;
         private Bundle queryParam;
@@ -147,11 +114,8 @@ public class CommunityList extends AppCompatActivity implements HasSupportFragme
                     return SharedFoodListFragmentNetwork.newInstance(queryParam);
                 case 1:
                     return new CommunityBlankFragment();
-//                case 2:
-//                    return new CommunityFoodListsDisplayFragment2();
                 default:
                     return null;
-
             }
         }
 
@@ -159,7 +123,5 @@ public class CommunityList extends AppCompatActivity implements HasSupportFragme
         public int getCount() {
             return 2;
         }
-
-
     }
 }

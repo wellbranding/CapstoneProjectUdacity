@@ -47,21 +47,9 @@ public class SearchFoodsAdapter extends RecyclerView.Adapter<SearchFoodsAdapter.
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                   // Toast.makeText(SearchFoodsAdapter.this, models.get(i).getId(), Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent(context, FoodNutritiensDisplay.class);
-//                    StringBuilder amm = new StringBuilder();
-//                    amm.append("https://api.nal.usda.gov/ndb/V2/reports?ndbno=");
-//                    amm.append(mDataSet.get(getAdapterPosition()).getId());
-//                    amm.append("&type=f&format=json&api_key=HXLecTDsMqy1Y6jNoYPw2n3DQ30FeGXxD2XBZqJh");
-                    //new GETADDITIONALFOODINFORMATION().execute(amm.toString());
+
                     listener.onItemClick(mDataSet.get(getAdapterPosition()).getId(),
                             mDataSet.get(getAdapterPosition()).getName(), whichTime );
-//                    intent.putExtra("id", mDataSet.get(getAdapterPosition()).getId());
-//                    intent.putExtra("foodname", mDataSet.get(getAdapterPosition()).getName());
-//                    intent.putExtra("foodselection", whichTime);
-//
-//                    context.startActivity(intent);
-                    Log.d(TAG, "Element " + getAdapterPosition() + " clicked.");
                 }
             });
                     textView = v.findViewById(R.id.textView);
@@ -72,40 +60,24 @@ public class SearchFoodsAdapter extends RecyclerView.Adapter<SearchFoodsAdapter.
         }
     }
 
-    /**
-     * Initialize the dataset of the Adapter.
-     *
-     * @param dataSet String[] containing the data to populate views to be used by RecyclerView.
-     */
     public SearchFoodsAdapter(List<Model> dataSet, String whichTime, OnItemClickListener listener) {
         mDataSet = dataSet;
         this.whichTime = whichTime;
         this.listener = listener;
-
-
     }
 
-    // Create new views (invoked by the layout manager)
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-        // Create a new view.
         View v = LayoutInflater.from(viewGroup.getContext())
                 .inflate(R.layout.food_list_item, viewGroup, false);
 
         return new ViewHolder(v);
     }
-
-    // Replace the conten nts of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, final int position) {
-        Log.d(TAG, "Element " + position + " set.");
-
-        // Get element from your dataset at this position and replace the contents of the view
-        // with that elemen/
         viewHolder.getTextView().setText(mDataSet.get(position).getName());
     }
 
-    // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
         return mDataSet.size();

@@ -1,4 +1,4 @@
-package udacityteam.healthapp.activities;
+package udacityteam.healthapp.completeRedesign.UI.MainActivity.ViewModels;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MediatorLiveData;
@@ -78,8 +78,6 @@ public class MainActivityViewModelGood extends ViewModel {
     @Inject
     SharedPreferences sharedPreferences;
 
-
-
     @Inject
     public MainActivityViewModelGood(RecipiesRepository recipiesRepository) {
         this.repository = recipiesRepository;
@@ -87,7 +85,6 @@ public class MainActivityViewModelGood extends ViewModel {
         IfHasPosted();
 
     }
-
     public void IfHasPosted()
     {
          Transformations.switchMap(hasPosted, result -> {
@@ -100,7 +97,6 @@ public class MainActivityViewModelGood extends ViewModel {
     }
 
 
-
     public LiveData<String> signOut()
     {
 
@@ -109,48 +105,14 @@ public class MainActivityViewModelGood extends ViewModel {
 
 
 
-    public void setHasPosted(MutableLiveData<Boolean> hasPosted) {
-        this.hasPosted = hasPosted;
-    }
-
     public MediatorLiveData<ApiResponse<Result>> getResultMediatorLiveData() {
 
         return repository.getResultMediatorLiveData();
     }
 
-    //  CALL IN RETROFIT MIGHT BE WRAPPED WITH LIVEDATA ON RESPONSE ADD TO REPOSITORY AND OPEN ACTIVITY
     public void AddFoodtoDatabase(String foodselection, String foodId, String foodName, List<Float> nutritiens) {
         repository.AddFoodtoDatabase(foodselection, foodId, foodName, nutritiens);
-//        Date date = new Date();
-//        Date newDate = new Date(date.getTime());
-//        SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd");
-//        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-//        Log.d("timestamp", timestamp.toString());
-//
-//        String stringdate = dt.format(newDate);
-//
-//
-//        LiveData<List<SelectedFoodretrofit>> getAddedFoods = repository.
-//                getAddedFoods(foodselection, String.valueOf(newDate.getYear()),
-//                        String.valueOf(newDate.getMonth()),
-//                        String.valueOf(newDate.getDay()));
-//resultMediatorLiveData.addSource();
-//      apiResponseLiveData = RetrofitFactoryNew.create().addSelectedFood(
-//                foodId,foodName,
-//                2, timestamp, nutritiens.get(0)
-//                ,nutritiens.get(1),nutritiens.get(2),nutritiens.get(3),
-//                foodselection,0
-//
-//        );
-//        resultMediatorLiveData.addSource(apiResponseLiveData, result->
-//        {
-//            resultMediatorLiveData.removeSource(apiResponseLiveData);
-//            if(result.isSuccessful()) {
-//                resultMediatorLiveData.removeSource(apiResponseLiveData);
-//
-//                resultMediatorLiveData.postValue(result);
-//            }
-//        });
+
 
     }
 

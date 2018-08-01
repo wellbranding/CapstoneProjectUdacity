@@ -31,13 +31,10 @@ import udacityteam.healthapp.PHP_Retrofit_API.APIService;
 import udacityteam.healthapp.PHP_Retrofit_API.APIUrl;
 import udacityteam.healthapp.activities.FoodNutritiensDisplayPrieview;
 import udacityteam.healthapp.app.ApplicationController;
+import udacityteam.healthapp.completeRedesign.Data.Networking.API.RetrofitFactoryNew;
 import udacityteam.healthapp.completeRedesign.Repository.RecipiesRepository;
 import udacityteam.healthapp.completeRedesign.Repository.Resource;
 import udacityteam.healthapp.completeRedesign.Repository.Status;
-
-/**
- * View model for each item in the repositories RecyclerView
- */
 public class SharedFoodListsViewModelNew extends ViewModel {
 
     private static final String TAG ="trxt" ;
@@ -104,24 +101,6 @@ public class SharedFoodListsViewModelNew extends ViewModel {
         return selectedFoodretrofit.getFoodid();
     }
 
-//
-//    public void InitSelectedfoods(List<OneSharedFoodProductsListRetrofit> ones)
-//    {
-//        mutableLiveData.setValue(ones);
-//    }
-//    public MutableLiveData<List<OneSharedFoodProductsListRetrofit>> getMutableLiveData()
-//    {
-//        return mutableLiveData;
-//    }
-    public void Transofrmations()
-    {
-       recipes = Transformations.switchMap(mutableLiveData,
-                response->
-                {
-                    recipes = mutableLiveData;
-                   return recipes;
-                });
-    }
     public void setSelectectedFoood(SelectedFoodretrofit selectedFoodretrofit) {
         this.selectedFoodretrofit = selectedFoodretrofit;
       notify();
@@ -144,8 +123,7 @@ public class SharedFoodListsViewModelNew extends ViewModel {
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
 
-        //Defining retrofit api service
-        APIService service = retrofit.create(APIService.class);
+        udacityteam.healthapp.completeRedesign.Data.Networking.API.APIService service = RetrofitFactoryNew.create();
 
         Call<SharedFoodProductsRetrofit> call = service.getAllFilteredSharedDiets(2
                 , SharedFoodListDatabase, protein.getThumb(0).getValue(), protein.getThumb(1).getValue(),

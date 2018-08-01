@@ -68,7 +68,7 @@ public class RecipiesRepository {
 
     public LiveData<String> SignOut()
     {
-        sharedPreferences.edit().putInt("userId", -1);
+        sharedPreferences.edit().putInt("userId", -1).commit();
         Completable.fromAction(() ->
            mainDatabase.clearAllTables()).
             observeOn(AndroidSchedulers.mainThread())
@@ -104,7 +104,7 @@ public class RecipiesRepository {
         );
         apiResponseLiveData = RetrofitFactoryNew.create().addSelectedFood(
                 foodId,foodName,
-                2, timestamp, nutritiens.get(0)
+                sharedPreferences.getInt("userId",-1), timestamp, nutritiens.get(0)
                 ,nutritiens.get(1),nutritiens.get(2),nutritiens.get(3),
                 foodselection,0
 

@@ -1,18 +1,12 @@
 package udacityteam.healthapp.activities;
 
 import android.content.Context;
-import android.databinding.BindingAdapter;
 import android.databinding.ObservableField;
-import android.util.Log;
-import android.view.View;
-import android.widget.ImageView;
-
 
 
 import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
 import udacityteam.healthapp.Model.SelectedFoodretrofit;
+import udacityteam.healthapp.completeRedesign.Utils.ViewModel;
 
 
 /**
