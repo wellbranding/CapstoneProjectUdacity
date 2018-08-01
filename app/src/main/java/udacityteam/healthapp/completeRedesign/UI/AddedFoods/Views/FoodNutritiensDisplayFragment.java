@@ -43,8 +43,7 @@ import javax.inject.Inject;
 
 import dagger.android.support.AndroidSupportInjection;
 import udacityteam.healthapp.R;
-import udacityteam.healthapp.activities.MainActivity;
-import udacityteam.healthapp.completeRedesign.FoodListComplete;
+import udacityteam.healthapp.completeRedesign.UI.MainActivity.Views.MainActivity;
 import udacityteam.healthapp.completeRedesign.UI.MainActivity.ViewModels.MainActivityViewModelGood;
 
 /**

@@ -8,8 +8,8 @@ import javax.inject.Singleton;
 import dagger.BindsInstance;
 import dagger.Component;
 import dagger.android.AndroidInjectionModule;
-import udacityteam.healthapp.app.ApplicationController;
-import udacityteam.healthapp.completeRedesign.Widget.BakingAppWidget;
+import udacityteam.healthapp.completeRedesign.ApplicationController;
+import udacityteam.healthapp.completeRedesign.Widget.AddedFoodsAppWidget;
 
 @Singleton
 @Component(modules = {ActivityModule.class,
@@ -35,7 +35,7 @@ public interface AppComponent {
 
     }
 
-   void inject(BakingAppWidget bakingAppWidget);
+   void inject(AddedFoodsAppWidget addedFoodsAppWidget);
 
 }
 

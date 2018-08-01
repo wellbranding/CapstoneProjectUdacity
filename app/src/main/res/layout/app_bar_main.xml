@@ -7,7 +7,7 @@
 
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="udacityteam.healthapp.Main4Activity">
+        tools:context="udacityteam.healthapp.completeRedesign.UI.MainActivity.Views.MainActivity">
 
         <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"
@@ -17,45 +17,18 @@
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
+                app:contentInsetLeft="0dp"
+                app:contentInsetStart="0dp"
+                app:contentInsetStartWithNavigation="0dp"
                 app:popupTheme="@style/AppTheme.PopupOverlay"
                 android:layout_height="?android:attr/actionBarSize" />
-                <!--android:layout_height="?attr/actionBarSize"-->
-                <!--android:background="?attr/colorPrimary"-->
 
 
         </android.support.design.widget.AppBarLayout>
 
-        <!--<include layout="@layout/content_main4"-->
-            <!--android:id="@+id/content_main"/>-->
-
-        <!--<ScrollView-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_alignParentBottom="true"-->
-            <!--android:layout_height="match_parent">-->
             <include
                 android:id="@+id/contentgood"
                 layout="@layout/activity_main_content_good"/>
-        <!--<RelativeLayout-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent">-->
-        <!--<include-->
-            <!--layout="@layout/layout_calendar_view"-->
-            <!--android:id="@+id/calendarView"-->
-            <!--/>-->
-        <!--<include-->
-            <!--android:id="@+id/buttons"-->
-            <!--android:layout_below="@id/calendarView"-->
-            <!--layout="@layout/layout_buttons"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content" />-->
-
-            <!--<include-->
-                <!--android:id="@+id/layout_floating_action"-->
-                <!--layout="@layout/layout_floating_action"-->
-                <!--android:layout_alignParentBottom="true"-->
-                <!--android:layout_alignParentStart="true" />-->
-        <!--</RelativeLayout>-->
-      <!-- </ScrollView>-->
 
 
     </android.support.design.widget.CoordinatorLayout>

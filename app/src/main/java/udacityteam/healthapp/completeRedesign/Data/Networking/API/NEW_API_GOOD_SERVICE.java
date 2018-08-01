@@ -10,10 +10,10 @@ import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 import rx.Observable;
-import udacityteam.healthapp.Model.Result;
-import udacityteam.healthapp.Model.SelectedFoodretrofitarray;
-import udacityteam.healthapp.Model.SharedFoodProductsRetrofit;
-import udacityteam.healthapp.Model.Usersretrofit;
+import udacityteam.healthapp.completeRedesign.Data.Networking.Models.Result;
+import udacityteam.healthapp.completeRedesign.Data.Networking.Models.SelectedFoodretrofitarray;
+import udacityteam.healthapp.completeRedesign.Data.Networking.Models.SharedFoodProductsRetrofit;
+import udacityteam.healthapp.completeRedesign.Data.Networking.Models.Usersretrofit;
 
 public interface NEW_API_GOOD_SERVICE {
     public static final String BASE_URL = "http://app.wellbranding.com/";
@@ -85,8 +85,6 @@ public interface NEW_API_GOOD_SERVICE {
             @Query("foodselection") String foodSelection
     );
 
-    @GET("users")
-    Observable<Usersretrofit> getUsers();
 
     @GET("getAllSharedDiets")
     Observable<SharedFoodProductsRetrofit> getAllSharedDiets(

@@ -3,8 +3,7 @@ package udacityteam.healthapp.completeRedesign.Dagger2;
 
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
-import udacityteam.healthapp.activities.BaseActivity;
-import udacityteam.healthapp.activities.MainActivity;
+import udacityteam.healthapp.completeRedesign.UI.MainActivity.Views.MainActivity;
 
 @Module
 public abstract class MainActivityModule {

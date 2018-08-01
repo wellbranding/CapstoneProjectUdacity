@@ -18,7 +18,6 @@ import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-import udacityteam.healthapp.Network.PHPService;
 import udacityteam.healthapp.completeRedesign.Data.Networking.API.APIService;
 import udacityteam.healthapp.completeRedesign.Data.Networking.API.LiveDataCallAdapterFactory;
 import udacityteam.healthapp.completeRedesign.db.MainDatabase;

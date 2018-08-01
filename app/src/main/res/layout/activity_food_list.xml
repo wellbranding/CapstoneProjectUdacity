@@ -6,7 +6,7 @@
 
         <variable
             name="viewModel"
-            type="udacityteam.healthapp.completeRedesign.FoodListViewModelComplete"/>
+            type="udacityteam.healthapp.completeRedesign.UI.AddedFoods.ViewModels.FoodListViewModelComplete"/>
     </data>
 
 
@@ -67,9 +67,10 @@
                 android:layout_alignLeft="@+id/fatcount"
                 android:layout_alignStart="@+id/fatcount"
                 android:layout_below="@+id/fatcount"
-                android:gravity="center"
-
+                android:gravity="center|center_vertical|clip_horizontal"
+                android:layout_marginTop="16dp"
                 android:text="Calories"
+                android:textStyle="bold"
                 android:textColor="#ffffff"
                 android:textSize="16sp" />
 
@@ -78,31 +79,37 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="30dp"
+                android:gravity="center|center_vertical|clip_horizontal"
                 android:layout_alignBaseline="@+id/proteincount"
                 android:layout_alignBottom="@+id/proteincount"
                 android:layout_toEndOf="@+id/proteincount"
                 android:layout_toRightOf="@+id/proteincount"
                 android:text="Fats"
+                android:textStyle="bold"
                 android:textColor="#ffffff"
                 android:textSize="16sp" />
             <TextView
                 android:id="@+id/proteincount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:gravity="center|center_vertical|clip_horizontal"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
                 android:text="Protein"
+                android:textStyle="bold"
                 android:textColor="#ffffff"
                 android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/carbohncount"
                 android:layout_width="wrap_content"
+                android:textStyle="bold"
                 android:layout_height="wrap_content"
                 android:layout_alignBaseline="@+id/caloriescount"
                 android:layout_alignBottom="@+id/caloriescount"
                 android:layout_alignLeft="@+id/proteincount"
+                android:gravity="center|center_vertical|clip_horizontal"
                 android:layout_alignStart="@+id/proteincount"
                 android:text="Carbos"
                 android:textColor="#ffffff"

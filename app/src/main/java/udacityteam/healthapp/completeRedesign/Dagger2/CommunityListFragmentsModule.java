@@ -3,13 +3,10 @@ package udacityteam.healthapp.completeRedesign.Dagger2;
 
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
-import udacityteam.healthapp.activities.CommunityActivities.SharedFoodListFragmentNetwork;
+import udacityteam.healthapp.completeRedesign.UI.Community.Views.SharedFoodListFragmentNetwork;
 
 @Module
 public abstract class CommunityListFragmentsModule {
-//    @ContributesAndroidInjector()
-//    abstract DetailStepFragment contributeDetailStepFragmenty();
-//
    @ContributesAndroidInjector()
    abstract SharedFoodListFragmentNetwork contributeSharedFoodListFragmentNetwork();
 

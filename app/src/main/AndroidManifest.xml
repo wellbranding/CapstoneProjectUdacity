@@ -5,7 +5,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
-        android:name=".app.ApplicationController"
+        android:name=".completeRedesign.ApplicationController"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -14,10 +14,10 @@
         android:theme="@style/AppTheme">
 
         <service
-            android:name=".completeRedesign.Widget.BakingAppWidgetService"
+            android:name=".completeRedesign.Widget.AddedFoodsAppWidgetService"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
 
-        <receiver android:name=".completeRedesign.Widget.BakingAppWidget">
+        <receiver android:name=".completeRedesign.Widget.AddedFoodsAppWidget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -27,7 +27,7 @@
                 android:resource="@xml/baking_app_widget_info" />
         </receiver>
         <activity
-            android:name=".activities.BaseActivity"
+            android:name=".completeRedesign.UI.BaseActivityLoginRegister.Views.BaseActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -36,36 +36,21 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.CommunityActivities.CommunityList"
+            android:name=".completeRedesign.UI.Community.Views.CommunityList"
             android:label="@string/title_food_information"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".activities.FoodNutritiensDisplay"
-            android:theme="@style/AppTheme.NoActionBar"
+            android:name=".completeRedesign.UI.Community.Views.FoodNutritiensDisplayPrieview"
             android:label="@string/title_food_information" />
         <activity
-            android:name=".activities.FoodSearchActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:label="@string/title_food_information" />
-        <activity
-            android:name=".activities.FoodNutritiensDisplayPrieview"
-            android:label="@string/title_food_information" />
-        <activity
-            android:name=".activities.MainActivity"
+            android:name=".completeRedesign.UI.MainActivity.Views.MainActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:label="@string/app_name" >
-            <!--<meta-data-->
-                <!--android:name="android.support.PARENT_ACTIVITY"-->
-                <!--android:value=".activities.MainActivity"/>-->
         </activity>
-        <activity android:name=".activities.FoodListPrieview"
-            android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".activities.FoodListPrieviewNew"
+        <activity android:name=".completeRedesign.UI.Community.Views.FoodListPrieviewNew"
             android:theme="@style/AppTheme.NoActionBar"
             />
-        <activity android:name=".activities.FoodList"
-            android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".completeRedesign.FoodListComplete"
+        <activity android:name=".completeRedesign.UI.AddedFoods.Views.FoodListComplete"
             android:theme="@style/AppTheme.NoActionBar"
             >
             <intent-filter>
@@ -76,17 +61,6 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/baking_app_widget_info" />
         </activity>
-        <activity
-            android:name=".activities.CommunityActivities.FilterActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".Main3Activity"
-            android:label="@string/title_activity_main3"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".Main4Activity"
-            android:label="@string/title_activity_main4"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

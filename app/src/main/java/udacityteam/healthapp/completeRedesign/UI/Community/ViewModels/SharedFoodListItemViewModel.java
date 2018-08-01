@@ -4,13 +4,10 @@ import android.content.Context;
 import android.databinding.BaseObservable;
 import android.view.View;
 
-import udacityteam.healthapp.Model.OneSharedFoodProductsListRetrofit;
-import udacityteam.healthapp.activities.FoodListPrieviewNew;
+import udacityteam.healthapp.completeRedesign.Data.Networking.Models.OneSharedFoodProductsListRetrofit;
+import udacityteam.healthapp.completeRedesign.UI.Community.Views.FoodListPrieviewNew;
 import udacityteam.healthapp.completeRedesign.Utils.ViewModel;
 
-/**
- * View model for each item in the repositories RecyclerView
- */
 public class SharedFoodListItemViewModel extends BaseObservable implements ViewModel {
 
     private OneSharedFoodProductsListRetrofit selectedFoodretrofit;

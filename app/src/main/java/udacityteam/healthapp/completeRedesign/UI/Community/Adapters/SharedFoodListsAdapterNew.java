@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
-import udacityteam.healthapp.Model.OneSharedFoodProductsListRetrofit;
+import udacityteam.healthapp.completeRedesign.Data.Networking.Models.OneSharedFoodProductsListRetrofit;
 import udacityteam.healthapp.R;
 import udacityteam.healthapp.completeRedesign.UI.Community.ViewModels.SharedFoodListItemViewModel;
 import udacityteam.healthapp.databinding.SharedFoodsListItemBinding;

@@ -3,37 +3,25 @@ package udacityteam.healthapp.completeRedesign.UI.BaseActivityLoginRegister.View
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import javax.inject.Inject;
 
 import io.reactivex.Completable;
 import io.reactivex.CompletableObserver;
-import io.reactivex.Observable;
-import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Action;
 import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-import udacityteam.healthapp.Model.Result;
-import udacityteam.healthapp.Model.UserRetrofitGood;
-import udacityteam.healthapp.Model.Userretrofit;
-import udacityteam.healthapp.PHP_Retrofit_API.APIService;
-import udacityteam.healthapp.PHP_Retrofit_API.APIUrl;
+import udacityteam.healthapp.completeRedesign.Data.Networking.Models.Result;
+import udacityteam.healthapp.completeRedesign.Data.Networking.Models.UserRetrofitGood;
+import udacityteam.healthapp.completeRedesign.Data.Networking.Models.Userretrofit;
 import udacityteam.healthapp.completeRedesign.Data.Networking.API.RetrofitFactoryNew;
 import udacityteam.healthapp.completeRedesign.Repository.RecipiesRepository;
 import udacityteam.healthapp.completeRedesign.db.MainDatabase;

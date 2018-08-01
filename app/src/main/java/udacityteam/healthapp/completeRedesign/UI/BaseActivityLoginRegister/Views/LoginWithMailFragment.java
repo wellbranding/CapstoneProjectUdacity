@@ -14,7 +14,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -25,10 +24,9 @@ import com.google.firebase.auth.FirebaseUser;
 
 import javax.inject.Inject;
 
-import udacityteam.healthapp.Model.UserRetrofitGood;
-import udacityteam.healthapp.Model.Userretrofit;
+import udacityteam.healthapp.completeRedesign.Data.Networking.Models.Userretrofit;
 import udacityteam.healthapp.R;
-import udacityteam.healthapp.activities.MainActivity;
+import udacityteam.healthapp.completeRedesign.UI.MainActivity.Views.MainActivity;
 import udacityteam.healthapp.completeRedesign.UI.BaseActivityLoginRegister.ViewModels.LoginRegisterViewModel;
 
 
@@ -37,11 +35,8 @@ public class LoginWithMailFragment extends Fragment implements
 
     private static final String TAG = "EmailPassword";
 
-    private TextView mStatusTextView;
-    private TextView mDetailTextView;
-    private EditText mEmailField;
-    private EditText mPasswordField;
-    public static UserRetrofitGood currentuser;
+    private EditText mEditTextEmail;
+    private EditText mEditTextPassword;
 
     private FirebaseAuth mAuth;
 
@@ -49,7 +44,6 @@ public class LoginWithMailFragment extends Fragment implements
     ViewModelProvider.Factory viewModelFactory;
 
     LoginRegisterViewModel viewModel;
-    // [END declare_auth]
 
 
     @Override
@@ -62,9 +56,6 @@ public class LoginWithMailFragment extends Fragment implements
     public void onCreate(Bundle savedInstanceState) {
         viewModel = ViewModelProviders.of(getActivity(), viewModelFactory).get(LoginRegisterViewModel.class);
         super.onCreate(savedInstanceState);
-
-        // Views
-
         mAuth = FirebaseAuth.getInstance();
     }
 
@@ -73,49 +64,35 @@ public class LoginWithMailFragment extends Fragment implements
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_login_with_mail_pasword,
                 container, false);
-        mStatusTextView = view.findViewById(R.id.status);
-        mDetailTextView = view.findViewById(R.id.detail);
-        mEmailField = view.findViewById(R.id.field_email);
-        mPasswordField = view.findViewById(R.id.field_password);
-
-        view.findViewById(R.id.email_password_buttons).setVisibility(View.VISIBLE);
-     view.findViewById(R.id.email_password_fields).setVisibility(View.VISIBLE);
-    view.findViewById(R.id.signed_in_buttons).setVisibility(View.GONE);
+        mEditTextEmail = view.findViewById(R.id.email_field_edit_text);
+        mEditTextPassword = view.findViewById(R.id.password_field_edit_text);
 
         view.findViewById(R.id.email_sign_in_button).setOnClickListener(this);
 
         return view;
     }
 
-    // [START on_start_check_user]
     @Override
     public void onStart() {
         super.onStart();
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        updateUI(currentUser);
+        determineCurrentState(currentUser);
     }
 
 
     private void signIn(final String email, final String password) {
-        Log.d(TAG, "signIn:" + email);
         if (!validateForm()) {
             return;
         }
 
-     //   showProgressDialog();
-
-        // [START sign_in_with_email]
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(requireActivity(), new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             final FirebaseUser user = mAuth.getCurrentUser();
-                            // Sign in success, update UI with the signed-in user's information
                             if(user!=null  && user.isEmailVerified()) {
 
-
-                                //Defining the user object as we need to pass it with the call
                                 Userretrofit retrofituser;
                                 if(user.getDisplayName()==null)
                                 {
@@ -144,16 +121,12 @@ public class LoginWithMailFragment extends Fragment implements
                             {
                                 Toast.makeText(requireActivity(), "User Email is not verified", Toast.LENGTH_SHORT).show();
                             }
-
-
-
-                            updateUI(user);
+                            determineCurrentState(user);
                         } else {
-                            updateUI(null);
+                            Toast.makeText(requireActivity(), "You need to verify your email", Toast.LENGTH_SHORT).show();
+
                         }
-                        if (!task.isSuccessful()) {
-                            mStatusTextView.setText("failed");
-                        }
+
                     }
                 });
     }
@@ -161,27 +134,21 @@ public class LoginWithMailFragment extends Fragment implements
     private boolean validateForm() {
         boolean valid = true;
 
-        String email = mEmailField.getText().toString();
+        String email = mEditTextEmail.getText().toString();
         if (TextUtils.isEmpty(email)) {
-            mEmailField.setError("Required.");
+            Toast.makeText(requireActivity(), R.string.email_required_error, Toast.LENGTH_SHORT).show();
             valid = false;
-        } else {
-            mEmailField.setError(null);
         }
 
-        String password = mPasswordField.getText().toString();
+        String password = mEditTextPassword.getText().toString();
         if (TextUtils.isEmpty(password)) {
-            mPasswordField.setError("Required.");
+            Toast.makeText(requireActivity(), R.string.password_required_error, Toast.LENGTH_SHORT).show();
             valid = false;
-        } else {
-            mPasswordField.setError(null);
         }
-
         return valid;
     }
 
-    private void updateUI(FirebaseUser user) {
-       // hideProgressDialog();
+    private void determineCurrentState(FirebaseUser user) {
         if (user != null) {
             if(user.isEmailVerified())
             {
@@ -189,17 +156,14 @@ public class LoginWithMailFragment extends Fragment implements
                 startActivity(intent);
             }
         }
-            else {
-            mStatusTextView.setText("sitnout");
-            mDetailTextView.setText(null);
-        }
+
     }
 
     @Override
     public void onClick(View v) {
         int i = v.getId();
        if (i == R.id.email_sign_in_button) {
-            signIn(mEmailField.getText().toString(), mPasswordField.getText().toString());
+            signIn(mEditTextEmail.getText().toString(), mEditTextPassword.getText().toString());
         }
     }
 }

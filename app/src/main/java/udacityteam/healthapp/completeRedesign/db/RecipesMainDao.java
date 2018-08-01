@@ -5,14 +5,12 @@ import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
-import android.arch.persistence.room.Transaction;
 
 import java.util.List;
 
-import udacityteam.healthapp.Model.OneSharedFoodProductsListRetrofit;
-import udacityteam.healthapp.Model.SelectedFoodretrofit;
-import udacityteam.healthapp.Model.UserRetrofitGood;
-import udacityteam.healthapp.Model.Userretrofit;
+import udacityteam.healthapp.completeRedesign.Data.Networking.Models.OneSharedFoodProductsListRetrofit;
+import udacityteam.healthapp.completeRedesign.Data.Networking.Models.SelectedFoodretrofit;
+import udacityteam.healthapp.completeRedesign.Data.Networking.Models.UserRetrofitGood;
 
 
 @Dao

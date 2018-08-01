@@ -45,14 +45,12 @@ import java.util.ArrayList;
 
 import dagger.android.support.AndroidSupportInjection;
 import udacityteam.healthapp.R;
-import udacityteam.healthapp.activities.MainActivity;
-import udacityteam.healthapp.adapters.SearchFoodsAdapter;
-import udacityteam.healthapp.models.Model;
+import udacityteam.healthapp.completeRedesign.UI.MainActivity.Adapters.SearchFoodsAdapter;
+import udacityteam.healthapp.completeRedesign.Data.Networking.Models.Model;
 
 
 public class FoodSearchFragment extends Fragment implements SearchView.OnQueryTextListener {
     StringBuffer buffer;
-    SearchFoodsAdapter adapter;
     int amm = 0;
     ArrayList<String> arrayCountry;
     String SharedFoodListDatabase;

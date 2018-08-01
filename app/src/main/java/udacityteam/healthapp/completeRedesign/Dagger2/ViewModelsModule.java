@@ -7,8 +7,8 @@ import dagger.Binds;
 import dagger.Module;
 import dagger.multibindings.IntoMap;
 import udacityteam.healthapp.completeRedesign.UI.MainActivity.ViewModels.MainActivityViewModelGood;
-import udacityteam.healthapp.completeRedesign.FoodListViewModelComplete;
-import udacityteam.healthapp.completeRedesign.SharedFoodListsViewModelNew;
+import udacityteam.healthapp.completeRedesign.UI.AddedFoods.ViewModels.FoodListViewModelComplete;
+import udacityteam.healthapp.completeRedesign.UI.Community.ViewModels.SharedFoodListsViewModelNew;
 import udacityteam.healthapp.completeRedesign.UI.BaseActivityLoginRegister.ViewModels.LoginRegisterViewModel;
 
 @Module

@@ -49,5 +49,7 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="favourites_to_be_added">Favourites to be added soon!</string>
+    <string name="email_required_error">Email is required!</string>
+    <string name="password_required_error">Password required!</string>
 
 </resources>

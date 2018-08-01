@@ -4,29 +4,19 @@ package udacityteam.healthapp.completeRedesign.Data.Networking.API;
 import android.arch.lifecycle.LiveData;
 
 import java.sql.Timestamp;
-import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
-import retrofit2.http.Path;
 import retrofit2.http.Query;
 import rx.Observable;
-import udacityteam.healthapp.Model.OneSharedFoodProductsListRetrofit;
-import udacityteam.healthapp.Model.Result;
-import udacityteam.healthapp.Model.SelectedFoodretrofitarray;
-import udacityteam.healthapp.Model.SharedFoodProductsRetrofit;
-import udacityteam.healthapp.Model.Usersretrofit;
-
-/**
- * Created by Belal on 14/04/17.
- */
+import udacityteam.healthapp.completeRedesign.Data.Networking.Models.Result;
+import udacityteam.healthapp.completeRedesign.Data.Networking.Models.SelectedFoodretrofitarray;
+import udacityteam.healthapp.completeRedesign.Data.Networking.Models.SharedFoodProductsRetrofit;
 
 public interface APIService {
-
-    public static final String BASE_URL = "http://app.wellbranding.com/";
+    String BASE_URL = "http://app.wellbranding.com/";
 
     @FormUrlEncoded
     @POST("register")
@@ -35,20 +25,6 @@ public interface APIService {
             @Field("email") String email,
             @Field("uid") String uid);
 
-
-    @FormUrlEncoded
-    @POST("login")
-    Observable<Result> userLogin(
-            @Field("email") String email,
-            @Field("password") String password
-    );
-    @FormUrlEncoded
-    @POST("loginwithmail")
-    Observable<Result> userLoginwithmail(
-            @Field("email") String email,
-            @Field("password") String password,
-            @Field("uid") String uid
-    );
     @FormUrlEncoded
     @POST("addSelectedFood")
     LiveData<ApiResponse<Result>> addSelectedFood(
@@ -63,6 +39,12 @@ public interface APIService {
             @Field("whichtime") String whichtime,
             @Field("sharedfoodId") Integer sharedFoodId
     );
+    @GET("getSelectedFoodsPrieview")
+    Observable<SelectedFoodretrofitarray> getselectedfoodsPrieview(
+            @Query("getParentSharedFoodsId") Integer ParentSharedKey,
+            @Query("foodselection") String foodSelection
+    );
+
     @FormUrlEncoded
     @POST("addSharedList")
     Call<Result> addSharedList(
@@ -76,11 +58,6 @@ public interface APIService {
             @Field("Carbohydrates") Float Carbohyrates
     );
 
-    @GET("getUserByUid")
-    Observable<Result> getCurrentUser(
-            @Query("UserId") String UserId
-
-    );
     @GET("getSelectedFoods")
  LiveData<ApiResponse<SelectedFoodretrofitarray>> getSelectedFoods(
             @Query("UserId") Integer UserId,
@@ -89,14 +66,6 @@ public interface APIService {
             @Query("month") String month,
             @Query("day") String day
     );
-    @GET("getSelectedFoodsPrieview")
-    Observable<SelectedFoodretrofitarray> getselectedfoodsPrieview(
-            @Query("getParentSharedFoodsId") Integer ParentSharedKey,
-            @Query("foodselection") String foodSelection
-    );
-
-    @GET("users")
-    Observable<Usersretrofit> getUsers();
 
     @GET("getAllSharedDiets")
     LiveData<ApiResponse<SharedFoodProductsRetrofit>> getAllSharedDiets(
@@ -126,16 +95,6 @@ public interface APIService {
                     @Query("whichtime") String whichtime
             );
 
-    @GET("usersquery")
-    Observable<Usersretrofit> getUsersquery();
-
-    @GET("tasks/{sort}")
-    Observable<Usersretrofit> getTasks(
-            @Path("sort") String order);
-    @GET("qur")
-    Call<Usersretrofit> getqur(
-            @Query("value") String value,
-            @Query("name") String name);
 
 
 }

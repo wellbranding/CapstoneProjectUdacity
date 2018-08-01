@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="udacityteam.healthapp.completeRedesign.SharedFoodListsViewModelNew" />
+            type="udacityteam.healthapp.completeRedesign.UI.Community.ViewModels.SharedFoodListsViewModelNew" />
     </data>
 
 <RelativeLayout

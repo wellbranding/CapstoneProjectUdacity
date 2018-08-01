@@ -1,6 +1,7 @@
 package udacityteam.healthapp.completeRedesign.UI.AddedFoods.Adapters;
 
 import android.databinding.DataBindingUtil;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -9,7 +10,7 @@ import java.util.Collections;
 import java.util.List;
 
 
-import udacityteam.healthapp.Model.SelectedFoodretrofit;
+import udacityteam.healthapp.completeRedesign.Data.Networking.Models.SelectedFoodretrofit;
 import udacityteam.healthapp.R;
 import udacityteam.healthapp.completeRedesign.UI.AddedFoods.ViewModels.FoodListItemViewModel;
 import udacityteam.healthapp.databinding.FoodListItemBinding;
@@ -31,13 +32,9 @@ public class FoodListRetrofitAdapterNew extends RecyclerView.Adapter<FoodListRet
         this.selectedFoodretrofits = repositories;
     }
 
-
-
-
-
-
+    @NonNull
     @Override
-    public RepositoryViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RepositoryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
        FoodListItemBinding binding = DataBindingUtil.inflate(
                 LayoutInflater.from(parent.getContext()),
                 R.layout.food_list_item,
@@ -47,7 +44,7 @@ public class FoodListRetrofitAdapterNew extends RecyclerView.Adapter<FoodListRet
     }
 
     @Override
-    public void onBindViewHolder(RepositoryViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RepositoryViewHolder holder, int position) {
         holder.bindRepository(selectedFoodretrofits.get(position));
     }
 
@@ -68,8 +65,6 @@ public class FoodListRetrofitAdapterNew extends RecyclerView.Adapter<FoodListRet
             if (binding.getViewModel() == null) {
                 binding.setViewModel(new FoodListItemViewModel(itemView.getContext(), repository));
             } else {
-
-
                 binding.getViewModel().setSelectectedFoood(repository);
             }
         }

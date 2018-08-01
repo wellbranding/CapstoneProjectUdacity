@@ -12,7 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -33,14 +32,10 @@ public class RegisterWithMailFragment extends Fragment implements
 
     private static final String TAG = "EmailPassword";
 
-    private TextView mStatusTextView;
-    private TextView mDetailTextView;
     private EditText mEmailField;
     private EditText mPasswordField;
 
-    // [START declare_auth]
     private FirebaseAuth mAuth;
-    // [END declare_auth]
 
 
     @Override
@@ -72,25 +67,19 @@ public class RegisterWithMailFragment extends Fragment implements
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_register_with_mail_pasword,
                 container, false);
-        mStatusTextView = view.findViewById(R.id.status);
-        mDetailTextView = view.findViewById(R.id.detail);
-        mEmailField = view.findViewById(R.id.field_email);
-        mPasswordField = view.findViewById(R.id.field_password);
+        mEmailField = view.findViewById(R.id.email_field_edit_text);
+        mPasswordField = view.findViewById(R.id.password_field_edit_text);
 
-        view.findViewById(R.id.email_create_account_button).setOnClickListener(this);
+        view.findViewById(R.id.register_account_with_name).setOnClickListener(this);
          view.findViewById(R.id.verify_email_button).setOnClickListener(this);
-        view.findViewById(R.id.signed_in_buttons).setVisibility(View.GONE);
         return view;
     }
-
-    // [START on_start_check_user]
     @Override
     public void onStart() {
         super.onStart();
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        updateUI(currentUser);
+        determineCurrentState(currentUser);
     }
-    // [END on_start_check_user]
 
     private void createAccount(final String email, final String password) {
         Log.d(TAG, "createAccount:" + email);
@@ -101,14 +90,10 @@ public class RegisterWithMailFragment extends Fragment implements
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(requireActivity(), task -> {
                     if (task.isSuccessful()) {
-                        // Sign in success, update UI with the signed-in user's information
-                        Log.d(TAG, "createUserWithEmail:success");
+                        Toast.makeText(requireActivity(), "Successfully registered, verify user", Toast.LENGTH_SHORT).show();
                         FirebaseUser user = mAuth.getCurrentUser();
-
-                        updateUI(user);
+                        determineCurrentState(user);
                     } else {
-                        // If sign in fails, display a message to the user.
-                        Log.w(TAG, "createUserWithEmail:failure", task.getException());
                         try {
                             throw Objects.requireNonNull(task.getException());
                         } catch(FirebaseAuthWeakPasswordException e) {
@@ -116,7 +101,7 @@ public class RegisterWithMailFragment extends Fragment implements
                                     Toast.LENGTH_SHORT).show();
 
                         } catch(FirebaseAuthInvalidCredentialsException e) {
-                            Toast.makeText(requireActivity(), "The Email  is badly formatted",
+                            Toast.makeText(requireActivity(), "The Email is badly formatted",
                                     Toast.LENGTH_SHORT).show();
 
                         } catch(FirebaseAuthUserCollisionException e) {
@@ -128,7 +113,7 @@ public class RegisterWithMailFragment extends Fragment implements
                             e.printStackTrace();
                         }
 
-                        updateUI(null);
+                        determineCurrentState(null);
                     }
 
                 });
@@ -168,44 +153,33 @@ public class RegisterWithMailFragment extends Fragment implements
 
         String email = mEmailField.getText().toString();
         if (TextUtils.isEmpty(email)) {
-            mEmailField.setError("Required.");
+            Toast.makeText(requireActivity(), R.string.email_required_error, Toast.LENGTH_SHORT).show();
             valid = false;
-        } else {
-            mEmailField.setError(null);
         }
 
         String password = mPasswordField.getText().toString();
         if (TextUtils.isEmpty(password)) {
-            mPasswordField.setError("Required.");
             valid = false;
-        } else {
-            mPasswordField.setError(null);
+            Toast.makeText(requireActivity(), R.string.password_required_error, Toast.LENGTH_SHORT).show();
         }
 
         return valid;
     }
 
-    private void updateUI(FirebaseUser user) {
-        if (user != null) {
-            requireActivity().findViewById(R.id.email_password_buttons).setVisibility(View.GONE);
-            requireActivity().findViewById(R.id.email_password_fields).setVisibility(View.GONE);
-            requireActivity().findViewById(R.id.signed_in_buttons).setVisibility(View.VISIBLE);
-            requireActivity().findViewById(R.id.verify_email_button).setEnabled(!user.isEmailVerified());
+    private void determineCurrentState(FirebaseUser user) {
+        if (user != null){
+            requireActivity().findViewById(R.id.verify_email_button).setVisibility(View.VISIBLE);
 
-
-        } else {
-            mStatusTextView.setText("sitnout");
-            mDetailTextView.setText(null);
-            requireActivity().findViewById(R.id.email_password_buttons).setVisibility(View.VISIBLE);
-            requireActivity().findViewById(R.id.email_password_fields).setVisibility(View.VISIBLE);
-            requireActivity().findViewById(R.id.signed_in_buttons).setVisibility(View.GONE);
         }
+         if (user != null&& !user.isEmailVerified())
+            requireActivity().findViewById(R.id.register_account_with_name).setVisibility(View.INVISIBLE);
+
     }
 
     @Override
     public void onClick(View v) {
         int i = v.getId();
-        if (i == R.id.email_create_account_button) {
+        if (i == R.id.register_account_with_name) {
             createAccount(mEmailField.getText().toString(), mPasswordField.getText().toString());
 
         } else if (i == R.id.verify_email_button) {
