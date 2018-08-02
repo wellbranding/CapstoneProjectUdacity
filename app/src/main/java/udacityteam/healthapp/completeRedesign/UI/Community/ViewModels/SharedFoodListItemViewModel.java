@@ -12,17 +12,10 @@ public class SharedFoodListItemViewModel extends BaseObservable implements ViewM
 
     private OneSharedFoodProductsListRetrofit selectedFoodretrofit;
     private Context context;
-    private  String foodselection;
-    private String foodId;
-    private String foodName;
-    private String SendDate;
-    private float Calories;
-    private float Protein;
-    private float Fat;
-    private float Carbohydrates;
+    private String foodselection;
 
     public SharedFoodListItemViewModel(Context context, OneSharedFoodProductsListRetrofit repository
-    , String foodselection) {
+            , String foodselection) {
         this.selectedFoodretrofit = repository;
         this.context = context;
         this.foodselection = foodselection;
@@ -31,10 +24,12 @@ public class SharedFoodListItemViewModel extends BaseObservable implements ViewM
     public String getName() {
         return selectedFoodretrofit.getDisplayname();
     }
+
     public void setSelectectedFoood(OneSharedFoodProductsListRetrofit selectedFoodretrofit) {
         this.selectedFoodretrofit = selectedFoodretrofit;
         notifyChange();
     }
+
     public void onItemClick(View view) {
         context.startActivity(FoodListPrieviewNew.newIntent(context, selectedFoodretrofit, foodselection));
     }

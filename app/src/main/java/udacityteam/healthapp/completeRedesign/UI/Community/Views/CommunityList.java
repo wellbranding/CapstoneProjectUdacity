@@ -28,6 +28,7 @@ public class CommunityList extends AppCompatActivity implements HasSupportFragme
 
     @Inject
     DispatchingAndroidInjector<Fragment> dispatchingAndroidInjector;
+
     @Override
     public AndroidInjector<Fragment> supportFragmentInjector() {
         return dispatchingAndroidInjector;
@@ -51,12 +52,12 @@ public class CommunityList extends AppCompatActivity implements HasSupportFragme
         Intent iin = getIntent();
         Bundle b = iin.getExtras();
         String value;
-        String foodselection =null;
-        String SharedFoodListDatabase =null;
+        String foodselection = null;
+        String SharedFoodListDatabase = null;
         if (b != null) {
-            value = (String) b.get("titlename");
-            foodselection = (String) b.get("foodselection");
-            SharedFoodListDatabase = (String) b.get("SharedFoodListDatabase");
+            value = (String) b.get(getString(R.string.which_title_key));
+            foodselection = (String) b.get(getString(R.string.which_time_key));
+            SharedFoodListDatabase = (String) b.get(getString(R.string.shared_food_list_database_key));
             getSupportActionBar().setTitle(value);
         }
         Bundle tofragment = new Bundle();

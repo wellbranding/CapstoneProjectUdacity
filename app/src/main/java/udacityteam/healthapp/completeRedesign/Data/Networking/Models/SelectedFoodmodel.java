@@ -1,7 +1,5 @@
 package udacityteam.healthapp.completeRedesign.Data.Networking.Models;
 
-import com.google.firebase.auth.FirebaseAuth;
-
 /**
  * Created by kunda on 10/4/2017.
  */
@@ -18,8 +16,8 @@ public class SelectedFoodmodel {
         this.UserId = UserId;
         this.Date = date;
     }
-    public  SelectedFoodmodel()
-    {
+
+    public SelectedFoodmodel() {
 
     }
 

@@ -9,9 +9,8 @@ import android.view.ViewGroup;
 import java.util.Collections;
 import java.util.List;
 
-
-import udacityteam.healthapp.completeRedesign.Data.Networking.Models.SelectedFoodretrofit;
 import udacityteam.healthapp.R;
+import udacityteam.healthapp.completeRedesign.Data.Networking.Models.SelectedFoodretrofit;
 import udacityteam.healthapp.completeRedesign.UI.AddedFoods.ViewModels.FoodListItemViewModel;
 import udacityteam.healthapp.databinding.FoodListItemBinding;
 
@@ -35,7 +34,7 @@ public class FoodListRetrofitAdapterNew extends RecyclerView.Adapter<FoodListRet
     @NonNull
     @Override
     public RepositoryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-       FoodListItemBinding binding = DataBindingUtil.inflate(
+        FoodListItemBinding binding = DataBindingUtil.inflate(
                 LayoutInflater.from(parent.getContext()),
                 R.layout.food_list_item,
                 parent,
@@ -54,7 +53,7 @@ public class FoodListRetrofitAdapterNew extends RecyclerView.Adapter<FoodListRet
     }
 
     public static class RepositoryViewHolder extends RecyclerView.ViewHolder {
-        final FoodListItemBinding  binding;
+        final FoodListItemBinding binding;
 
         public RepositoryViewHolder(FoodListItemBinding binding) {
             super(binding.layout);

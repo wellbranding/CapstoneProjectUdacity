@@ -20,8 +20,8 @@ import java.util.List;
 import javax.inject.Inject;
 
 import dagger.android.AndroidInjection;
-import udacityteam.healthapp.completeRedesign.Data.Networking.Models.SelectedFoodretrofit;
 import udacityteam.healthapp.R;
+import udacityteam.healthapp.completeRedesign.Data.Networking.Models.SelectedFoodretrofit;
 import udacityteam.healthapp.completeRedesign.db.MainDatabase;
 
 public class AddedFoodsAppWidgetService extends RemoteViewsService {
@@ -36,6 +36,7 @@ public class AddedFoodsAppWidgetService extends RemoteViewsService {
     public RemoteViewsFactory onGetViewFactory(Intent intent) {
         return new BakingAppWidgetRemoteViewsFactory(mainDatabase, getApplicationContext(), sharedPreferences);
     }
+
     LiveData<List<SelectedFoodretrofit>> finalRecipeFromId;
 
     @Override
@@ -58,7 +59,7 @@ public class AddedFoodsAppWidgetService extends RemoteViewsService {
             this.mainDatabase = mainDatabase;
             this.sharedPreferences = sharedPreferences;
             finalRecipeFromId = new MutableLiveData<>();
-            recipeFromId=new MutableLiveData<>();
+            recipeFromId = new MutableLiveData<>();
 
 
         }
@@ -74,16 +75,14 @@ public class AddedFoodsAppWidgetService extends RemoteViewsService {
             String query = sharedPreferences.getString("query_widget", null);
             String whichTime = sharedPreferences.getString("whichtime_widget", null);
 
-            if(whichTime!=null && query!=null) {
+            if (whichTime != null && query != null) {
                 recipeFromId = mainDatabase.recipeDao().getAddedFoodsNew(whichTime,
                         query);
             }
             recipeFromId.observeForever(this);
 
 
-                }
-
-
+        }
 
 
         @Override
@@ -146,9 +145,9 @@ public class AddedFoodsAppWidgetService extends RemoteViewsService {
         @Override
         public void onChanged(@Nullable List<SelectedFoodretrofit> selectedFoodretrofits) {
 
-                ingredientList = new ArrayList<>();
-                ingredientList.addAll(selectedFoodretrofits);
-                recipeFromId.removeObserver(this);
+            ingredientList = new ArrayList<>();
+            ingredientList.addAll(selectedFoodretrofits);
+            recipeFromId.removeObserver(this);
 
 
         }

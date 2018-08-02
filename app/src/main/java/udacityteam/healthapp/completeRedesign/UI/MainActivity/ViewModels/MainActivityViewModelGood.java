@@ -14,30 +14,17 @@ import java.util.List;
 import javax.inject.Inject;
 
 import rx.Subscription;
+import udacityteam.healthapp.completeRedesign.Data.Networking.API.ApiResponse;
 import udacityteam.healthapp.completeRedesign.Data.Networking.Models.Result;
 import udacityteam.healthapp.completeRedesign.Data.Networking.Models.SelectedFoodretrofit;
-import udacityteam.healthapp.completeRedesign.Data.Networking.API.ApiResponse;
-import udacityteam.healthapp.completeRedesign.Repository.RecipiesRepository;
+import udacityteam.healthapp.completeRedesign.Repository.MainRepository;
 
-/**
- * View model for the MainActivity
- */
 public class MainActivityViewModelGood extends ViewModel {
 
     private static final String TAG = "MainViewModel";
 
-    public String sharedFoodListDatabase;
     public String foodselection;
-
-    private Context context;
-    private Subscription subscription;
-    public  List<SelectedFoodretrofit> selectedFoodretrofits;
-
-    SimpleDateFormat format;
-    //private List<Repository> repositories;
-    private String editTextUsernameValue;
-    public  Float verte;
-    private RecipiesRepository repository;
+    private MainRepository repository;
     private MediatorLiveData<ApiResponse<Result>> resultMediatorLiveData;
     private LiveData<ApiResponse<Result>> apiResponseLiveData;
 
@@ -47,31 +34,26 @@ public class MainActivityViewModelGood extends ViewModel {
     SharedPreferences sharedPreferences;
 
     @Inject
-    public MainActivityViewModelGood(RecipiesRepository recipiesRepository) {
-        this.repository = recipiesRepository;
+    public MainActivityViewModelGood(MainRepository mainRepository) {
+        this.repository = mainRepository;
         hasPosted = new MutableLiveData<>();
         IfHasPosted();
 
     }
-    public void IfHasPosted()
-    {
-         Transformations.switchMap(hasPosted, result -> {
 
-             resultMediatorLiveData = repository.getResultMediatorLiveData();
-               return resultMediatorLiveData;
+    public void IfHasPosted() {
+        Transformations.switchMap(hasPosted, result -> {
+            resultMediatorLiveData = repository.getResultMediatorLiveData();
+            return resultMediatorLiveData;
 
         });
 
     }
 
+    public LiveData<String> signOut() {
 
-    public LiveData<String> signOut()
-    {
-
-       return repository.SignOut();
+        return repository.SignOut();
     }
-
-
 
     public MediatorLiveData<ApiResponse<Result>> getResultMediatorLiveData() {
 
@@ -81,10 +63,7 @@ public class MainActivityViewModelGood extends ViewModel {
     public void AddFoodtoDatabase(String foodselection, String foodId, String foodName, List<Float> nutritiens) {
         repository.AddFoodtoDatabase(foodselection, foodId, foodName, nutritiens);
 
-
     }
-
-
 
 
 }

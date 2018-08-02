@@ -12,57 +12,52 @@ import io.apptik.widget.MultiSlider;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import udacityteam.healthapp.completeRedesign.ApplicationController;
+import udacityteam.healthapp.completeRedesign.Data.Networking.API.RetrofitFactoryNew;
 import udacityteam.healthapp.completeRedesign.Data.Networking.Models.OneSharedFoodProductsListRetrofit;
 import udacityteam.healthapp.completeRedesign.Data.Networking.Models.SelectedFoodretrofit;
 import udacityteam.healthapp.completeRedesign.Data.Networking.Models.SharedFoodProductsRetrofit;
-import udacityteam.healthapp.completeRedesign.ApplicationController;
-import udacityteam.healthapp.completeRedesign.Data.Networking.API.RetrofitFactoryNew;
-import udacityteam.healthapp.completeRedesign.Repository.RecipiesRepository;
+import udacityteam.healthapp.completeRedesign.Repository.MainRepository;
 import udacityteam.healthapp.completeRedesign.Repository.Resource;
 import udacityteam.healthapp.completeRedesign.Repository.Status;
+
 public class SharedFoodListsViewModelNew extends ViewModel {
 
     private SelectedFoodretrofit selectedFoodretrofit;
-    private LiveData<Resource<List<OneSharedFoodProductsListRetrofit>>> recipes;
+    private LiveData<Resource<List<OneSharedFoodProductsListRetrofit>>> sharedFoodLists;
 
-    List<OneSharedFoodProductsListRetrofit> selectedFoodretrofits;
-    RecipiesRepository repository;
+    MainRepository repository;
 
     MutableLiveData<String> whichTime = new MutableLiveData<>();
-    public void setWhichTime(String value)
-    {
-        if(whichTime.getValue()!=null) {
+
+    public void setWhichTime(String value) {
+        if (whichTime.getValue() != null) {
             if (whichTime.getValue().equals(value)) {
                 return;
             }
-        }else {
-
-                whichTime.setValue(value);
-            }
-
+        } else {
+            whichTime.setValue(value);
+        }
     }
-
-
 
 
     public MutableLiveData<Resource<List<OneSharedFoodProductsListRetrofit>>> mutableLiveData = new MutableLiveData<>();
     ApplicationController application = null;
 
-    public LiveData<Resource<List<OneSharedFoodProductsListRetrofit>>> getFilteredData()
-    {
+    public LiveData<Resource<List<OneSharedFoodProductsListRetrofit>>> getFilteredData() {
         return mutableLiveData;
     }
 
     @Inject
-    public SharedFoodListsViewModelNew(RecipiesRepository recipiesRepository) {
-        this.repository = recipiesRepository;
+    public SharedFoodListsViewModelNew(MainRepository mainRepository) {
+        this.repository = mainRepository;
     }
 
-    public LiveData<Resource<List<OneSharedFoodProductsListRetrofit>>> getRecipes() {
-        if (recipes == null) {
-            recipes = repository.loadSharedFoodLists(whichTime.getValue());
+    public LiveData<Resource<List<OneSharedFoodProductsListRetrofit>>> getSharedFoodLists() {
+        if (sharedFoodLists == null) {
+            sharedFoodLists = repository.loadSharedFoodLists(whichTime.getValue());
         }
-        return recipes;
+        return sharedFoodLists;
     }
 
     public String getName() {
@@ -70,9 +65,9 @@ public class SharedFoodListsViewModelNew extends ViewModel {
     }
 
 
-    public  void GetFilteredSharedDiets(MultiSlider protein, MultiSlider calories,
-                                        MultiSlider carbohydrates, MultiSlider fats
-    , String SharedFoodListDatabase) //only if today
+    public void GetFilteredSharedDiets(MultiSlider protein, MultiSlider calories,
+                                       MultiSlider carbohydrates, MultiSlider fats
+            , String SharedFoodListDatabase) //only if today
     {
         udacityteam.healthapp.completeRedesign.Data.Networking.API.APIService service = RetrofitFactoryNew.create();
 
@@ -87,15 +82,8 @@ public class SharedFoodListsViewModelNew extends ViewModel {
             public void onResponse(Call<SharedFoodProductsRetrofit> call, Response<SharedFoodProductsRetrofit> response) {
                 List<OneSharedFoodProductsListRetrofit> selectedFoodretrofits = response.body().
                         getSelectedFoodretrofits();
-                if(response.isSuccessful()){
+                if (response.isSuccessful()) {
                     mutableLiveData.setValue(new Resource(Status.SUCCESS, response.body().getSelectedFoodretrofits(), "SUCCESS"));
-                }
-             //   mutableLiveData.setValue(selectedFoodretrofits);
-
-                //notify();
-
-                if (selectedFoodretrofits.size() != 0) {
-                //    Toast.makeText(application.getApplicationContext(), String.valueOf(selectedFoodretrofits.get(0).getCalories()), Toast.LENGTH_SHORT).show();
                 }
             }
 

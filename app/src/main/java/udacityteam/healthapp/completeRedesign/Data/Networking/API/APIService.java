@@ -4,6 +4,7 @@ package udacityteam.healthapp.completeRedesign.Data.Networking.API;
 import android.arch.lifecycle.LiveData;
 
 import java.sql.Timestamp;
+
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
@@ -20,7 +21,7 @@ public interface APIService {
 
     @FormUrlEncoded
     @POST("register")
-   Call<Result> createUser(
+    Call<Result> createUser(
             @Field("name") String name,
             @Field("email") String email,
             @Field("uid") String uid);
@@ -39,6 +40,7 @@ public interface APIService {
             @Field("whichtime") String whichtime,
             @Field("sharedfoodId") Integer sharedFoodId
     );
+
     @GET("getSelectedFoodsPrieview")
     Observable<SelectedFoodretrofitarray> getselectedfoodsPrieview(
             @Query("getParentSharedFoodsId") Integer ParentSharedKey,
@@ -59,7 +61,7 @@ public interface APIService {
     );
 
     @GET("getSelectedFoods")
- LiveData<ApiResponse<SelectedFoodretrofitarray>> getSelectedFoods(
+    LiveData<ApiResponse<SelectedFoodretrofitarray>> getSelectedFoods(
             @Query("UserId") Integer UserId,
             @Query("whichtime") String whichTime,
             @Query("year") String year,
@@ -72,8 +74,9 @@ public interface APIService {
             @Query("UserId") Integer UserId,
             @Query("SharedFoodListDatabase") String SharedFoodListDatabase
     );
+
     @GET("getAllFilteredSharedDiets")
-   Call<SharedFoodProductsRetrofit> getAllFilteredSharedDiets(
+    Call<SharedFoodProductsRetrofit> getAllFilteredSharedDiets(
             @Query("UserId") Integer UserId,
             @Query("SharedFoodListDatabase") String SharedFoodListDatabase,
             @Query("ProteinBegin") Integer proteinbegin,
@@ -94,7 +97,6 @@ public interface APIService {
                     @Query("date") Timestamp Date,
                     @Query("whichtime") String whichtime
             );
-
 
 
 }

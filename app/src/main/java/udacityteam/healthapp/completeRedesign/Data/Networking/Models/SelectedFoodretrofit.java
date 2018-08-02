@@ -9,20 +9,20 @@ import android.os.Parcelable;
  * Created by kunda on 10/4/2017.
  */
 @Entity
-public class SelectedFoodretrofit implements  Parcelable {
+public class SelectedFoodretrofit implements Parcelable {
     @PrimaryKey(autoGenerate = true)
     private int roomId;
     private String foodId;
     private String foodName;
     private String whichTime;
-//    private String UserId= FirebaseAuth.getInstance().getCurrentUser().getUid();
+    //    private String UserId= FirebaseAuth.getInstance().getCurrentUser().getUid();
     private String SendDate;
     private float Calories;
     private float Protein;
     private float Fat;
     private float Carbohydrates;
-   //  private String mail;
-   //  private String
+    //  private String mail;
+    //  private String
 
 
     public String getFoodId() {
@@ -57,8 +57,7 @@ public class SelectedFoodretrofit implements  Parcelable {
         this.roomId = roomId;
     }
 
-    public SelectedFoodretrofit()
-    {
+    public SelectedFoodretrofit() {
 
     }
 
@@ -161,7 +160,7 @@ public class SelectedFoodretrofit implements  Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(foodId);
         dest.writeString(foodName);
-       // dest.writeString(UserId);
+        // dest.writeString(UserId);
         dest.writeString(SendDate);
         dest.writeFloat(Calories);
         dest.writeFloat(Protein);

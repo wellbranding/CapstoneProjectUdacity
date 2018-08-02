@@ -14,12 +14,12 @@ import udacityteam.healthapp.completeRedesign.Widget.AddedFoodsAppWidget;
 @Singleton
 @Component(modules = {ActivityModule.class,
         AndroidInjectionModule.class,
-       // DetailsOfRecipeActivityModule.class,
+        // DetailsOfRecipeActivityModule.class,
         RemoteViewsService.class,
         BaseActivityModule.class,
         FoodListActivityModule.class,
         MainActivityModule.class,
-      BakingAppWidgetModule.class,
+        BakingAppWidgetModule.class,
         AppModule.class})
 
 
@@ -35,7 +35,7 @@ public interface AppComponent {
 
     }
 
-   void inject(AddedFoodsAppWidget addedFoodsAppWidget);
+    void inject(AddedFoodsAppWidget addedFoodsAppWidget);
 
 }
 

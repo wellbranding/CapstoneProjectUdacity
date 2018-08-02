@@ -7,20 +7,19 @@ import android.os.Parcelable;
  * Created by vvost on 11/21/2017.
  */
 
-public class Model implements Parcelable{
+public class Model implements Parcelable {
 
     private String name;
     private String offset;
     private String id;
 
-    public Model()
-    {
+    public Model() {
         this.name = name;
         this.offset = offset;
         this.id = id;
     }
-    public Model(String name, String offset, String id)
-    {
+
+    public Model(String name, String offset, String id) {
         this.name = name;
         this.offset = offset;
         this.id = id;
@@ -75,8 +74,7 @@ public class Model implements Parcelable{
         return name;
     }
 
-    public String toString3()
-    {
+    public String toString3() {
         return id;
     }
 

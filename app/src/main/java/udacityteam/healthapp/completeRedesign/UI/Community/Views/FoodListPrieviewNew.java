@@ -10,25 +10,25 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import udacityteam.healthapp.R;
 import udacityteam.healthapp.completeRedesign.Data.Networking.Models.OneSharedFoodProductsListRetrofit;
 import udacityteam.healthapp.completeRedesign.Data.Networking.Models.SelectedFoodretrofit;
-import udacityteam.healthapp.R;
-import udacityteam.healthapp.completeRedesign.UI.Community.ViewModels.FoodListPrieviewNewViewModel;
 import udacityteam.healthapp.completeRedesign.UI.AddedFoods.Adapters.FoodListRetrofitAdapterNew;
+import udacityteam.healthapp.completeRedesign.UI.Community.ViewModels.FoodListPrieviewNewViewModel;
 import udacityteam.healthapp.databinding.ActivityFoodListPreviewBinding;
 
 public class FoodListPrieviewNew extends AppCompatActivity implements FoodListPrieviewNewViewModel.DataListener {
     private static final String SELECTED_FOOD_PRIEVIEW = "EXTRA_REPOSITORY";
     private static final String FOOD_SELECTION = "FOOD_SELECTION";
-    String id = null;
     OneSharedFoodProductsListRetrofit oneSharedFoodProductsListRetrofit;
     String foodselection;
     TextView carboCount, fatCount, caloriesCount, proteinCount;
     private ActivityFoodListPreviewBinding binding;
     private FoodListPrieviewNewViewModel foodListPrieviewNewViewModel;
+
     public static Intent newIntent(Context context, OneSharedFoodProductsListRetrofit selectedFoodretrofit
-    , String foodselection) {
-            Intent intent = new Intent(context, FoodListPrieviewNew.class);
+            , String foodselection) {
+        Intent intent = new Intent(context, FoodListPrieviewNew.class);
         intent.putExtra(SELECTED_FOOD_PRIEVIEW, selectedFoodretrofit);
         intent.putExtra(FOOD_SELECTION, foodselection);
         return intent;
@@ -45,13 +45,13 @@ public class FoodListPrieviewNew extends AppCompatActivity implements FoodListPr
         caloriesCount = findViewById(R.id.caloriescount);
         fatCount = findViewById(R.id.fatcount);
         carboCount = findViewById(R.id.carbohncount);
-      oneSharedFoodProductsListRetrofit = getIntent().getParcelableExtra(SELECTED_FOOD_PRIEVIEW);
-        proteinCount.setText("Protein " + oneSharedFoodProductsListRetrofit.getProtein());
-        carboCount.setText("Carbos " + oneSharedFoodProductsListRetrofit.getCarbohydrates());
-       fatCount.setText("Fats " + oneSharedFoodProductsListRetrofit.getFat());
-        caloriesCount.setText("Calories " + oneSharedFoodProductsListRetrofit.getCalories());
-      foodselection = getIntent().getExtras().getString(FOOD_SELECTION);
-      foodListPrieviewNewViewModel.LoadFoodList(oneSharedFoodProductsListRetrofit.getParentSharedFoodsId(), foodselection);
+        oneSharedFoodProductsListRetrofit = getIntent().getParcelableExtra(SELECTED_FOOD_PRIEVIEW);
+        proteinCount.setText(String.format("%s%s", getString(R.string.protein_display_text), oneSharedFoodProductsListRetrofit.getProtein()));
+        carboCount.setText(String.format("%s%s", getString(R.string.carbos_display_text), oneSharedFoodProductsListRetrofit.getCarbohydrates()));
+        fatCount.setText(String.format("%s%s", getString(R.string.fats_display_text), oneSharedFoodProductsListRetrofit.getFat()));
+        caloriesCount.setText(getString(R.string.calories_display_text) + oneSharedFoodProductsListRetrofit.getCalories());
+        foodselection = getIntent().getExtras().getString(FOOD_SELECTION);
+        foodListPrieviewNewViewModel.LoadFoodList(oneSharedFoodProductsListRetrofit.getParentSharedFoodsId(), foodselection);
     }
 
     @Override
@@ -61,7 +61,7 @@ public class FoodListPrieviewNew extends AppCompatActivity implements FoodListPr
 
     @Override
     public void onRepositoriesChanged(List<SelectedFoodretrofit> repositories) {
-        FoodListRetrofitAdapterNew customAdapterFoodListPrievew= new FoodListRetrofitAdapterNew(repositories);
+        FoodListRetrofitAdapterNew customAdapterFoodListPrievew = new FoodListRetrofitAdapterNew(repositories);
         customAdapterFoodListPrievew.setSelectedFoodretrofits(repositories);
         customAdapterFoodListPrievew.notifyDataSetChanged();
         binding.recyclerFood.setLayoutManager(new LinearLayoutManager(this));

@@ -10,6 +10,7 @@ import udacityteam.healthapp.completeRedesign.UI.BaseActivityLoginRegister.Views
 public abstract class BaseActivityFragmentsModule {
     @ContributesAndroidInjector()
     abstract LoginWithMailFragment contributeLoginWithMailFragment();
+
     @ContributesAndroidInjector()
     abstract RegisterWithMailFragment contributeRegisterWithMailFragment();
 //

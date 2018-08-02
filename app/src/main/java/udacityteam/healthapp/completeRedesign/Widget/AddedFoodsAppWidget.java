@@ -15,9 +15,6 @@ import udacityteam.healthapp.completeRedesign.UI.MainActivity.Views.MainActivity
 
 import static dagger.android.AndroidInjection.inject;
 
-/**
- * Implementation of App Widget functionality.
- */
 public class AddedFoodsAppWidget extends AppWidgetProvider {
 
     @Inject

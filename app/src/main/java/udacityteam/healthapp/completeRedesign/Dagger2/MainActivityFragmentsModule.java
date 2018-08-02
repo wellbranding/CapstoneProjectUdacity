@@ -9,11 +9,11 @@ import udacityteam.healthapp.completeRedesign.UI.MainActivity.Views.FoodSearchFr
 @Module
 public abstract class MainActivityFragmentsModule {
 
-   @ContributesAndroidInjector()
-   abstract FoodSearchFragment contributeFoodSearchFragment();
+    @ContributesAndroidInjector()
+    abstract FoodSearchFragment contributeFoodSearchFragment();
 
-   @ContributesAndroidInjector()
-   abstract FoodNutritiensDisplayFragment contributeFoodNutritiensDisplayFragment();
+    @ContributesAndroidInjector()
+    abstract FoodNutritiensDisplayFragment contributeFoodNutritiensDisplayFragment();
 
 
 }

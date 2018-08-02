@@ -1,12 +1,12 @@
 package udacityteam.healthapp.completeRedesign.UI.Community.Views;
 
-import android.content.Context;
-import android.support.v4.app.DialogFragment;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,20 +20,14 @@ import udacityteam.healthapp.R;
 import udacityteam.healthapp.completeRedesign.UI.Community.ViewModels.SharedFoodListsViewModelNew;
 
 public class FilterFragment extends DialogFragment {
-  //  private DialogInterface.OnDismissListener onDismissListener;
 
-//    public void setOnDismissListener(DialogInterface.OnDismissListener onDismissListener) {
-//        this.onDismissListener = onDismissListener;
-//    }
-
-    TextView  carbohydratesend, proteinbegin, proteinend, caloriesbegin, caloriesend,
+    TextView carbohydratesend, proteinbegin, proteinend, caloriesbegin, caloriesend,
             fatsbegin, fatsend;
     MultiSlider carbohydrates, protein, calories, fats;
     String SharedFoodListDatabase;
     Button confirm;
 
     SharedFoodListsViewModelNew viewModel;
-
 
     @Inject
     ViewModelProvider.Factory ViewModelFactory;
@@ -81,8 +75,8 @@ public class FilterFragment extends DialogFragment {
             @Override
             public void onClick(View view) {
 
-              GetFilteredSharedDiets();
-              dismiss();
+                GetFilteredSharedDiets();
+                dismiss();
             }
         });
 
@@ -92,20 +86,17 @@ public class FilterFragment extends DialogFragment {
                                        MultiSlider.Thumb thumb,
                                        int thumbIndex,
                                        int value) {
-                if(carbohydrates.getThumb(0).getValue() == 0) {
-                    // carbohydratesbegin.setText(String.valueOf(carbohydrates.getThumb(0).getValue()));
-                    carbohydratesend.setText("Up to " + String.valueOf(carbohydrates.getThumb(1).getValue()));
+                if (carbohydrates.getThumb(0).getValue() == 0) {
+                    carbohydratesend.setText(String.format("Up to %s", String.valueOf(carbohydrates.getThumb(1).getValue())));
                 }
-                if(carbohydrates.getThumb(1).getValue()==10000)
-                {
-                    carbohydratesend.setText("From  " + String.valueOf(carbohydrates.getThumb(0).getValue()));
+                if (carbohydrates.getThumb(1).getValue() == 10000) {
+                    carbohydratesend.setText(String.format("From  %s", String.valueOf(carbohydrates.getThumb(0).getValue())));
                 }
-                if(carbohydrates.getThumb(0).getValue()!=0 && carbohydrates.getThumb(1).getValue()!=10000)
-                    carbohydratesend.setText(String.valueOf(carbohydrates.getThumb(0).getValue()) +  " - " +
-                String.valueOf(carbohydrates.getThumb(1).getValue()));
-                if(carbohydrates.getThumb(0).getValue()==0 &&
-                        carbohydrates.getThumb(1).getValue()==10000)
-                   carbohydratesend.setText("Any");
+                if (carbohydrates.getThumb(0).getValue() != 0 && carbohydrates.getThumb(1).getValue() != 10000)
+                    carbohydratesend.setText(String.format("%s - %s", String.valueOf(carbohydrates.getThumb(0).getValue()), String.valueOf(carbohydrates.getThumb(1).getValue())));
+                if (carbohydrates.getThumb(0).getValue() == 0 &&
+                        carbohydrates.getThumb(1).getValue() == 10000)
+                    carbohydratesend.setText(R.string.fiilter_any);
 
             }
         });
@@ -139,12 +130,12 @@ public class FilterFragment extends DialogFragment {
                 caloriesend.setText(String.valueOf(calories.getThumb(1).getValue()));
             }
         });
-        return  view;
+        return view;
     }
 
-    private void GetFilteredSharedDiets() //only if today
+    private void GetFilteredSharedDiets()
     {
-        viewModel.GetFilteredSharedDiets(protein, calories, carbohydrates, fats, SharedFoodListDatabase );
+        viewModel.GetFilteredSharedDiets(protein, calories, carbohydrates, fats, SharedFoodListDatabase);
 
     }
 
@@ -158,8 +149,6 @@ public class FilterFragment extends DialogFragment {
         super.onCreate(savedInstanceState);
         viewModel = ViewModelProviders.of(getActivity(), ViewModelFactory).
                 get(SharedFoodListsViewModelNew.class);
-
-
     }
 }
 

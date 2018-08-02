@@ -4,7 +4,7 @@
     android:initialLayout="@layout/baking_app_widget"
     android:minHeight="40dp"
     android:minWidth="40dp"
-    android:previewImage="@drawable/common_full_open_on_phone"
+    android:previewImage="@drawable/ic_all_foods"
     android:resizeMode="horizontal|vertical"
     android:updatePeriodMillis="86400000"
     android:widgetCategory="home_screen">

@@ -29,7 +29,6 @@ import android.widget.Toast;
 
 import com.google.firebase.FirebaseApp;
 
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -45,8 +44,8 @@ import java.util.ArrayList;
 
 import dagger.android.support.AndroidSupportInjection;
 import udacityteam.healthapp.R;
-import udacityteam.healthapp.completeRedesign.UI.MainActivity.Adapters.SearchFoodsAdapter;
 import udacityteam.healthapp.completeRedesign.Data.Networking.Models.Model;
+import udacityteam.healthapp.completeRedesign.UI.MainActivity.Adapters.SearchFoodsAdapter;
 
 
 public class FoodSearchFragment extends Fragment implements SearchView.OnQueryTextListener {
@@ -58,7 +57,7 @@ public class FoodSearchFragment extends Fragment implements SearchView.OnQueryTe
     ArrayList<Model> models1;
     RecyclerView lv;
     RelativeLayout noresultsdisplay;
-    public static String foodselection = null;
+    public String foodselection = null;
     RecyclerView main;
     private static final String COLUMN_ID = "_id";
     private static final String COLUMN_TERM = "term";
@@ -72,21 +71,18 @@ public class FoodSearchFragment extends Fragment implements SearchView.OnQueryTe
     FoodListRecyclerViewListener mCallback;
 
     public interface FoodListRecyclerViewListener {
-        public void onFoodListSelected(String id, String foodName,
-                                       String whichTime );
+       void onFoodListSelected(String id, String foodName,
+                                       String whichTime);
     }
-
 
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-     View view = inflater.inflate(R.layout.activity_foodsearchfragmnet,
-             container, false);
-  //      Toolbar toolbar = view.findViewById(R.id.toolbar);
+        View view = inflater.inflate(R.layout.activity_foodsearchfragmnet,
+                container, false);
         Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
-     //   toolbar.setNavigationIcon(R.drawable.abc_ic_ab_back_material);
-     ((MainActivity)getActivity()).setSupportActionBar(toolbar);
+        ((MainActivity) getActivity()).setSupportActionBar(toolbar);
         setHasOptionsMenu(true);
         toolbar.setTitle(foodselection);
 
@@ -96,7 +92,7 @@ public class FoodSearchFragment extends Fragment implements SearchView.OnQueryTe
         lv.setVisibility(View.INVISIBLE);
         arrayCountry = new ArrayList<>();
         models1 = new ArrayList<>();
-     return view;
+        return view;
     }
 
     @Override
@@ -105,8 +101,8 @@ public class FoodSearchFragment extends Fragment implements SearchView.OnQueryTe
         FirebaseApp.initializeApp(requireActivity());
         Intent iin = requireActivity().getIntent();
         Bundle b = getArguments();
-      //  Bundle b = iin.getExtras();
-        if(b!=null) {
+        //  Bundle b = iin.getExtras();
+        if (b != null) {
             foodselection = (String) b.get("foodselection");
             SharedFoodListDatabase = (String) b.get("SharedFoodListDatabase");
             Log.d("receivedFragmentSearch", String.valueOf(foodselection));
@@ -118,9 +114,6 @@ public class FoodSearchFragment extends Fragment implements SearchView.OnQueryTe
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         menu.clear();
         inflater.inflate(R.menu.menu_search, menu);
-
-      //  (((AppCompatActivity)requireActivity()).getSupportActionBar()).setDisplayShowHomeEnabled(true);
-    //    Objects.requireNonNull(((AppCompatActivity) requireActivity()).getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         searchMenuItem = menu.findItem(R.id.menuSearch);
         searchManager = (SearchManager) requireActivity().getSystemService(Context.SEARCH_SERVICE);
         searchView = (SearchView) searchMenuItem.getActionView();
@@ -133,16 +126,15 @@ public class FoodSearchFragment extends Fragment implements SearchView.OnQueryTe
     public boolean onQueryTextChange(final String newText) {
 
         StringBuilder amm = new StringBuilder();
-        //  amm.append("https://api.nal.usda.gov/ndb/V2/reports?ndbno=");
         amm.append("https://api.nal.usda.gov/ndb/search/?format=json&q=");
         amm.append(newText);
         amm.append("&sort=r&max=10&offset=10&ds=Standard+Reference&api_key=HXLecTDsMqy1Y6jNoYPw2n3DQ30FeGXxD2XBZqJh");
-        //   amm.append("&type=f&format=json&api_key=HXLecTDsMqy1Y6jNoYPw2n3DQ30FeGXxD2XBZqJh");
         new JSONTask().execute(amm.toString());
 
 
         return true;
     }
+
     @Override
     public void onAttach(Context context) {
         AndroidSupportInjection.inject(this);
@@ -160,18 +152,14 @@ public class FoodSearchFragment extends Fragment implements SearchView.OnQueryTe
     @Override
     public boolean onQueryTextSubmit(final String query) {
         StringBuilder amm = new StringBuilder();
-        //  amm.append("https://api.nal.usda.gov/ndb/V2/reports?ndbno=");
-
         amm.append("https://api.nal.usda.gov/ndb/search/?format=json&q=");
         amm.append(query);
         amm.append("&sort=r&max=50&offset=0&ds=Standard+Reference&api_key=HXLecTDsMqy1Y6jNoYPw2n3DQ30FeGXxD2XBZqJh");
-        //   amm.append("&type=f&format=json&api_key=HXLecTDsMqy1Y6jNoYPw2n3DQ30FeGXxD2XBZqJh");
         main.setVisibility(View.VISIBLE);
         lv.setVisibility(View.INVISIBLE);
         searchView.setQuery("", false);
         models1.clear();
         new FoodSearchFragment.JSONTask1().execute(amm.toString(), query);
-        // TODO Auto-generated method stub
         return false;
     }
 
@@ -214,7 +202,6 @@ public class FoodSearchFragment extends Fragment implements SearchView.OnQueryTe
                 view.setOnClickListener(this);
 
             } else {
-                // Something went wrong
             }
         }
 
@@ -230,38 +217,23 @@ public class FoodSearchFragment extends Fragment implements SearchView.OnQueryTe
             if (cursorInBounds(position)) {
 
 
-//                Intent intent = new Intent(requireActivity(), FoodNutritiensDisplay.class);
-//                StringBuilder amm = new StringBuilder();
-//                amm.append("https://api.nal.usda.gov/ndb/V2/reports?ndbno=");
-//                amm.append(models.get(position).getId());
-//                amm.append("&type=f&format=json&api_key=HXLecTDsMqy1Y6jNoYPw2n3DQ30FeGXxD2XBZqJh");
-                //new GETADDITIONALFOODINFORMATION().execute(amm.toString());
-                
                 mCallback.onFoodListSelected(models.get(position).getId(),
                         models.get(position).getName(), foodselection);
-//                intent.putExtra("id", models.get(position).getId());
-//                intent.putExtra("foodname", models.get(position).getName());
-//                intent.putExtra("foodselection", foodselection);
-//
-//                startActivity(intent);
-                Log.d("ama", "Element " + position + " clicked.");
 
                 final String selected = mObjects.get(position).getId();
 
                 Toast.makeText(requireActivity(), selected, Toast.LENGTH_SHORT).show();
 
-                // Do something
 
             } else {
-                // Something went wrong
             }
         }
     }
 
     private MatrixCursor getCursor(final ArrayList<String> suggestions) {
 
-        final String[] columns = new String[] { COLUMN_ID, COLUMN_TERM };
-        final Object[] object = new Object[] { 0, DEFAULT };
+        final String[] columns = new String[]{COLUMN_ID, COLUMN_TERM};
+        final Object[] object = new Object[]{0, DEFAULT};
 
         final MatrixCursor matrixCursor = new MatrixCursor(columns);
 
@@ -284,7 +256,6 @@ public class FoodSearchFragment extends Fragment implements SearchView.OnQueryTe
             HttpURLConnection connection = null;
             BufferedReader reader = null;
 
-            // return null;
             Log.e("ayaa", "aaaa");
             try {
                 URL url = new URL(strings[0]);
@@ -346,14 +317,11 @@ public class FoodSearchFragment extends Fragment implements SearchView.OnQueryTe
             super.onPostExecute(s);
             if (s != null) {
                 try {
-                    Log.d("ahhaa", String.valueOf(models.size()));
                     final MatrixCursor matrixCursor = getCursor(dummyArray);
                     suggestionsAdapter = new SuggestAdapter(requireActivity(), matrixCursor, models);
                     searchView.setSuggestionsAdapter(suggestionsAdapter);
                     suggestionsAdapter.notifyDataSetChanged();
-                    // aki.setText(String.valueOf(models.size()));
                 } catch (Exception e) {
-                    // aki.setText(s);
                 }
 
 
@@ -362,6 +330,7 @@ public class FoodSearchFragment extends Fragment implements SearchView.OnQueryTe
 
         }
     }
+
     public class JSONTask1 extends AsyncTask<String, String, String> {
 
         @Override
@@ -391,7 +360,6 @@ public class FoodSearchFragment extends Fragment implements SearchView.OnQueryTe
                 JSONObject parentArray = parentObject.getJSONObject("list");
                 JSONArray array = parentArray.getJSONArray("item");
                 JSONObject finalobjectt = array.getJSONObject(0);
-                String name = finalobjectt.getString("name");
                 models1.clear();
                 for (int i = 0; i < array.length(); i++) {
 
@@ -399,7 +367,6 @@ public class FoodSearchFragment extends Fragment implements SearchView.OnQueryTe
                     Model model = new Model(finalobject.getString("name"), finalobject.getString("offset"),
                             finalobject.getString("ndbno"));
                     models1.add(model);
-                    Log.e("aaa", String.valueOf(models1.size()));
                 }
                 return finalobjectt.getString("ndbno");
             } catch (MalformedURLException e) {
@@ -429,26 +396,19 @@ public class FoodSearchFragment extends Fragment implements SearchView.OnQueryTe
             if (s != null) {
                 try {
                     LinearLayoutManager liner = new LinearLayoutManager(requireActivity());
-                    DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(main.getContext(),
-                            liner.getOrientation());
                     if (models1.size() != 0) {
                         main.setLayoutManager(liner);
                         SearchFoodsAdapter adapter = new SearchFoodsAdapter(models1, foodselection, (id, name, whichTime) -> mCallback.onFoodListSelected(id,
                                 name, whichTime));
-
                         main.setAdapter(adapter);
                         main.setVisibility(View.VISIBLE);
                         noresultsdisplay.setVisibility(View.GONE);
                     }
 
 
+                } catch (Exception e) {
                 }
-                catch (Exception e) {
-                    // aki.setText(s);
-                }
-            }
-            else
-            {
+            } else {
                 noresultsdisplay.setVisibility(View.VISIBLE);
             }
 
@@ -456,7 +416,6 @@ public class FoodSearchFragment extends Fragment implements SearchView.OnQueryTe
     }
 
 
-
-    }
+}
 
 

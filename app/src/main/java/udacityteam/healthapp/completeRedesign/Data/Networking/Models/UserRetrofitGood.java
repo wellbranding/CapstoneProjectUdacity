@@ -3,8 +3,6 @@ package udacityteam.healthapp.completeRedesign.Data.Networking.Models;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 
-import java.util.zip.Inflater;
-
 /**
  * Created by vvost on 1/27/2018.
  */
@@ -12,7 +10,7 @@ import java.util.zip.Inflater;
 public class UserRetrofitGood {
     @PrimaryKey(autoGenerate = true)
     private int roomId;
-    private  Integer id;
+    private Integer id;
     private String mail;
     private String uid;
     private String displayname;
@@ -32,10 +30,11 @@ public class UserRetrofitGood {
         this.uid = uid;
         this.displayname = displayname;
     }
+
     public UserRetrofitGood() {
     }
 
-    public  Integer getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -69,6 +68,6 @@ public class UserRetrofitGood {
 
     @Override
     public String toString() {
-        return id + "  " + mail + " " +uid + " " + displayname;
+        return id + "  " + mail + " " + uid + " " + displayname;
     }
 }

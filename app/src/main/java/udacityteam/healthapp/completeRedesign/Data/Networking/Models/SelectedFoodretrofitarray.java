@@ -6,7 +6,7 @@ import java.util.ArrayList;
  * Created by kunda on 10/4/2017.
  */
 
-public class SelectedFoodretrofitarray{
+public class SelectedFoodretrofitarray {
     private ArrayList<SelectedFoodretrofit> users;
 
     public SelectedFoodretrofitarray() {

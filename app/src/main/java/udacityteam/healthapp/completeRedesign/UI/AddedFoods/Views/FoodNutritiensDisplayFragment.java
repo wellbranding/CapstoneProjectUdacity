@@ -43,15 +43,11 @@ import javax.inject.Inject;
 
 import dagger.android.support.AndroidSupportInjection;
 import udacityteam.healthapp.R;
-import udacityteam.healthapp.completeRedesign.UI.MainActivity.Views.MainActivity;
 import udacityteam.healthapp.completeRedesign.UI.MainActivity.ViewModels.MainActivityViewModelGood;
-
-/**
- * Created by vvost on 11/26/2017.
- */
+import udacityteam.healthapp.completeRedesign.UI.MainActivity.Views.MainActivity;
 
 public class FoodNutritiensDisplayFragment extends Fragment {
-    TextView  mCalories, mProtein, mFats, mCarbos;
+    TextView mCalories, mProtein, mFats, mCarbos;
     Button addtoSqlite;
     String id = null;
     String foodname = null;
@@ -72,19 +68,18 @@ public class FoodNutritiensDisplayFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-      View view =  inflater.inflate(R.layout.food_fragment,
-              container, false);
+        View view = inflater.inflate(R.layout.food_fragment,
+                container, false);
         setHasOptionsMenu(true);
         Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
-        //   toolbar.setNavigationIcon(R.drawable.abc_ic_ab_back_material);
-        ((MainActivity)getActivity()).setSupportActionBar(toolbar);
-        ((MainActivity)getActivity()).getSupportActionBar().setTitle(foodname);
+        ((MainActivity) getActivity()).setSupportActionBar(toolbar);
+        ((MainActivity) getActivity()).getSupportActionBar().setTitle(foodname);
         setHasOptionsMenu(true);
         progressBar = view.findViewById(R.id.progressbar);
         productname = view.findViewById(R.id.ProductName);
         mCalories = view.findViewById(R.id.calories_display);
         mProtein = view.findViewById(R.id.protein_display);
-        mCarbos= view.findViewById(R.id.carbos_display);
+        mCarbos = view.findViewById(R.id.carbos_display);
         mFats = view.findViewById(R.id.fats_display);
 
         addtoSqlite = view.findViewById(R.id.button2);
@@ -106,6 +101,7 @@ public class FoodNutritiensDisplayFragment extends Fragment {
         super.onCreateOptionsMenu(menu, inflater);
 
     }
+
     @Override
     public void onAttach(Context context) {
         AndroidSupportInjection.inject(this);
@@ -122,43 +118,39 @@ public class FoodNutritiensDisplayFragment extends Fragment {
 
         viewModel.getResultMediatorLiveData().observe(this, resultApiResponse ->
         {
-            if(resultApiResponse!=null)
-            if (resultApiResponse.isSuccessful()
-                    && isHasAdded) {
+            if (resultApiResponse != null)
+                if (resultApiResponse.isSuccessful()
+                        && isHasAdded) {
 
-                Intent intent = new Intent(requireActivity(), FoodListComplete.class);
-                Date date = new Date();
-                Date newDate = new Date(date.getTime());
-                SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd");
-                Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-                Log.d("timestamp", timestamp.toString());
-                String stringdate = dt.format(newDate);
-                intent.putExtra("foodselection", foodselection);
-                intent.putExtra("SharedFoodListDatabase", SharedFoodListDatabase);
-                intent.putExtra("requestdate", stringdate);
-                startActivity(intent);
-                Log.d("importnant", resultApiResponse.body.getMessage());
-                Toast.makeText(requireActivity(), resultApiResponse.body.getMessage(), Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(requireActivity(), FoodListComplete.class);
+                    Date date = new Date();
+                    Date newDate = new Date(date.getTime());
+                    SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd");
+                    String stringdate = dt.format(newDate);
+                    intent.putExtra(getString(R.string.which_time_key), foodselection);
+                    intent.putExtra(getString(R.string.shared_food_list_database_key), SharedFoodListDatabase);
+                    intent.putExtra(getString(R.string.request_date_key), stringdate);
+                    startActivity(intent);
+                    if (resultApiResponse.body != null) {
+                        Toast.makeText(requireActivity(), resultApiResponse.body.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
 
-            }
+                }
         });
 
 
-        if(b!=null)
-        {
-            id =(String) b.get("id");
-            foodname = (String) b.get("foodname");
-            foodselection = (String) b.get("whichtime");
-            SharedFoodListDatabase = (String) b.get("SharedFoodListDatabase");
+        if (b != null) {
+            id = (String) b.get(getString(R.string.food_id_bundle_key));
+            foodname = (String) b.get(getString(R.string.food_name_bundle_key));
+            foodselection = (String) b.get(getString(R.string.which_time_key));
+            SharedFoodListDatabase = (String) b.get(getString(R.string.shared_food_list_database_key));
 
         }
 
 
-
     }
 
-    public class GETADDITIONALFOODINFORMATION extends AsyncTask<String, String, List<Float>>
-    {
+    public class GETADDITIONALFOODINFORMATION extends AsyncTask<String, String, List<Float>> {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -170,11 +162,7 @@ public class FoodNutritiensDisplayFragment extends Fragment {
         protected List<Float> doInBackground(String... strings) {
             HttpURLConnection connection = null;
             BufferedReader reader = null;
-
-           // return null;
-            Log.e("ayaa", "aaaa");
-            try
-            {
+            try {
                 URL url = new URL(strings[0]);
                 connection = (HttpURLConnection) url.openConnection();
                 connection.connect();
@@ -184,31 +172,30 @@ public class FoodNutritiensDisplayFragment extends Fragment {
                 StringBuffer buffer = new StringBuffer();
 
                 String line = "";
-                while((line=reader.readLine())!=null)
-                {
+                while ((line = reader.readLine()) != null) {
                     buffer.append(line);
                 }
                 String finalJson = buffer.toString();
-           JSONObject parentObject = new JSONObject(finalJson);
-           JSONArray parentArray = parentObject.getJSONArray("foods");
+                JSONObject parentObject = new JSONObject(finalJson);
+                JSONArray foods = parentObject.getJSONArray("foods");
 
-            JSONObject finalobject = parentArray.getJSONObject(0);
-            JSONObject aaa = finalobject.getJSONObject("food");
-            JSONArray aaa1 = aaa.getJSONArray("nutrients");
-            JSONObject enerhy = aaa1.getJSONObject(1);
-                JSONObject protein = aaa1.getJSONObject(3);
-                JSONObject fat = aaa1.getJSONObject(4);
-                JSONObject carbohydrates = aaa1.getJSONObject(6);
-              float enerhykcal = Float.parseFloat(String.format(Locale.getDefault(), "%.2f", Float.parseFloat(enerhy.getString("value"))));
-                float proteinvalue = Float.parseFloat(String.format(Locale.getDefault(), "%.2f",Float.parseFloat(protein.getString("value"))));
-                float fatvalue = Float.parseFloat(String.format(Locale.getDefault(), "%.2f",Float.parseFloat(fat.getString("value"))));
-                float carbohydratesvalue = Float.parseFloat(String.format(Locale.getDefault(),"%.2f",Float.parseFloat(carbohydrates.getString("value"))));
+                JSONObject finalobject = foods.getJSONObject(0);
+                JSONObject singleFood = finalobject.getJSONObject("food");
+                JSONArray nutritientsArray = singleFood.getJSONArray("nutrients");
+                JSONObject energy = nutritientsArray.getJSONObject(1);
+                JSONObject protein = nutritientsArray.getJSONObject(3);
+                JSONObject fat = nutritientsArray.getJSONObject(4);
+                JSONObject carbohydrates = nutritientsArray.getJSONObject(6);
+                float enerhykcal = Float.parseFloat(String.format(Locale.getDefault(), "%.2f", Float.parseFloat(energy.getString("value"))));
+                float proteinvalue = Float.parseFloat(String.format(Locale.getDefault(), "%.2f", Float.parseFloat(protein.getString("value"))));
+                float fatvalue = Float.parseFloat(String.format(Locale.getDefault(), "%.2f", Float.parseFloat(fat.getString("value"))));
+                float carbohydratesvalue = Float.parseFloat(String.format(Locale.getDefault(), "%.2f", Float.parseFloat(carbohydrates.getString("value"))));
 
-           List<Float> modelList = new ArrayList<>();
-           modelList.add(enerhykcal);
-           modelList.add(proteinvalue);
-           modelList.add(fatvalue);
-           modelList.add(carbohydratesvalue);
+                List<Float> modelList = new ArrayList<>();
+                modelList.add(enerhykcal);
+                modelList.add(proteinvalue);
+                modelList.add(fatvalue);
+                modelList.add(carbohydratesvalue);
                 return modelList;
 
 
@@ -216,56 +203,48 @@ public class FoodNutritiensDisplayFragment extends Fragment {
                 e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
-            }
-            catch (JSONException e) {
+            } catch (JSONException e) {
                 e.printStackTrace();
             } finally {
-                if(connection!=null)
-                {
+                if (connection != null) {
                     connection.disconnect();
                 }
                 try {
-                    if(reader!=null)
-                    {
+                    if (reader != null) {
                         reader.close();
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
-          return null;
+            return null;
         }
 
         @Override
         protected void onPostExecute(final List<Float> nutritiens) {
             super.onPostExecute(nutritiens);
-
             if (nutritiens != null) {
                 addtoSqlite.setActivated(true);
                 addtoSqlite.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                      //  AddFoodtoDatabase(nutritiens);
                         viewModel.IfHasPosted();
                         viewModel.AddFoodtoDatabase(foodselection, id,
                                 foodname, nutritiens);
                         isHasAdded = true;
                     }
                 });
-                mCalories.setText("CALORIES: " + nutritiens.get(0));
-                mProtein.setText("PROTEIN: " + nutritiens.get(1));
-                mFats.setText("FATS: " + nutritiens.get(2));
-                mCarbos.setText("CARBOHYDRATES: " + nutritiens.get(3));
+                mCalories.setText(getString(R.string.calories_display_text) + nutritiens.get(0));
+                mProtein.setText(getString(R.string.protein_display_text) + nutritiens.get(1));
+                mFats.setText(getString(R.string.fats_display_text) + nutritiens.get(2));
+                mCarbos.setText(getString(R.string.carbos_display_text) + nutritiens.get(3));
                 productname.setVisibility(View.VISIBLE);
                 progressBar.setVisibility(View.INVISIBLE);
             }
-            else
-            {
-            }
         }
 
-        }
     }
+}
 
 
 

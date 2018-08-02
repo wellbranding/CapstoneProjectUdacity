@@ -19,7 +19,6 @@ public class Userretrofit {
     }
 
 
-
     public int getId() {
         return id;
     }

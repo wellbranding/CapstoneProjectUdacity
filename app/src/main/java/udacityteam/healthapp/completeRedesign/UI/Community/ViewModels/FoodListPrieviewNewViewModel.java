@@ -5,24 +5,22 @@ import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
 import android.view.View;
 
-import rx.android.schedulers.AndroidSchedulers;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
+import udacityteam.healthapp.completeRedesign.ApplicationController;
 import udacityteam.healthapp.completeRedesign.Data.Networking.API.APIService;
 import udacityteam.healthapp.completeRedesign.Data.Networking.API.RetrofitFactoryNew;
 import udacityteam.healthapp.completeRedesign.Data.Networking.Models.SelectedFoodretrofit;
 import udacityteam.healthapp.completeRedesign.Data.Networking.Models.SelectedFoodretrofitarray;
-import udacityteam.healthapp.completeRedesign.ApplicationController;
 import udacityteam.healthapp.completeRedesign.Utils.ViewModel;
 
 
 public class FoodListPrieviewNewViewModel implements ViewModel {
 
-    private static final String TAG = "MainViewModel";
 
     public ObservableInt infoMessageVisibility;
     public ObservableInt recyclerViewVisibility;
@@ -42,26 +40,23 @@ public class FoodListPrieviewNewViewModel implements ViewModel {
         infoMessage = new ObservableField<>("message");
     }
 
-    public void LoadFoodList(Integer SharedListId,  String foodselection)
-    {
+    public void LoadFoodList(Integer SharedListId, String foodselection) {
         if (subscription != null && !subscription.isUnsubscribed()) subscription.unsubscribe();
-        ApplicationController application = ApplicationController.get(context);
-       // PHPService phpService = application.getPHPService();
         APIService apiService = RetrofitFactoryNew.create();
         subscription = apiService.getselectedfoodsPrieview(SharedListId,
                 foodselection)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(this::handleResponse,this::handleError);
+                .subscribe(this::handleResponse, this::handleError);
     }
+
     private void handleResponse(SelectedFoodretrofitarray androidList) {
         selectedFoodretrofits = new ArrayList<>(androidList.getUsers());
         dataListener.onRepositoriesChanged(selectedFoodretrofits);
     }
+
     private void handleError(Throwable error) {
-
     }
-
 
 
     @Override

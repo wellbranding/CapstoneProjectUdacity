@@ -11,10 +11,10 @@ import java.util.Date;
  * Created by kunda on 10/4/2017.
  */
 
-public class SelectedFood implements Parcelable{
+public class SelectedFood implements Parcelable {
     private String foodid;
     private String foodName;
-    private String UserId= FirebaseAuth.getInstance().getCurrentUser().getUid();
+    private String UserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
     private String Date;
     private float Calories;
     private float Protein;
@@ -38,6 +38,7 @@ public class SelectedFood implements Parcelable{
         this.foodName = foodName;
         this.Date = date;
     }
+
     public SelectedFood(String foodid, String foodName, String UserId, String date) {
         this.foodid = foodid;
         this.foodName = foodName;
@@ -45,8 +46,7 @@ public class SelectedFood implements Parcelable{
         this.Date = date;
     }
 
-    public SelectedFood(String id, String foodname, String userId, Date newDate, Float calories, Float protein, Float fat, Float carbohydrates)
-    {
+    public SelectedFood(String id, String foodname, String userId, Date newDate, Float calories, Float protein, Float fat, Float carbohydrates) {
 
     }
 

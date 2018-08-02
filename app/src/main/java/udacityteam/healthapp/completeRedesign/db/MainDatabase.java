@@ -12,7 +12,7 @@ import udacityteam.healthapp.completeRedesign.Data.Networking.Models.UserRetrofi
         UserRetrofitGood.class, SelectedFoodretrofit.class}, version = MainDatabase.VERSION)
 public abstract class MainDatabase extends RoomDatabase {
 
-    public abstract RecipesMainDao recipeDao();
+    public abstract MainDao recipeDao();
 
     static final int VERSION = 6;
 

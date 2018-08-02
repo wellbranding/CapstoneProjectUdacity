@@ -19,7 +19,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,28 +26,27 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 import javax.inject.Inject;
 
 import dagger.android.AndroidInjection;
-import udacityteam.healthapp.completeRedesign.Data.Networking.Models.SelectedFoodretrofit;
 import udacityteam.healthapp.R;
+import udacityteam.healthapp.completeRedesign.Data.Networking.Models.SelectedFood;
+import udacityteam.healthapp.completeRedesign.Data.Networking.Models.SelectedFoodretrofit;
+import udacityteam.healthapp.completeRedesign.Repository.Status;
+import udacityteam.healthapp.completeRedesign.UI.AddedFoods.Adapters.FoodListRetrofitAdapterNew;
 import udacityteam.healthapp.completeRedesign.UI.AddedFoods.ViewModels.FoodListViewModelComplete;
 import udacityteam.healthapp.completeRedesign.UI.Community.Views.CommunityList;
-import udacityteam.healthapp.completeRedesign.UI.AddedFoods.Adapters.FoodListRetrofitAdapterNew;
-import udacityteam.healthapp.completeRedesign.Repository.Status;
 import udacityteam.healthapp.completeRedesign.Widget.AddedFoodsAppWidget;
 import udacityteam.healthapp.databinding.ActivityFoodListBinding;
-import udacityteam.healthapp.completeRedesign.Data.Networking.Models.SelectedFood;
 
-public class FoodListComplete extends AppCompatActivity implements   NavigationView.OnNavigationItemSelectedListener  {
+public class FoodListComplete extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     RecyclerView recyclerView;
     RecyclerView.LayoutManager layoutManager;
@@ -60,9 +58,7 @@ public class FoodListComplete extends AppCompatActivity implements   NavigationV
     Button share;
     SharedPreferences prefs;
     SharedPreferences.Editor editor;
-    CollectionReference userstorage;
-   FirebaseFirestore storage;
-    String newstring=null;
+    String newstring = null;
     TextView caloriescounter, proteincounter, fatcounter, carbohycounter;
     ArrayList<SelectedFood> selectedFoods;
     private FoodListViewModelComplete foodListViewModel;
@@ -70,6 +66,11 @@ public class FoodListComplete extends AppCompatActivity implements   NavigationV
     List<SelectedFoodretrofit> receivedSelectedFoods;
     FoodListRetrofitAdapterNew customAdapterFoodListPrievew;
 
+    public static final String INTENT_WHICH_DATABASE = "SharedFoodListDatabase";
+    public static final String INTENT_WHICH_TIME = "foodselection";
+    public static final String INTENT_REQUEST_DATA = "requestdate";
+
+    public static final String INTENT_TITLE_NAME = "titlename";
 
 
     @Inject
@@ -77,7 +78,6 @@ public class FoodListComplete extends AppCompatActivity implements   NavigationV
 
     @Inject
     SharedPreferences sharedPreferences;
-
 
 
     @Override
@@ -89,9 +89,11 @@ public class FoodListComplete extends AppCompatActivity implements   NavigationV
         receivedSelectedFoods = new ArrayList<>();
         Intent iin = getIntent();
         Bundle b = iin.getExtras();
-        foodselection = (String) b.get("foodselection");
-        requestedString = (String) b.get("requestdate");
-        SharedFoodListDatabase = (String) b.get("SharedFoodListDatabase");
+        if (b != null) {
+            foodselection = (String) b.get(getString(R.string.which_time_key));
+            requestedString = (String) b.get(getString(R.string.request_date_key));
+            SharedFoodListDatabase = (String) b.get(getString(R.string.shared_food_list_database_key));
+        }
         activityFoodListBinding = DataBindingUtil.setContentView(this, R.layout.activity_food_list);
         caloriescounter = findViewById(R.id.caloriescount);
         proteincounter = findViewById(R.id.proteincount);
@@ -104,7 +106,7 @@ public class FoodListComplete extends AppCompatActivity implements   NavigationV
         setSupportActionBar(toolbar);
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("MainActivity");
+        Objects.requireNonNull(getSupportActionBar()).setTitle("MainActivity");
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -118,13 +120,12 @@ public class FoodListComplete extends AppCompatActivity implements   NavigationV
         share.setVisibility(View.INVISIBLE);
 
 
-        foodListViewModel.getShareResult().observe(this, response->
+        foodListViewModel.getShareResult().observe(this, response ->
         {
-           if(response!=null) {
+            if (response != null) {
 
-               Toast.makeText(this, response.getMessage(), Toast.LENGTH_SHORT).show();
-               Log.d("response", response.getMessage());
-           }
+                Toast.makeText(this, response.getMessage(), Toast.LENGTH_SHORT).show();
+            }
         });
 
         share.setOnClickListener(new View.OnClickListener() {
@@ -132,17 +133,14 @@ public class FoodListComplete extends AppCompatActivity implements   NavigationV
             public void onClick(View v) {
 
                 String todays = dt.format(new Date(new Date().getTime()));
-                if(todays.equals(stringdate) && receivedSelectedFoods.size()>=1)
-                foodListViewModel.ShareFoodList(foodselection, SharedFoodListDatabase);
-                else if(!todays.equals(stringdate))
-                    Toast.makeText(FoodListComplete.this, "Can only share Today's diet", Toast.LENGTH_SHORT).show();
-                else if(receivedSelectedFoods.size()>=1)
-                {
+                if (todays.equals(stringdate) && receivedSelectedFoods.size() >= 1)
                     foodListViewModel.ShareFoodList(foodselection, SharedFoodListDatabase);
-                }
-                else if(receivedSelectedFoods.size()==0)
-                {
-                    Toast.makeText(FoodListComplete.this, "Can't share empty Diet", Toast.LENGTH_SHORT).show();
+                else if (!todays.equals(stringdate))
+                    Toast.makeText(FoodListComplete.this, R.string.cant_share_todays_diet_message, Toast.LENGTH_SHORT).show();
+                else if (receivedSelectedFoods.size() >= 1) {
+                    foodListViewModel.ShareFoodList(foodselection, SharedFoodListDatabase);
+                } else if (receivedSelectedFoods.size() == 0) {
+                    Toast.makeText(FoodListComplete.this, R.string.cant_share_empty_diet_message, Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -155,7 +153,6 @@ public class FoodListComplete extends AppCompatActivity implements   NavigationV
             Date newDate = new Date(date.getTime());
             stringdate = dt.format(newDate);
         }
-        Log.d("reqss", stringdate);
 
         selectedFoods = new ArrayList<>();
 
@@ -164,9 +161,9 @@ public class FoodListComplete extends AppCompatActivity implements   NavigationV
         String day = requestedString.substring(8, 10);
         setupRecyclerView();
         foodListViewModel.setDataForRequestMutableLiveData(foodselection, year, month, day);
-        foodListViewModel.getFoodLists().observe(this, response->
+        foodListViewModel.getFoodLists().observe(this, response ->
         {
-            if(response!=null) {
+            if (response != null) {
                 if (response.status == Status.SUCCESS) {
 
                     receivedSelectedFoods = response.data;
@@ -176,29 +173,25 @@ public class FoodListComplete extends AppCompatActivity implements   NavigationV
                     share.setVisibility(View.VISIBLE);
 
                 }
-            }
-            else
-            {
-                Toast.makeText(this, "Server issue", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, R.string.server_issue_error_toast, Toast.LENGTH_SHORT).show();
             }
         });
-        foodListViewModel.getNutritionalValue().observe(this, response->
+        foodListViewModel.getNutritionalValue().observe(this, response ->
         {
-            if(response!=null)
-            {
-                if(response.size()==4)
-                {
-                    caloriescounter.setText("Calories: " + response.get(0));
-                    proteincounter.setText("Protein: " + response.get(1));
-                    carbohycounter.setText("Carbos:" + response.get(2));
-                    fatcounter.setText("Fats:" + response.get(3));
+            if (response != null) {
+                if (response.size() == 4) {
+                    caloriescounter.setText(getString(R.string.calories_display_text) + response.get(0));
+                    proteincounter.setText(getString(R.string.protein_display_text) + response.get(1));
+                    carbohycounter.setText(getString(R.string.carbos_display_text) + response.get(2));
+                    fatcounter.setText(getString(R.string.fats_display_text) + response.get(3));
                 }
             }
         });
 
 
-
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -208,17 +201,13 @@ public class FoodListComplete extends AppCompatActivity implements   NavigationV
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
+        int id = item.getItemId();
         if (id == R.id.to_widget) {
             SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd");
             String todays = dt.format(new Date(new Date().getTime()));
-            if(foodselection!=null)
-            addToWidget(todays, foodselection);
+            if (foodselection != null)
+                addToWidget(todays, foodselection);
             return true;
         }
 
@@ -226,11 +215,10 @@ public class FoodListComplete extends AppCompatActivity implements   NavigationV
     }
 
 
-    private void addToWidget(String query, String whichTime )
-    {
-        query = query+"%";
-        sharedPreferences.edit().putString("query_widget", query).apply();
-        sharedPreferences.edit().putString("whichtime_widget", whichTime).apply();
+    private void addToWidget(String query, String whichTime) {
+        query = query + "%";
+        sharedPreferences.edit().putString(getString(R.string.shared_prefs_query_string_key_widget), query).apply();
+        sharedPreferences.edit().putString(getString(R.string.shared_prefs_which_time_key_widget), whichTime).apply();
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(FoodListComplete.this);
         int[] appWidgetIds = appWidgetManager.getAppWidgetIds(
                 new ComponentName(FoodListComplete.this, AddedFoodsAppWidget.class));
@@ -239,79 +227,55 @@ public class FoodListComplete extends AppCompatActivity implements   NavigationV
         AddedFoodsAppWidget addedFoodsAppWidget = new AddedFoodsAppWidget();
         addedFoodsAppWidget.updateAppWidget(FoodListComplete.this, appWidgetManager, appWidgetIds);
         appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.recipe_list_widget);
-        Toast.makeText(FoodListComplete.this, "Track in your widget", Toast.LENGTH_SHORT).show();
+        Toast.makeText(FoodListComplete.this, R.string.track_in_your_widget_toast, Toast.LENGTH_SHORT).show();
     }
 
-
-
-
-
-
-    private boolean isNetworkAvailable() {
-        ConnectivityManager connectivityManager
-                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
-    }
-
-
-
-    ///
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
         int id = item.getItemId();
 
         if (id == R.id.nav_breakfasts) {
             Intent intent = new Intent(this, CommunityList.class);
-            Bundle extras = intent.getExtras();
-            intent.putExtra("titlename", "Community Breakfasts");
-            intent.putExtra("SharedFoodListDatabase", "SharedBreakfasts");
-            intent.putExtra("foodselection", "Breakfast");
+            intent.putExtra(INTENT_TITLE_NAME, getString(R.string.title_community_breakfasts));
+            intent.putExtra(INTENT_WHICH_DATABASE, getString(R.string.shared_breakfasts));
+            intent.putExtra(INTENT_WHICH_TIME, getString(R.string.which_time_breakfast));
             startActivity(intent);
-            // Handle the camera action
         } else if (id == R.id.nav_dinners) {
             Intent intent = new Intent(this, CommunityList.class);
-            Bundle extras = intent.getExtras();
-            intent.putExtra("titlename", "Community Dinners");
-            intent.putExtra("SharedFoodListDatabase", "SharedDinners");
-            intent.putExtra("foodselection", "Dinner");
+            intent.putExtra(INTENT_TITLE_NAME, getString(R.string.title_community_dinners));
+            intent.putExtra(INTENT_WHICH_DATABASE, getString(R.string.shared_dinners));
+            intent.putExtra(INTENT_WHICH_TIME, getString(R.string.which_time_dinner));
             startActivity(intent);
 
 
         } else if (id == R.id.nav_lunches) {
             Intent
                     intent = new Intent(this, CommunityList.class);
-            Bundle extras = intent.getExtras();
-            intent.putExtra("titlename", "Community Lunches");
-            intent.putExtra("SharedFoodListDatabase", "SharedLunches");
-            intent.putExtra("foodselection", "Lunch");
+            intent.putExtra(INTENT_TITLE_NAME, getString(R.string.title_community_lunches));
+            intent.putExtra(INTENT_WHICH_DATABASE, getString(R.string.shared_lunches));
+            intent.putExtra(INTENT_WHICH_TIME, getString(R.string.shared_lunches));
             startActivity(intent);
 
         } else if (id == R.id.nav_community_daily_diets) {
             Intent intent = new Intent(this, CommunityList.class);
-            Bundle extras = intent.getExtras();
-            intent.putExtra("titlename", "Community Daily Diet Plan");
-            intent.putExtra("SharedFoodListDatabase", "SharedDailyDiets");
-            Toast.makeText(this, "Currently Not Available", Toast.LENGTH_SHORT).show();
-            //startActivity(intent);
+            intent.putExtra(INTENT_TITLE_NAME, "");
+            intent.putExtra(INTENT_TITLE_NAME, "");
+            Toast.makeText(this, R.string.currently_not_available_message, Toast.LENGTH_SHORT).show();
 
         } else if (id == R.id.nav_snacks) {
             Intent intent = new Intent(this, CommunityList.class);
-            Bundle extras = intent.getExtras();
-            intent.putExtra("titlename", "Snacks");
-            intent.putExtra("SharedFoodListDatabase", "SharedSnacks");
-            intent.putExtra("foodselection", "Snacks");
+            intent.putExtra(INTENT_TITLE_NAME, getString(R.string.title_community_snacks));
+            intent.putExtra(INTENT_WHICH_DATABASE, getString(R.string.shared_snacks));
+            intent.putExtra(INTENT_WHICH_TIME, getString(R.string.shared_snacks));
             startActivity(intent);
-            //test
 
         } else if (id == R.id.nav_drinks_cocktails) {
+            //  setCurrentTitle(getResources().getString(R.string.which_time_drinks));
             Intent intent = new Intent(this, CommunityList.class);
-            Bundle extras = intent.getExtras();
-            intent.putExtra("titlename", "Drinks/Coctails");
-            intent.putExtra("SharedFoodListDatabase", "SharedDrinks");
-            intent.putExtra("foodselection", "Drinks");
+            intent.putExtra(INTENT_TITLE_NAME, getString(R.string.title_community_drinks));
+            intent.putExtra(INTENT_WHICH_DATABASE, getString(R.string.shared_drinks));
+            intent.putExtra(INTENT_WHICH_TIME, getString(R.string.which_time_drinks));
             startActivity(intent);
         }
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -322,13 +286,11 @@ public class FoodListComplete extends AppCompatActivity implements   NavigationV
 
     private void setupRecyclerView() {
 
-      customAdapterFoodListPrievew= new
+        customAdapterFoodListPrievew = new
                 FoodListRetrofitAdapterNew();
         activityFoodListBinding.recyclerFood.setLayoutManager(new LinearLayoutManager(this));
         activityFoodListBinding.recyclerFood.setHasFixedSize(true);
         activityFoodListBinding.recyclerFood.setAdapter(customAdapterFoodListPrievew);
-      //  Log.d("tikrinu", String.valueOf(foodListViewModel.selectedFoodretrofits.size()));
-
     }
 
 }

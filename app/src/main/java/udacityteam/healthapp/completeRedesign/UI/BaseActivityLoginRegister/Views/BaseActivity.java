@@ -3,9 +3,9 @@ package udacityteam.healthapp.completeRedesign.UI.BaseActivityLoginRegister.View
 import android.app.FragmentManager;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.content.Intent;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -22,12 +22,13 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 import javax.inject.Inject;
+
 import dagger.android.AndroidInjection;
 import dagger.android.DispatchingAndroidInjector;
-import udacityteam.healthapp.completeRedesign.Data.Networking.Models.Userretrofit;
 import udacityteam.healthapp.R;
-import udacityteam.healthapp.completeRedesign.UI.MainActivity.Views.MainActivity;
+import udacityteam.healthapp.completeRedesign.Data.Networking.Models.Userretrofit;
 import udacityteam.healthapp.completeRedesign.UI.BaseActivityLoginRegister.ViewModels.LoginRegisterViewModel;
+import udacityteam.healthapp.completeRedesign.UI.MainActivity.Views.MainActivity;
 
 public class BaseActivity extends AppCompatActivity implements
         View.OnClickListener, RegisterWithMailFragment.RegisterSuccessListener {
@@ -87,19 +88,21 @@ public class BaseActivity extends AppCompatActivity implements
                 fragmentManager.popBackStack(BACK_STACK_ROOT_TAG_LOGIN, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 fragmentManager.beginTransaction().
                         replace(R.id.fragmentContainer, fragment)
-                         .addToBackStack(BACK_STACK_ROOT_TAG_LOGIN)
+                        .addToBackStack(BACK_STACK_ROOT_TAG_LOGIN)
                         .commit();
                 fragmentManager.executePendingTransactions();
             }
         });
 
     }
+
     @Override
     public void onStart() {
         super.onStart();
         FirebaseUser currentUser = mAuth.getCurrentUser();
         determineCurrentState(currentUser);
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -113,33 +116,33 @@ public class BaseActivity extends AppCompatActivity implements
             }
         }
     }
+
     private void authWithGoogleUsingFirebase(GoogleSignInAccount acct) {
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
                         final FirebaseUser user = mAuth.getCurrentUser();
-                        if(user!=null) {
+                        if (user != null) {
                             Userretrofit retrofituser = new Userretrofit(user.getDisplayName(), user.getEmail(), mAuth.getCurrentUser().getUid());
-                            viewModel.getRegisterWithGoogleSignInResponse(retrofituser).observe(this, result->
+                            viewModel.getRegisterWithGoogleSignInResponse(retrofituser).observe(this, result ->
                             {
-                                if(result!=null)
-                                if(!result.getError())
-                                {
-                                    Intent intent = new Intent(BaseActivity.this, MainActivity.class);
-                                    startActivity(intent);
-                                    finish();
-                                }
-                                else
-                                    Toast.makeText(this, result.getMessage(), Toast.LENGTH_SHORT).show();
+                                if (result != null)
+                                    if (!result.getError()) {
+                                        Intent intent = new Intent(BaseActivity.this, MainActivity.class);
+                                        startActivity(intent);
+                                        finish();
+                                    } else
+                                        Toast.makeText(this, result.getMessage(), Toast.LENGTH_SHORT).show();
 
                             });
 
-                    } else {
-                        determineCurrentState(null);
+                        } else {
+                            determineCurrentState(null);
+                        }
                     }
-                }
-            });}
+                });
+    }
 
     private void signIn() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
@@ -166,7 +169,7 @@ public class BaseActivity extends AppCompatActivity implements
 
     @Override
     public void onUserRegistered() {
-       LoginWithMailFragment fragment = new LoginWithMailFragment();
+        LoginWithMailFragment fragment = new LoginWithMailFragment();
         android.support.v4.app.FragmentManager fragmentManager = BaseActivity.this.getSupportFragmentManager();
         fragmentManager.popBackStack(BACK_STACK_ROOT_TAG_LOGIN, FragmentManager.POP_BACK_STACK_INCLUSIVE);
         fragmentManager.beginTransaction().

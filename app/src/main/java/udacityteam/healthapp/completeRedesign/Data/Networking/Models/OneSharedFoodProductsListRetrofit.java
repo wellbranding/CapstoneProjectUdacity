@@ -12,11 +12,11 @@ import udacityteam.healthapp.completeRedesign.Utils.DataConverterStep;
  * Created by vvost on 12/29/2017.
  */
 @Entity
-    public class OneSharedFoodProductsListRetrofit implements Parcelable {
+public class OneSharedFoodProductsListRetrofit implements Parcelable {
     @PrimaryKey(autoGenerate = true)
     private int roomId;
-     private String UserId;
-     private String Date;
+    private String UserId;
+    private String Date;
     private Integer ParentSharedFoodsId;
     private float Calories;
     private float Protein;
@@ -152,7 +152,6 @@ import udacityteam.healthapp.completeRedesign.Utils.DataConverterStep;
     public void setUserId(String userId) {
         UserId = userId;
     }
-
 
 
     @Override

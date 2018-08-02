@@ -7,7 +7,7 @@ import udacityteam.healthapp.completeRedesign.UI.Community.Views.SharedFoodListF
 
 @Module
 public abstract class CommunityListFragmentsModule {
-   @ContributesAndroidInjector()
-   abstract SharedFoodListFragmentNetwork contributeSharedFoodListFragmentNetwork();
+    @ContributesAndroidInjector()
+    abstract SharedFoodListFragmentNetwork contributeSharedFoodListFragmentNetwork();
 
 }

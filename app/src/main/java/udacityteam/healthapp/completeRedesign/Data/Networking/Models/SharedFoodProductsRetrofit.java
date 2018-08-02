@@ -6,10 +6,10 @@ import java.util.List;
  * Created by vvost on 12/29/2017.
  */
 
-    public class SharedFoodProductsRetrofit  {
-   private List<OneSharedFoodProductsListRetrofit>  selectedFoodretrofits;
-    public SharedFoodProductsRetrofit()
-    {
+public class SharedFoodProductsRetrofit {
+    private List<OneSharedFoodProductsListRetrofit> selectedFoodretrofits;
+
+    public SharedFoodProductsRetrofit() {
 
     }
 

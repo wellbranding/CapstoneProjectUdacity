@@ -14,11 +14,6 @@
     <string name="tab2_title">Favourites</string>
     <string name="tab3_title">Tab 3</string>
 
-    <string name="facebook_application_id" translatable="false">APP_ID</string>
-    <!-- Facebook Application ID, prefixed by 'fb'.  Enables Chrome Custom tabs. -->
-    <string name="facebook_login_protocol_scheme" translatable="false">fbAPP_ID</string>
-
-    <!-- Main drawer menu items -->
     <string name="main_drawer_item_community_breakfasts">Community Breakfasts</string>
     <string name="main_drawer_item_community_lunches">Community Lunches</string>
     <string name="main_drawer_item_community_dinners">Community Dinners</string>
@@ -34,22 +29,56 @@
     <string name="title_activity_main3">Main3Activity</string>
     <string name="title_activity_main4">Main4Activity</string>
 
-    <string name="Dinner">Dinner</string>
-    <string name="Lunch">Lunch</string>
-    <string name="Snacks">Snacks</string>
-    <string name="Drinks">Drinks</string>
-    <string name="Breakfast">Breakfast</string>
-    <string name="SharedDinners">SharedDinners</string>
-    <string name="SharedLunches">SharedLunches</string>
-    <string name="SharedSnacks">SharedSnacks</string>
-    <string name="SharedDrinks">SharedDrinks</string>
-    <string name="SharedBreakfasts">SharedBreakfasts</string>
-
-
-
-    <!-- TODO: Remove or change this placeholder text -->
+    <string name="which_time_dinner">Dinner</string>
+    <string name="which_time_lunch">Lunch</string>
+    <string name="which_time_snacks">Snacks</string>
+    <string name="which_time_drinks">Drinks</string>
+    <string name="which_time_breakfast">Breakfast</string>
+    <string name="shared_dinners">SharedDinners</string>
+    <string name="shared_lunches">SharedLunches</string>
+    <string name="shared_snacks">SharedSnacks</string>
+    <string name="shared_drinks">SharedDrinks</string>
+    <string name="shared_breakfasts">SharedBreakfasts</string>
+    <string name="shared_pref_user_id">userId</string>
     <string name="favourites_to_be_added">Favourites to be added soon!</string>
     <string name="email_required_error">Email is required!</string>
     <string name="password_required_error">Password required!</string>
+    <string name="fiilter_any">Any</string>
+    <string name="protein_display_text">Protein</string>
+    <string name="carbos_display_text">Carbos</string>
+    <string name="fats_display_text">Fats</string>
+    <string name="calories_display_text">Calories</string>
+    <string name="which_time_key">foodselection</string>
+    <string name="which_title_key">titlename</string>
+    <string name="filter_dialog_tag">FilterDialog</string>
+    <string name="verify_email_error">You need to verify your email</string>
+    <string name="unknown_user_name">unknown</string>
+    <string name="successful_regiser_verify_toast">Successfully registered, verify user</string>
+    <string name="password_short_error">The Password is too short</string>
+    <string name="email_is_badly_formatted_error">The Email is badly formatted</string>
+    <string name="email_is_already_in_use_error">The Email is already in Use</string>
+    <string name="verification_email_send_to">Verification email sent to</string>
+    <string name="request_date_key">requestdate</string>
+    <string name="shared_food_list_database_key">SharedFoodListDatabase</string>
+    <string name="server_issue_error_toast">Server issue</string>
+    <string name="food_id_query_search">id</string>
+    <string name="food_name_bundle_key">foodname</string>
+    <string name="shared_prefs_query_string_key_widget">query_widget</string>
+    <string name="shared_prefs_which_time_key_widget">whichtime_widget</string>
+    <string name="track_in_your_widget_toast">Track in your widget</string>
+    <string name="currently_not_available_toast">Currently Not Available</string>
+    <string name="can_add_food_only_today_message">Can add food only to today!</string>
+    <string name="fragment_tag_main_activity_search_display">SEARCH_FRAGMENT_DISPLAY_MAIN_ACTIVITY_TAG</string>
+    <string name="successfully_sign_out">succesfully Sign out</string>
+    <string name="try_again_toast">Try again</string>
+    <string name="title_community_breakfasts">Community Breakfasts</string>
+    <string name="title_community_dinners">Community Dinners</string>
+    <string name="title_community_lunches">Community Lunches</string>
+    <string name="currently_not_available_message">Currently Not Available</string>
+    <string name="title_community_snacks">Snacks</string>
+    <string name="title_community_drinks">Drinks/Coctails</string>
+    <string name="food_id_bundle_key">id</string>
+    <string name="cant_share_todays_diet_message">Can only share Today\'s diet</string>
+    <string name="cant_share_empty_diet_message">Can\'t share empty Diet</string>
 
 </resources>

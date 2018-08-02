@@ -19,46 +19,46 @@ import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import udacityteam.healthapp.completeRedesign.Data.Networking.API.RetrofitFactoryNew;
 import udacityteam.healthapp.completeRedesign.Data.Networking.Models.Result;
 import udacityteam.healthapp.completeRedesign.Data.Networking.Models.UserRetrofitGood;
 import udacityteam.healthapp.completeRedesign.Data.Networking.Models.Userretrofit;
-import udacityteam.healthapp.completeRedesign.Data.Networking.API.RetrofitFactoryNew;
-import udacityteam.healthapp.completeRedesign.Repository.RecipiesRepository;
+import udacityteam.healthapp.completeRedesign.Repository.MainRepository;
+import udacityteam.healthapp.completeRedesign.db.MainDao;
 import udacityteam.healthapp.completeRedesign.db.MainDatabase;
-import udacityteam.healthapp.completeRedesign.db.RecipesMainDao;
 
 public class LoginRegisterViewModel extends ViewModel {
 
-    RecipiesRepository repository;
-    private FirebaseAuth mAuth;
-    private RecipesMainDao recipesMainDao;
+    private static final String TAG ="sharedSend" ;
+    MainRepository repository;
+    private MainDao mainDao;
     private MainDatabase mainDatabase;
+
+    public static final String SHARED_PREF_USER_ID = "userId";
     @Inject
     SharedPreferences sharedPreferences;
+
     @Inject
-    public LoginRegisterViewModel(RecipiesRepository recipiesRepository) {
-        this.repository = recipiesRepository;
-        this.recipesMainDao = recipiesRepository.getUserDao();
-        this.mainDatabase = recipiesRepository.getMainDatabase();
+    public LoginRegisterViewModel(MainRepository mainRepository) {
+        this.repository = mainRepository;
+        this.mainDao = mainRepository.getMainDao();
+        this.mainDatabase = mainRepository.getMainDatabase();
     }
+
     MutableLiveData<Result> googleSigInRegister;
-    public LiveData<Result> getRegisterWithGoogleSignInResponse(Userretrofit userretrofit)
-    {
-        if(userretrofit!=null)
+
+    public LiveData<Result> getRegisterWithGoogleSignInResponse(Userretrofit userretrofit) {
+        if (userretrofit != null)
             registerWithGoogleSignIn(userretrofit);
         return googleSigInRegister;
 
     }
 
-    public void registerWithGoogleSignIn(Userretrofit retrofituser)
-    {
+    public void registerWithGoogleSignIn(Userretrofit retrofituser) {
         googleSigInRegister = new MutableLiveData<>();
 
-        //Defiin retrofit api service
         udacityteam.healthapp.completeRedesign.Data.Networking.API.APIService apiService
                 = RetrofitFactoryNew.create();
-
-        //defining the call
         Call<Result> call = apiService.createUser(
                 retrofituser.getName(),
                 retrofituser.getEmail(),
@@ -69,15 +69,15 @@ public class LoginRegisterViewModel extends ViewModel {
             @Override
             public void onResponse(@NonNull Call<Result> call, @NonNull Response<Result> response) {
                 Result result = response.body();
-                if(result!=null) {
+                if (result != null) {
                     if (!result.getError()) {
                         googleSigInRegister.setValue(result);
-                        UserRetrofitGood userRetrofitGood= result.getUser();
-                        sharedPreferences.edit().putInt("userId", userRetrofitGood.getId())
+                        UserRetrofitGood userRetrofitGood = result.getUser();
+                        sharedPreferences.edit().putInt(SHARED_PREF_USER_ID, userRetrofitGood.getId())
                                 .commit();
-                        Log.d("sharedSend", String.valueOf(sharedPreferences.getInt("userId", -1)));
+                        Log.d(TAG, String.valueOf(sharedPreferences.getInt(SHARED_PREF_USER_ID, -1)));
                         Completable.fromAction(() ->
-                                recipesMainDao.insertCurrentUser(userRetrofitGood)).
+                                mainDao.insertCurrentUser(userRetrofitGood)).
                                 observeOn(AndroidSchedulers.mainThread())
                                 .subscribeOn(Schedulers.io()).subscribe(new CompletableObserver() {
                             @Override
@@ -96,24 +96,18 @@ public class LoginRegisterViewModel extends ViewModel {
                     } else {
                         googleSigInRegister.setValue(result);
                     }
-                }
-                else
-                {
+                } else {
                     googleSigInRegister.setValue(new Result(false, "Server Issue"
-                    , null));
+                            , null));
                 }
-
 
             }
 
             @Override
             public void onFailure(@NonNull Call<Result> call, @NonNull Throwable t) {
 
-
             }
         });
     }
-
-    //public void
 
 }
