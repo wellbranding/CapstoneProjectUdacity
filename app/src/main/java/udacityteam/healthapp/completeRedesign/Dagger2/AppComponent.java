@@ -8,16 +8,18 @@ import javax.inject.Singleton;
 import dagger.BindsInstance;
 import dagger.Component;
 import dagger.android.AndroidInjectionModule;
-import udacityteam.healthapp.app.ApplicationController;
+import udacityteam.healthapp.completeRedesign.ApplicationController;
+import udacityteam.healthapp.completeRedesign.Widget.AddedFoodsAppWidget;
 
 @Singleton
 @Component(modules = {ActivityModule.class,
         AndroidInjectionModule.class,
-       // DetailsOfRecipeActivityModule.class,
+        // DetailsOfRecipeActivityModule.class,
         RemoteViewsService.class,
         BaseActivityModule.class,
         FoodListActivityModule.class,
-       // BakingAppWidgetModule.class,
+        MainActivityModule.class,
+        BakingAppWidgetModule.class,
         AppModule.class})
 
 
@@ -33,7 +35,7 @@ public interface AppComponent {
 
     }
 
-  //  void inject(BakingAppWidget bakingAppWidget);
+    void inject(AddedFoodsAppWidget addedFoodsAppWidget);
 
 }
 

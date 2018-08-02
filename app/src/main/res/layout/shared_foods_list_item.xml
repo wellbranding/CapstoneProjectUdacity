@@ -5,7 +5,7 @@
     <data>
         <variable
             name="viewModel"
-            type="udacityteam.healthapp.activities.SharedFoodListItemViewModel" />
+            type="udacityteam.healthapp.completeRedesign.UI.Community.ViewModels.SharedFoodListItemViewModel" />
     </data>
 
 <RelativeLayout android:layout_width="match_parent"

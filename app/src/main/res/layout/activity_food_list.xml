@@ -6,7 +6,7 @@
 
         <variable
             name="viewModel"
-            type="udacityteam.healthapp.completeRedesign.FoodListViewModelComplete"/>
+            type="udacityteam.healthapp.completeRedesign.UI.AddedFoods.ViewModels.FoodListViewModelComplete"/>
     </data>
 
 
@@ -35,107 +35,112 @@
 
 
 
-    <android.support.v7.widget.Toolbar
+
+        <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_alignParentTop="true"
         android:layout_width="match_parent"
+        app:contentInsetLeft="0dp"
+        app:contentInsetStart="0dp"
+        app:contentInsetStartWithNavigation="0dp"
         app:popupTheme="@style/AppTheme.PopupOverlay"
         android:layout_height="56dp" />
+
     </android.support.design.widget.AppBarLayout>
 
 
         <RelativeLayout
             android:id="@+id/foodlistinformation"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="120dp"
             android:layout_centerHorizontal="true"
             android:layout_centerInParent="true"
             android:foregroundGravity="center_horizontal"
             android:layout_below="@+id/toolbars"
             android:background="@color/colorPrimary"
-            android:gravity="center_horizontal">
-
+            android:gravity="center_horizontal|center|center_vertical">
 
             <TextView
                 android:id="@+id/caloriescount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
-              android:layout_alignParentTop="true"
-                android:layout_marginTop="15dp"
-                android:text="@{viewModel.caloriesCount}"
-                android:textColor="#ffffff"
+                android:layout_alignLeft="@+id/fatcount"
+                android:layout_alignStart="@+id/fatcount"
+                android:layout_below="@+id/fatcount"
+                android:gravity="center|center_vertical|clip_horizontal"
+                android:layout_marginTop="16dp"
+                android:text="Calories"
                 android:textStyle="bold"
+                android:textColor="#ffffff"
                 android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/fatcount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="40dp"
+                android:layout_marginLeft="30dp"
+                android:gravity="center|center_vertical|clip_horizontal"
+                android:layout_alignBaseline="@+id/proteincount"
+                android:layout_alignBottom="@+id/proteincount"
+                android:layout_toEndOf="@+id/proteincount"
+                android:layout_toRightOf="@+id/proteincount"
+                android:text="Fats"
                 android:textStyle="bold"
-
-                android:layout_alignTop="@id/caloriescount"
-                android:layout_alignBottom="@id/caloriescount"
-                android:layout_toEndOf="@+id/caloriescount"
-                android:layout_toRightOf="@+id/caloriescount"
-                android:text="@{viewModel.fatsCount}"
                 android:textColor="#ffffff"
                 android:textSize="16sp" />
-
             <TextView
                 android:id="@+id/proteincount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:gravity="center|center_vertical|clip_horizontal"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:text="Protein"
                 android:textStyle="bold"
-                android:layout_marginBottom="15dp"
-                android:layout_alignParentBottom="true"
-                android:text="@{viewModel.proteinCount}"
-
                 android:textColor="#ffffff"
                 android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/carbohncount"
-                android:layout_height="wrap_content"
-                android:layout_alignTop="@id/proteincount"
-                android:layout_alignBottom="@id/proteincount"
                 android:layout_width="wrap_content"
                 android:textStyle="bold"
-                android:layout_toEndOf="@+id/proteincount"
-                android:layout_toRightOf="@+id/proteincount"
-                android:layout_marginLeft="40dp"
-                android:text="@{viewModel.carbosCount}"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/caloriescount"
+                android:layout_alignBottom="@+id/caloriescount"
+                android:layout_alignLeft="@+id/proteincount"
+                android:gravity="center|center_vertical|clip_horizontal"
+                android:layout_alignStart="@+id/proteincount"
+                android:text="Carbos"
                 android:textColor="#ffffff"
                 android:textSize="16sp" />
         </RelativeLayout>
 
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_below="@id/foodlistinformation"
-        android:layout_above="@id/share"
-        android:layout_height="wrap_content">
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycler_food"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            app:visibility="@{viewModel.recyclerViewVisibility}"
-            android:layout_alignParentTop="true"
-            tools:listitem="@layout/food_list_item"
-            android:scrollbars="vertical" />
-    </RelativeLayout>
+            android:layout_above="@id/share"
+            android:layout_below="@id/foodlistinformation">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_food"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:scrollbars="vertical"
+                android:visibility="visible"
+                tools:listitem="@layout/food_list_item" />
+        </RelativeLayout>
 
     <Button
         android:id="@+id/share"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:text="SHARE/UPDATE DIET"
         android:layout_alignParentLeft="true"
-        android:onClick="@{()->viewModel.ShareFoodList()}"
-        android:text="@{viewModel.canshare}"
         android:layout_alignParentStart="true"
         android:background="@color/colorPrimary" />
 

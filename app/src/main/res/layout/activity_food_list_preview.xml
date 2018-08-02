@@ -6,7 +6,7 @@
 
         <variable
             name="viewModel"
-            type="udacityteam.healthapp.activities.FoodListPrieviewNewViewModel"/>
+            type="udacityteam.healthapp.completeRedesign.UI.Community.ViewModels.FoodListPrieviewNewViewModel"/>
     </data>
 
 <RelativeLayout
@@ -18,7 +18,9 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
+        android:gravity="center|center_horizontal|center_vertical"
         android:id="@+id/foodlistinformation"
+        android:padding="16dp"
         android:background="@color/colorPrimary"
         android:layout_height="100dp">
 
@@ -27,9 +29,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/fatcount"
+            android:layout_marginTop="16dp"
+            android:textStyle="bold"
             android:layout_alignStart="@+id/fatcount"
             android:layout_below="@+id/fatcount"
-            android:layout_marginTop="16dp"
+            android:gravity="center"
+
             android:text="Calories"
             android:textColor="#ffffff"
             android:textSize="16sp" />
@@ -38,26 +43,24 @@
             android:id="@+id/fatcount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:textStyle="bold"
             android:layout_alignBaseline="@+id/proteincount"
             android:layout_alignBottom="@+id/proteincount"
-            android:layout_marginLeft="55dp"
-            android:layout_marginStart="55dp"
             android:layout_toEndOf="@+id/proteincount"
             android:layout_toRightOf="@+id/proteincount"
-            android:text="Calories"
+            android:text="Fats"
             android:textColor="#ffffff"
             android:textSize="16sp" />
         <TextView
             android:id="@+id/proteincount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textStyle="bold"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:layout_marginLeft="72dp"
-            android:layout_marginStart="72dp"
-            android:layout_marginTop="21dp"
-            android:text="Calories"
+            android:text="Protein"
             android:textColor="#ffffff"
             android:textSize="16sp" />
 
@@ -69,7 +72,7 @@
             android:layout_alignBottom="@+id/caloriescount"
             android:layout_alignLeft="@+id/proteincount"
             android:layout_alignStart="@+id/proteincount"
-            android:text="Calories"
+            android:text="Carbos"
             android:textColor="#ffffff"
             android:textSize="16sp" />
     </RelativeLayout>
@@ -84,23 +87,13 @@
             android:id="@+id/recycler_food"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            app:visibility="@{viewModel.recyclerViewVisibility}"
             android:layout_alignParentTop="true"
-            tools:listitem="@layout/food_list_item"
-            android:scrollbars="vertical" />
+            android:scrollbars="vertical"
+            app:visibility="@{viewModel.recyclerViewVisibility}"
+            tools:listitem="@layout/food_list_item" />
     </RelativeLayout>
 
-    <Button
-        android:id="@+id/share"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:text="@{viewModel.canshare}"
-        android:layout_alignParentStart="true"
-        android:background="@color/colorPrimary" />
 
 </RelativeLayout>
 </layout>

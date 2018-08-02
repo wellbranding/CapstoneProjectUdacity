@@ -1,24 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:showIn="navigation_view">
 
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_breakfasts"
-            android:icon="@drawable/ic_menu_camera"
+            android:icon="@drawable/food_apple"
             android:title="@string/main_drawer_item_community_breakfasts" />
         <item
             android:id="@+id/nav_lunches"
-            android:icon="@drawable/ic_menu_slideshow"
+            android:icon="@drawable/ic_baseline_fastfood_24px"
             android:title="@string/main_drawer_item_community_lunches" />
         <item
             android:id="@+id/nav_dinners"
-            android:icon="@drawable/ic_menu_gallery"
+            android:icon="@drawable/ic_local_dining_black_24dp"
             android:title="@string/main_drawer_item_community_dinners" />
         <item
             android:id="@+id/nav_community_daily_diets"
-            android:icon="@drawable/ic_menu_manage"
+            android:icon="@drawable/ic_all_foods"
             android:title="@string/main_drawer_item_community_daily_diet" />
     </group>
 
@@ -26,11 +27,11 @@
         <menu>
             <item
                 android:id="@+id/nav_snacks"
-                android:icon="@drawable/ic_menu_share"
+                android:icon="@drawable/ic_free_breakfast_black_24dp"
                 android:title="@string/main_drawer_item_snacks" />
             <item
                 android:id="@+id/nav_drinks_cocktails"
-                android:icon="@drawable/ic_menu_send"
+                android:icon="@drawable/ic_local_bar_black_24dp"
                 android:title="@string/main_drawer_item_drinks_cocktails" />
         </menu>
     </item>

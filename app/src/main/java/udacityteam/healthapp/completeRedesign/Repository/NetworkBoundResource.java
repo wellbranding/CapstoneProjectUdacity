@@ -42,22 +42,13 @@ public abstract class NetworkBoundResource<ResultType, RequestType> {
             result.removeSource(dbSource);
             //noinspection ConstantConditions
             if (response.isSuccessful()) {
-                appExecutors.diskIO().execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        saveResultAndReInit(response);
-                        appExecutors.mainThread().execute(new Runnable() {
-                            @Override
-                            public void run() {
-                                result.addSource(loadFromDb(),
-                                        newData -> result.setValue(Resource.success(newData)));
-                            }
-                        });
-                    }
+                appExecutors.diskIO().execute(() -> {
+                    saveResultAndReInit(response);
+                    appExecutors.mainThread().execute(() -> result.addSource(loadFromDb(),
+                            newData -> result.setValue(Resource.success(newData))));
                 });
 
             } else {
-                //     onFetchFailed();
                 result.addSource(dbSource,
                         newData -> result.setValue(
                                 Resource.error(response.errorMessage, newData)));

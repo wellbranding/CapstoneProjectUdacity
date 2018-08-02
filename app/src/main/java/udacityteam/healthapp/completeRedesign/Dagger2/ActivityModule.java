@@ -3,7 +3,7 @@ package udacityteam.healthapp.completeRedesign.Dagger2;
 
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
-import udacityteam.healthapp.activities.CommunityActivities.CommunityList;
+import udacityteam.healthapp.completeRedesign.UI.Community.Views.CommunityList;
 
 @Module
 public abstract class ActivityModule {

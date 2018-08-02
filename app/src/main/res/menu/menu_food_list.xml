@@ -1,0 +1,10 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.vvost.myapplication.MainActivity">
+    <item
+        android:id="@+id/to_widget"
+        android:orderInCategory="100"
+        android:title="ADD to Widget"
+        app:showAsAction="ifRoom" />
+</menu>

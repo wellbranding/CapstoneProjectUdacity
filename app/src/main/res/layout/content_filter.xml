@@ -75,7 +75,7 @@
         android:layout_below="@id/carbohydrateslayout"
         android:layout_height="wrap_content">
         <io.apptik.widget.MultiSlider
-            android:id="@+id/protein"
+            android:id="@+id/carbos"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:trackColor="@color/maindark"
