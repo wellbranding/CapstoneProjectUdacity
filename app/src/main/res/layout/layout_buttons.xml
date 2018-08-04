@@ -28,12 +28,12 @@
         android:layout_width="0dp"
         android:layout_weight="1"
         android:textSize="14sp"
-        android:textColor="#ffffff"
+        android:textColor="@color/white"
         android:clickable="true"
         android:focusable="true"
         android:layout_margin="4dp"
         android:background="@color/colorPrimary"
-        android:text="Dinner" />
+        android:text="@string/dinner_button_name" />
 
     <Button
         android:id="@+id/btnlunch"
@@ -41,21 +41,21 @@
         android:background="@color/colorPrimary"
         android:layout_width="0dp"
         android:textSize="14sp"
-        android:textColor="#ffffff"
+        android:textColor="@color/white"
         android:layout_weight="1"
         android:layout_margin="4dp"
-        android:text="Lunch" />
+        android:text="@string/lunch_button_name" />
 
     <Button
         android:id="@+id/btnbreakfast"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:textSize="14sp"
-        android:textColor="#ffffff"
+        android:textColor="@color/white"
         android:layout_margin="4dp"
         android:background="@color/colorPrimary"
         android:layout_width="0dp"
-        android:text="Breakfast" />
+        android:text="@string/breakfast_food_name" />
 
 
         </TableRow>
@@ -70,10 +70,10 @@
                 android:layout_height="wrap_content"
                 android:layout_width="0dp"
                 android:layout_margin="4dp"
-                android:textColor="#ffffff"
+                android:textColor="@color/white"
                 android:background="@color/colorPrimary"
                 android:layout_weight="1"
-                android:text="Snacks" />
+                android:text="@string/snacks_button_name" />
 
             <Button
                 android:id="@+id/btndaily"
@@ -81,10 +81,10 @@
                 android:layout_width="0dp"
                 android:layout_margin="4dp"
                 android:textSize="14sp"
-                android:textColor="#ffffff"
+                android:textColor="@color/white"
                 android:background="@color/colorPrimary"
                 android:layout_weight="1"
-                android:text="Whole Day" />
+                android:text="@string/whole_day_button_name" />
 
             <Button
                 android:id="@+id/btndrinks"
@@ -92,10 +92,10 @@
                 android:layout_width="0dp"
                 android:layout_margin="4dp"
                 android:textSize="14sp"
-                android:textColor="#ffffff"
+                android:textColor="@color/white"
                 android:background="@color/colorPrimary"
                 android:layout_weight="1"
-                android:text="Drinks/Coctails" />
+                android:text="@string/drinks_button_name" />
 
 
         </TableRow>

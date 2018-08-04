@@ -70,7 +70,12 @@ public class FilterFragment extends DialogFragment {
         fats.getThumb(1).setValue(10000);
         calories.getThumb(0).setValue(0);
         calories.getThumb(1).setValue(10000);
-        carbohydratesend.setText("Any");
+        carbohydratesend.setText(R.string.any_filter_text);
+        proteinend.setText(R.string.any_filter_text);
+        fatsend.setText(R.string.any_filter_text);
+        caloriesend.setText(R.string.any_filter_text);
+
+
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -106,8 +111,18 @@ public class FilterFragment extends DialogFragment {
                                        MultiSlider.Thumb thumb,
                                        int thumbIndex,
                                        int value) {
-                proteinbegin.setText(String.valueOf(protein.getThumb(0).getValue()));
-                proteinend.setText(String.valueOf(protein.getThumb(1).getValue()));
+                if (protein.getThumb(0).getValue() == 0) {
+                    proteinend.setText(String.format("Up to %s", String.valueOf(protein.getThumb(1).getValue())));
+                }
+                if (protein.getThumb(1).getValue() == 10000) {
+                    proteinend.setText(String.format("From  %s", String.valueOf(protein.getThumb(0).getValue())));
+                }
+                if (protein.getThumb(0).getValue() != 0 && protein.getThumb(1).getValue() != 10000)
+                    proteinend.setText(String.format("%s - %s", String.valueOf(protein.getThumb(0).getValue()),
+                            String.valueOf(protein.getThumb(1).getValue())));
+                if (protein.getThumb(0).getValue() == 0 &&
+                       protein.getThumb(1).getValue() == 10000)
+                    proteinend.setText(R.string.fiilter_any);
             }
         });
         fats.setOnThumbValueChangeListener(new MultiSlider.OnThumbValueChangeListener() {
@@ -116,8 +131,20 @@ public class FilterFragment extends DialogFragment {
                                        MultiSlider.Thumb thumb,
                                        int thumbIndex,
                                        int value) {
-                fatsbegin.setText(String.valueOf(fats.getThumb(0).getValue()));
-                fatsend.setText(String.valueOf(fats.getThumb(1).getValue()));
+                if (fats.getThumb(0).getValue() == 0) {
+                   fatsend.setText(String.format("Up to %s", String.valueOf(fats.getThumb(1).getValue())));
+                }
+                if (fats.getThumb(1).getValue() == 10000) {
+                    fatsend.setText(String.format("From  %s",
+                            String.valueOf(fats.getThumb(0).getValue())));
+                }
+                if (fats.getThumb(0).getValue() != 0 && fats.getThumb(1).getValue() != 10000)
+                   fatsend.setText(String.format("%s - %s", String.valueOf(fats.getThumb(0).
+                                   getValue()),
+                            String.valueOf(fats.getThumb(1).getValue())));
+                if (fats.getThumb(0).getValue() == 0 &&
+                        fats.getThumb(1).getValue() == 10000)
+                    fatsend.setText(R.string.fiilter_any);
             }
         });
         calories.setOnThumbValueChangeListener(new MultiSlider.OnThumbValueChangeListener() {
@@ -126,8 +153,21 @@ public class FilterFragment extends DialogFragment {
                                        MultiSlider.Thumb thumb,
                                        int thumbIndex,
                                        int value) {
-                caloriesbegin.setText(String.valueOf(calories.getThumb(0).getValue()));
-                caloriesend.setText(String.valueOf(calories.getThumb(1).getValue()));
+                if (calories.getThumb(0).getValue() == 0) {
+                  caloriesend.setText(String.format("Up to %s", String.valueOf(
+                          calories.getThumb(1).getValue())));
+                }
+                if (calories.getThumb(1).getValue() == 10000) {
+                   caloriesend.setText(String.format("From  %s",
+                            String.valueOf(fats.getThumb(0).getValue())));
+                }
+                if (calories.getThumb(0).getValue() != 0 && calories.getThumb(1).getValue() != 10000)
+                    caloriesend.setText(String.format("%s - %s", String.valueOf(calories.getThumb(0).
+                                    getValue()),
+                            String.valueOf(calories.getThumb(1).getValue())));
+                if (calories.getThumb(0).getValue() == 0 &&
+                        calories.getThumb(1).getValue() == 10000)
+                   caloriesend.setText(R.string.fiilter_any);
             }
         });
         return view;

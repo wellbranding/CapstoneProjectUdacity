@@ -12,7 +12,7 @@
 <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ffffff"
+    android:background="@color/white"
    >
 
 
@@ -35,23 +35,24 @@
             android:layout_below="@+id/fatcount"
             android:gravity="center"
 
-            android:text="Calories"
-            android:textColor="#ffffff"
+            android:text=""
+            android:textColor="@color/white"
             android:textSize="16sp" />
 
         <TextView
             android:id="@+id/fatcount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
+            android:layout_marginLeft="50dp"
             android:textStyle="bold"
             android:layout_alignBaseline="@+id/proteincount"
             android:layout_alignBottom="@+id/proteincount"
             android:layout_toEndOf="@+id/proteincount"
             android:layout_toRightOf="@+id/proteincount"
-            android:text="Fats"
-            android:textColor="#ffffff"
-            android:textSize="16sp" />
+            android:text=""
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:layout_marginStart="50dp" />
         <TextView
             android:id="@+id/proteincount"
             android:layout_width="wrap_content"
@@ -60,20 +61,21 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:text="Protein"
-            android:textColor="#ffffff"
+            android:text=""
+            android:textColor="@color/white"
             android:textSize="16sp" />
 
         <TextView
             android:id="@+id/carbohncount"
+            android:textStyle="bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBaseline="@+id/caloriescount"
             android:layout_alignBottom="@+id/caloriescount"
             android:layout_alignLeft="@+id/proteincount"
             android:layout_alignStart="@+id/proteincount"
-            android:text="Carbos"
-            android:textColor="#ffffff"
+            android:text=""
+            android:textColor="@color/white"
             android:textSize="16sp" />
     </RelativeLayout>
 
@@ -91,7 +93,8 @@
             android:layout_alignParentTop="true"
             android:scrollbars="vertical"
             app:visibility="@{viewModel.recyclerViewVisibility}"
-            tools:listitem="@layout/food_list_item" />
+            tools:listitem="@layout/food_list_item"
+            android:layout_alignParentLeft="true" />
     </RelativeLayout>
 
 

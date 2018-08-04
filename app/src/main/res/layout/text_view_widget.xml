@@ -6,7 +6,8 @@
     android:layout_marginLeft="4dp"
     android:textColor="@color/colorPrimary"
     android:id="@+id/list_view_item_widget"
-    android:text="djdjdj"
-    android:layout_height="wrap_content">
+    android:text=""
+    android:layout_height="wrap_content"
+    android:layout_marginStart="4dp">
 
 </TextView>

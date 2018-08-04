@@ -10,7 +10,7 @@
         android:layout_marginTop="?attr/actionBarSize"
         android:clipChildren="false"
         android:clipToPadding="false"
-    >
+        >
 
         <android.support.constraint.ConstraintLayout
             android:id="@+id/Snacks"
@@ -60,7 +60,7 @@
                 android:id="@+id/fabSave"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-android:contentDescription="@string/select_snacks_for_today"
+                android:contentDescription="@string/select_snacks_for_today"
                 android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
                 android:background="@color/colorPrimaryDark"

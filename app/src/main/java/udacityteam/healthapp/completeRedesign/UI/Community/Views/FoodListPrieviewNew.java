@@ -46,10 +46,10 @@ public class FoodListPrieviewNew extends AppCompatActivity implements FoodListPr
         fatCount = findViewById(R.id.fatcount);
         carboCount = findViewById(R.id.carbohncount);
         oneSharedFoodProductsListRetrofit = getIntent().getParcelableExtra(SELECTED_FOOD_PRIEVIEW);
-        proteinCount.setText(String.format("%s%s", getString(R.string.protein_display_text), oneSharedFoodProductsListRetrofit.getProtein()));
-        carboCount.setText(String.format("%s%s", getString(R.string.carbos_display_text), oneSharedFoodProductsListRetrofit.getCarbohydrates()));
-        fatCount.setText(String.format("%s%s", getString(R.string.fats_display_text), oneSharedFoodProductsListRetrofit.getFat()));
-        caloriesCount.setText(getString(R.string.calories_display_text) + oneSharedFoodProductsListRetrofit.getCalories());
+        proteinCount.setText(String.format("%s %s", getString(R.string.protein_display_text), oneSharedFoodProductsListRetrofit.getProtein()));
+        carboCount.setText(String.format("%s %s", getString(R.string.carbos_display_text), oneSharedFoodProductsListRetrofit.getCarbohydrates()));
+        fatCount.setText(String.format("%s %s", getString(R.string.fats_display_text), oneSharedFoodProductsListRetrofit.getFat()));
+        caloriesCount.setText(String.format("%s %s", getString(R.string.calories_display_text), oneSharedFoodProductsListRetrofit.getCalories()));
         foodselection = getIntent().getExtras().getString(FOOD_SELECTION);
         foodListPrieviewNewViewModel.LoadFoodList(oneSharedFoodProductsListRetrofit.getParentSharedFoodsId(), foodselection);
     }

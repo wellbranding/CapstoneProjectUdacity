@@ -3,7 +3,7 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/parent_relative_layout_widget"
-    android:background="#ffffff"
+    android:background="@color/white"
     android:padding="10dp"
     android:orientation="vertical">
 
