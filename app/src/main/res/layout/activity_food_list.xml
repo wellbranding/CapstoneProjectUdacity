@@ -22,7 +22,7 @@
     <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ffffff"
+    android:background="@color/white"
 
    >
 
@@ -69,25 +69,26 @@
                 android:layout_below="@+id/fatcount"
                 android:gravity="center|center_vertical|clip_horizontal"
                 android:layout_marginTop="16dp"
-                android:text="Calories"
+                android:text=""
                 android:textStyle="bold"
-                android:textColor="#ffffff"
+                android:textColor="@color/white"
                 android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/fatcount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="30dp"
+                android:layout_marginLeft="50dp"
                 android:gravity="center|center_vertical|clip_horizontal"
                 android:layout_alignBaseline="@+id/proteincount"
                 android:layout_alignBottom="@+id/proteincount"
                 android:layout_toEndOf="@+id/proteincount"
                 android:layout_toRightOf="@+id/proteincount"
-                android:text="Fats"
+                android:text=""
                 android:textStyle="bold"
-                android:textColor="#ffffff"
-                android:textSize="16sp" />
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:layout_marginStart="50dp" />
             <TextView
                 android:id="@+id/proteincount"
                 android:layout_width="wrap_content"
@@ -96,9 +97,9 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:text="Protein"
+                android:text=""
                 android:textStyle="bold"
-                android:textColor="#ffffff"
+                android:textColor="@color/white"
                 android:textSize="16sp" />
 
             <TextView
@@ -111,8 +112,8 @@
                 android:layout_alignLeft="@+id/proteincount"
                 android:gravity="center|center_vertical|clip_horizontal"
                 android:layout_alignStart="@+id/proteincount"
-                android:text="Carbos"
-                android:textColor="#ffffff"
+                android:text=""
+                android:textColor="@color/white"
                 android:textSize="16sp" />
         </RelativeLayout>
 
@@ -139,7 +140,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:text="SHARE/UPDATE DIET"
+        android:text="@string/share_update_diet"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:background="@color/colorPrimary" />

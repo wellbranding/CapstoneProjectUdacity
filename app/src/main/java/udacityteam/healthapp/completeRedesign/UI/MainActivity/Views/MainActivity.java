@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -37,7 +38,6 @@ import java.util.Date;
 
 import javax.inject.Inject;
 
-import butterknife.ButterKnife;
 import dagger.android.AndroidInjection;
 import dagger.android.AndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
@@ -64,11 +64,11 @@ public class MainActivity extends AppCompatActivity
     DrawerLayout mDrawer;
 
     private boolean fabExpanded = false;
-    private LinearLayout Snacks;
-    private LinearLayout Drinks;
-    private LinearLayout Breakfast;
-    private LinearLayout Dinner;
-    private LinearLayout Lunch;
+    private ConstraintLayout Snacks;
+    private ConstraintLayout Drinks;
+    private ConstraintLayout Breakfast;
+    private ConstraintLayout Dinner;
+    private ConstraintLayout Lunch;
     private Button dinnerbtn;
     private Button lunchbtn;
     private Button breakfastbtn;
@@ -108,11 +108,11 @@ public class MainActivity extends AppCompatActivity
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         fabsettings = findViewById(R.id.fabSetting);
 
-        Breakfast = (LinearLayout) this.findViewById(R.id.Breakfast);
-        Dinner = (LinearLayout) this.findViewById(R.id.Dinner);
-        Lunch = (LinearLayout) this.findViewById(R.id.Lunch);
-        Snacks = (LinearLayout) this.findViewById(R.id.Snacks);
-        Drinks = (LinearLayout) this.findViewById(R.id.Drinks);
+        Breakfast = this.findViewById(R.id.Breakfast);
+        Dinner = this.findViewById(R.id.Dinner);
+        Lunch = this.findViewById(R.id.Lunch);
+        Snacks = this.findViewById(R.id.Snacks);
+        Drinks =  this.findViewById(R.id.Drinks);
         fabsettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -126,7 +126,7 @@ public class MainActivity extends AppCompatActivity
                     if (stringdate.equals(calendarCurrentTime))
                         openSubMenusFab();
                     else
-                        Toast.makeText(MainActivity.this, "Can add food only to today!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, R.string.can_only_add_food_today_toast, Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -218,7 +218,7 @@ public class MainActivity extends AppCompatActivity
         dailybtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(MainActivity.this, "Currently not Available", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, R.string.currently_not_available_toast, Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -226,10 +226,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void calendarinit() {
-        Date date = new Date();
-        Date newDate = new Date(date.getTime());
         @SuppressLint("SimpleDateFormat") SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd");
-        ButterKnife.bind(this);
 
         binding.appBarMain.contentgood.calendarView.calendarView.state().edit()
                 .setCalendarDisplayMode(CalendarMode.WEEKS)

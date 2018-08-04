@@ -38,6 +38,7 @@ public class AddedFoodsAppWidgetService extends RemoteViewsService {
     }
 
     LiveData<List<SelectedFoodretrofit>> finalRecipeFromId;
+    List<SelectedFoodretrofit> receivedList;
 
     @Override
     public void onCreate() {
@@ -60,6 +61,7 @@ public class AddedFoodsAppWidgetService extends RemoteViewsService {
             this.sharedPreferences = sharedPreferences;
             finalRecipeFromId = new MutableLiveData<>();
             recipeFromId = new MutableLiveData<>();
+            recipeFromId.observeForever(this);
 
 
         }
@@ -78,8 +80,13 @@ public class AddedFoodsAppWidgetService extends RemoteViewsService {
             if (whichTime != null && query != null) {
                 recipeFromId = mainDatabase.recipeDao().getAddedFoodsNew(whichTime,
                         query);
+                receivedList = mainDatabase.recipeDao().getAddedFoodsWidget(whichTime, query);
             }
-            recipeFromId.observeForever(this);
+            if(receivedList!=null)
+            {
+                ingredientList = new ArrayList<>();
+                ingredientList.addAll(receivedList);
+            }
 
 
         }

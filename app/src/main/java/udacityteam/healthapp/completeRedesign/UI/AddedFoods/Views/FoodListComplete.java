@@ -181,10 +181,10 @@ public class FoodListComplete extends AppCompatActivity implements NavigationVie
         {
             if (response != null) {
                 if (response.size() == 4) {
-                    caloriescounter.setText(getString(R.string.calories_display_text) + response.get(0));
-                    proteincounter.setText(getString(R.string.protein_display_text) + response.get(1));
-                    carbohycounter.setText(getString(R.string.carbos_display_text) + response.get(2));
-                    fatcounter.setText(getString(R.string.fats_display_text) + response.get(3));
+                    caloriescounter.setText(getString(R.string.calories_display_text) + " " + response.get(0));
+                    proteincounter.setText(getString(R.string.protein_display_text) + " " +  response.get(1));
+                    carbohycounter.setText(getString(R.string.carbos_display_text) + " " +  response.get(2));
+                    fatcounter.setText(getString(R.string.fats_display_text) +  " " +  response.get(3));
                 }
             }
         });

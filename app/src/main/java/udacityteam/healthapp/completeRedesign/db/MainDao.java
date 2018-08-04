@@ -5,6 +5,7 @@ import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
+import android.arch.persistence.room.Transaction;
 
 import java.util.List;
 
@@ -25,11 +26,17 @@ public interface MainDao {
     LiveData<List<SelectedFoodretrofit>> getAddedFoods(String whichTime,
                                                        String year, String month, String day
     );
-
     @Query("SELECT * FROM SelectedFoodretrofit WHERE " +
             "whichTime ==:whichTime AND SendDate LIKE :query  "
     )
     LiveData<List<SelectedFoodretrofit>> getAddedFoodsNew(String whichTime, String query
+    );
+
+    @Transaction
+    @Query("SELECT * FROM SelectedFoodretrofit WHERE " +
+            "whichTime ==:whichTime AND SendDate LIKE :query  "
+    )
+   List<SelectedFoodretrofit> getAddedFoodsWidget(String whichTime, String query
     );
 
     @Delete

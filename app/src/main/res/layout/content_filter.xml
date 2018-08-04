@@ -51,12 +51,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
-        android:textStyle="bold"
-        android:layout_alignBaseline="@+id/carbobegin"
-        android:layout_alignBottom="@+id/carbobegin"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:text="TextView" />
+        android:layout_centerVertical="true"
+        android:text="TextView"
+        android:textStyle="bold"
+        tools:ignore="UnknownId" />
 
     <TextView
         android:id="@+id/textView4"
@@ -97,7 +96,8 @@
 
             android:layout_marginTop="26dp"
 
-            android:text="TextView" />
+            android:text="Protein"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/proteinend"
@@ -108,15 +108,9 @@
             android:layout_alignBottom="@+id/proteinbegin"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:text="TextView" />
+            android:text="TextView"
+            android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/proteinend"
-            android:layout_centerHorizontal="true"
-            android:text="Protein" />
     </RelativeLayout>
     <RelativeLayout
         android:layout_width="match_parent"
@@ -142,12 +136,12 @@
         <TextView
             android:id="@+id/fatbegin"
             android:layout_width="wrap_content"
-            android:textStyle="bold"
             android:layout_height="wrap_content"
-
             android:layout_marginTop="26dp"
 
-            android:text="TextView" />
+            android:text="Fats"
+
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/fatnend"
@@ -160,14 +154,6 @@
             android:layout_alignParentRight="true"
             android:text="TextView" />
 
-        <TextView
-            android:id="@+id/textView5"
-            android:textStyle="bold"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/fatnend"
-            android:layout_centerHorizontal="true"
-            android:text="Fats" />
     </RelativeLayout>
     <RelativeLayout
         android:layout_width="match_parent"
@@ -194,11 +180,11 @@
             android:id="@+id/caloriesbegin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/maindark"
-            android:textStyle="bold"
             android:layout_marginTop="26dp"
+            android:text="Calories"
+            android:textColor="@color/maindark"
 
-            android:text="TextView" />
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/caloriesnend"
@@ -215,11 +201,10 @@
         <TextView
             android:id="@+id/textView6"
             android:layout_width="wrap_content"
-            android:textColor="@color/maindark"
             android:layout_height="wrap_content"
-            android:textStyle="bold"
             android:layout_alignBottom="@+id/caloriesnend"
             android:layout_centerHorizontal="true"
-            android:text="Calories" />
+            android:textColor="@color/maindark"
+            android:textStyle="bold" />
     </RelativeLayout>
 </RelativeLayout>

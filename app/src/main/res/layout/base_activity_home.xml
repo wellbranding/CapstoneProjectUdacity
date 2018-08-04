@@ -28,14 +28,15 @@
             android:layout_alignParentStart="true"
             android:layout_marginTop="68dp"
             android:background="@color/colorPrimary"
-            android:text="REGISTER"
-            android:textColor="#ffffff"
+            android:text="@string/register_button"
+            android:textColor="@color/white"
             android:textSize="14sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_alignParentLeft="true" />
 
         <Button
             android:id="@+id/mailogin"
@@ -45,13 +46,14 @@
             android:layout_alignParentTop="true"
             android:layout_marginTop="144dp"
             android:background="@color/colorPrimary"
-            android:text="LOGIN"
+            android:text="@string/login_button"
             android:textSize="14sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/mailregister" />
+            app:layout_constraintTop_toBottomOf="@+id/mailregister"
+            android:layout_alignParentLeft="true" />
 
 
         <com.google.android.gms.common.SignInButton
@@ -66,7 +68,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/mailogin" />
+            app:layout_constraintTop_toBottomOf="@+id/mailogin"
+            android:layout_alignParentLeft="true" />
 
     </android.support.constraint.ConstraintLayout>
 

@@ -80,5 +80,36 @@
     <string name="food_id_bundle_key">id</string>
     <string name="cant_share_todays_diet_message">Can only share Today\'s diet</string>
     <string name="cant_share_empty_diet_message">Can\'t share empty Diet</string>
+    <string name="share_update_diet">SHARE/UPDATE DIET</string>
+    <string name="no_results_found">No results found</string>
+    <string name="hint_password">password</string>
+    <string name="login_button">LOGIN</string>
+    <string name="email_hint">email</string>
+    <string name="verify_email_button">VERIFY EMAIL</string>
+    <string name="filter_data_button">FilterData</string>
+    <string name="add_food_button">Add food</string>
+    <string name="dinner_button_name">Dinner</string>
+    <string name="lunch_button_name">Lunch</string>
+    <string name="breakfast_food_name">Breakfast</string>
+    <string name="snacks_button_name">Snacks</string>
+    <string name="whole_day_button_name">Whole Day</string>
+    <string name="drinks_button_name">Drinks/Coctails</string>
+    <string name="drinks_floating_action">Drinks</string>
+    <string name="breakfast_floating_action">Breakfast</string>
+    <string name="lunch_floating_action">Lunch</string>
+    <string name="dinner_floating_action">Dinner</string>
+    <string name="user_password_and_name">User password and Name</string>
+    <string name="register_button">REGISTER</string>
+    <string name="any_filter_text">Any</string>
+    <string name="snacks_floating_action">Snacks</string>
+    <string name="can_only_add_food_today_toast">Can add food only to today!</string>
+    <string name="lunch_selection_content_description">Select lunch for today</string>
+    <string name="content_secription_fab_drinks">Select drink for today</string>
+    <string name="select_snacks_for_today">Select snacks for today</string>
+    <string name="breakfast_content_description">Select breakfast for today</string>
+    <string name="dinner_content_description">Select dinner for today</string>
+    <string name="fab_main_content_description">Tap to select which meal you want to add</string>
+    <string name="name_of_food_food_item">Name of Food</string>
+    <string name="select_particular_food_to_see_information_content_description">Select particular food to see information</string>
 
 </resources>
